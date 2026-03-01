@@ -15,6 +15,7 @@ import mods.eln.sim.IProcess;
 import mods.eln.sim.ThermalLoad;
 import mods.eln.sim.nbt.NbtElectricalGateInput;
 import mods.eln.sim.nbt.NbtElectricalGateOutput;
+import mods.eln.sim.nbt.NbtElectricalGateOutputProcess;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,6 +39,7 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
     Boolean initialized=false;
     Boolean process_finished=false;
     Boolean in_thread=false;
+    public NbtElectricalGateOutputProcess outputGateProcess;
 
     public LogicPortElement(TransparentNode node, TransparentNodeDescriptor descriptor) {
         super(node, descriptor);
@@ -47,6 +49,8 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
             gate = new NbtElectricalGateInput("control");
         } else {
             gate = new NbtElectricalGateOutput("control");
+            outputGateProcess=new NbtElectricalGateOutputProcess("outputGateProcess", gate);
+            electricalComponentList.add(outputGateProcess);
         }
         electricalLoadList.add(gate);
     }
@@ -291,6 +295,6 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
             logger.error("trying to set signal at input gate");
             return;
         }
-        gate.setU(value);
+        outputGateProcess.setU(value);
     }
 }

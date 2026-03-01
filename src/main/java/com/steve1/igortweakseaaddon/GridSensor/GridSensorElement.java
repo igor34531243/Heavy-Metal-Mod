@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.misc.Direction.XN;
 
 
@@ -104,10 +105,20 @@ public class GridSensorElement extends IgorGridLogicElement implements IConfigur
     @Override
     public String multiMeterString(Direction side) {
         double outv=0;
+        String str="";
         if (port_interface.safe_to_get("output1")) {
             outv=port_interface.get_port_u("output1");
         }
-        return Utils.plotVolt("Uin:", loadA.getU()) + Utils.plotVolt("Uout:",outv );
+        if (typeOfSensor==voltageType) {
+            str += Utils.plotVolt("U in:", loadA.getU());
+        } else if (typeOfSensor==currantType) {
+            str += Utils.plotAmpere("I in:", loadA.getI());
+        } else if (typeOfSensor==powerType) {
+            str += Utils.plotPower("P in:", loadA.getU()*loadA.getI());
+        } else {
+            str += "unknown sensor type";
+        }
+        return str + Utils.plotVolt("  U out:",outv );
     }
 
     @Override
@@ -171,28 +182,39 @@ public class GridSensorElement extends IgorGridLogicElement implements IConfigur
 
     @Override
     public byte networkUnserialize(DataInputStream stream) {
-        byte res =super.networkUnserialize(stream);
+        byte command = super.networkUnserialize(stream);
+
+        if (command==-128) {
+            return -128;
+        }
+
         try {
-            switch (stream.readByte()) {
-                case setTypeOfSensorId:
-                    typeOfSensor = stream.readByte();
-                    needPublish();
-                    break;
-                case setValueId:
-                    lowValue = stream.readFloat();
-                    highValue = stream.readFloat();
-                    if (lowValue == highValue) highValue += 0.0001;
-                    needPublish();
-                    break;
-                case setDirType:
-                    dirType = stream.readByte();
-                    needPublish();
-                    break;
+            if (stream.available()>0) {
+                switch (command) {
+                    case setTypeOfSensorId:
+                        typeOfSensor = stream.readByte();
+                        needPublish();
+                        command=-128;
+                        break;
+                    case setValueId:
+                        lowValue = stream.readFloat();
+                        highValue = stream.readFloat();
+                        if (lowValue == highValue) highValue += 0.0001;
+                        command=-128;
+                        needPublish();
+                        break;
+                    case setDirType:
+                        dirType = stream.readByte();
+                        needPublish();
+                        command=-128;
+                        break;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return -128;
         }
-        return res;
+        return command;
     }
 
     @Override

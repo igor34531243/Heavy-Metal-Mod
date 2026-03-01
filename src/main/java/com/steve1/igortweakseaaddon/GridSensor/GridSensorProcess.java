@@ -3,6 +3,8 @@ package com.steve1.igortweakseaaddon.GridSensor;
 import mods.eln.Eln;
 import mods.eln.sim.IProcess;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+
 public class GridSensorProcess implements IProcess {
 
     GridSensorElement sensor;
@@ -28,7 +30,6 @@ public class GridSensorProcess implements IProcess {
                     output = (-sensor.resistor.getCurrent());
                     break;
             }
-
             setOutput(output);
         } else if (sensor.typeOfSensor == sensor.powerType) {
             double output = 0;
@@ -52,7 +53,6 @@ public class GridSensorProcess implements IProcess {
         double U = (physical - sensor.lowValue) / (sensor.highValue - sensor.lowValue) * Eln.SVU;
         if (U > Eln.SVU) U = Eln.SVU;
         if (U < 0) U = 0;
-        double outv=0;
         if (sensor.port_interface.safe_to_set("output1")) {
             sensor.port_interface.set_port_u("output1",U);
         }

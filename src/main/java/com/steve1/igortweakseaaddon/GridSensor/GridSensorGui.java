@@ -3,6 +3,7 @@ package com.steve1.igortweakseaaddon.GridSensor;
 import mods.eln.gui.*;
 import mods.eln.misc.BasicContainer;
 import mods.eln.misc.UtilsClient;
+import mods.eln.node.six.SixNodeElementInventory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -108,47 +109,13 @@ public class GridSensorGui extends GuiContainerEln {
 
     @Override
     public GuiHelperContainer newHelper() {
-        return new GuiHelperContainer(this, 176, 166 - 45, 8, 84 - 45);
+        return new HelperStdContainer(this);
     }
 
     @Override
-    public void drawGuiContainerBackgroundLayer(float f,int mx,int my) {
-        try {
-            GL11.glColor4f(1f, 1f, 1f, 1f);
-            preDraw(f, mx, my);
-//            Method mouseMove = helper.getClass().getMethod("mouseMove",int.class,int.class);
-//            Method draw = helper.getClass().getMethod("draw",int.class,int.class,float.class);
-//            mouseMove.setAccessible(true);
-//            draw.setAccessible(true);
-//            mouseMove.invoke(helper,mx,my);
-//            draw.invoke(helper,mx,my,f);
-            //helper.mouseMove(mx, my);
-            //helper.draw(mx, my, f);
-//            Field slotSkin=this.getClass().getDeclaredField("slotSkin");
-//            slotSkin.setAccessible(true);
-//            UtilsClient.bindTexture((ResourceLocation) slotSkin.get(this));
-            UtilsClient.bindTexture(new ResourceLocation("textures/gui/container/furnace.png"));
-            GL11.glColor4f(1f, 1f, 1f, 1f);
-
-            for (Object o : inventorySlots.inventorySlots) {
-                Slot slot = (Slot) o;
-                ISlotSkin.SlotSkin skin = ISlotSkin.SlotSkin.none;
-
-                if (slot instanceof ISlotSkin) skin = ((ISlotSkin) slot).getSlotSkin();
-
-                switch (skin) {
-                    case medium:
-                        drawTexturedModalRectEln(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1, 55, 16, 73 - 55, 34 - 16);
-                        break;
-                    case big:
-                        drawTexturedModalRectEln(slot.xDisplayPosition - 5, slot.yDisplayPosition - 5, 111, 30, 137 - 111, 56 - 30);
-                        break;
-                }
-            }
-            postDraw(f, mx, my);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("");
-        }
+    public void drawGuiContainerBackgroundLayer(float f, int mx, int my) {
+        // ide marks this as invalid but it has be be like this
+        // it builds fine with this line and breaks totaly without
+        super.func_146976_a(f, mx, my);
     }
 }

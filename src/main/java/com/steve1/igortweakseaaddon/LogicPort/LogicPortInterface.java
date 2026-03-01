@@ -49,9 +49,27 @@ public class LogicPortInterface implements INBTTReady {
             return false;
         }
         InterfaceConnection connection = connections.get(name);
-        if (!connection.is_input) {
+        if (connection.is_input) {
             return false;
         }
+        return true;
+    }
+
+    public Boolean safe_to_set_dbg(String name) {
+        if (!master.is_valid()) {
+            logger.error("dbg safe to set: master is invalid!");
+            return false;
+        }
+        if (!connections.containsKey(name)) {
+            logger.error("dbg safe to set: field not registered: '"+name+"'!");
+            return false;
+        }
+        InterfaceConnection connection = connections.get(name);
+        if (connection.is_input) {
+            logger.error("dbg safe to set: trying to set an input!");
+            return false;
+        }
+        logger.info("dbg safe to set: this passes check!");
         return true;
     }
 
@@ -65,7 +83,7 @@ public class LogicPortInterface implements INBTTReady {
             return;
         }
         InterfaceConnection connection = connections.get(name);
-        if (!connection.is_input) {
+        if (connection.is_input) {
             logger.error("trying to set value of input connection ");
             return;
         }
@@ -166,6 +184,7 @@ public class LogicPortInterface implements INBTTReady {
         }
         public void remove_slave_port(SlavePort port) {
             if (port.is_input()!=is_input) {
+                logger.error("trying to remove mismatched input/output logic port");
                 return;
             }
             if (!ports.contains(port)) {

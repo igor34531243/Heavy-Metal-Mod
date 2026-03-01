@@ -24,6 +24,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+
 public class GridSensorRender extends IgorGridRender {
 
     TransparentNodeDescriptor descriptor;
@@ -39,6 +41,7 @@ public class GridSensorRender extends IgorGridRender {
 
     public void clientSetByte(byte id, byte value) {
         try {
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             DataOutputStream stream = new DataOutputStream(bos);
 
@@ -48,6 +51,7 @@ public class GridSensorRender extends IgorGridRender {
             stream.writeByte(value);
 
             sendPacketToServer(bos);
+
         } catch (IOException e) {
 
             e.printStackTrace();
