@@ -1,0 +1,7 @@
+
+Grid_High_Voltage_Fuse.name=Grid High Voltage Fuse
+Grid_High_Voltage_Switch.name=Grid High Voltage Switch
+Grid_Electrical_Probe.name=Grid Electrical Probe
+Fuse_For_T1_Power_Lines.name=Fuse For T1 Power Lines
+Fuse_For_T2_Power_Lines.name=Fuse For T2 Power Lines
+Fuse_Blown_For_Power_Lines.name=Blown Fuse For Power Lines

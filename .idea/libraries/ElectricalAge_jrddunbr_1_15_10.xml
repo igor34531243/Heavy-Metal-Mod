@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="ElectricalAge-jrddunbr-1.15.10">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/ElectricalAge-jrddunbr-1.15.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../ElectricalAge-1.15.10/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

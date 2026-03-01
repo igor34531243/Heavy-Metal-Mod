@@ -1,0 +1,10 @@
+[
+{
+  "modid": "igortweaksdistilledwater",
+  "name": "Igor Tweaks Distilled Water",
+  "description": "Ability to produce distilled water for ic2 crafts",
+  "version": "1.0",
+  "mcversion": "1.7.10",
+  "dependencies": ["required-after:IC2;"]
+}
+]

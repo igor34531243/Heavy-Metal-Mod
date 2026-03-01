@@ -1,0 +1,30 @@
+package com.steve1.igortweaks;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+public class BlockBestBlockEver extends Block {
+
+	protected BlockBestBlockEver() {
+		super(Material.rock);
+		this.setBlockName("balls");
+		this.setCreativeTab(BaseIgorTweaks.tabIgorTweaks);
+		this.setHardness(0F);
+		this.setResistance(1F);
+		this.setLightLevel(5F);
+		this.setBlockTextureName("igortweaks:balls");
+		
+		@Override
+		public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+            ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+            drops.add(new ItemStack(BaseIgorTweaks.BestBlockEver, 1));
+            return drops;
+        }
+	}
+
+}

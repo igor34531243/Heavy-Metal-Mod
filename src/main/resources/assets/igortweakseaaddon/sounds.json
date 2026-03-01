@@ -1,0 +1,16 @@
+{
+  "fuse_release": {
+    "category": "master",
+    "sounds": [
+      "igortweakseaaddon:fuserelease1",
+      "igortweakseaaddon:fuserelease2",
+      "igortweakseaaddon:fuserelease3"
+    ]
+  },
+  "fuse_buzzing": {
+    "category": "master",
+    "sounds": [
+      "igortweakseaaddon:fusebuzzing"
+    ]
+  }
+}

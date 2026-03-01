@@ -1,0 +1,10 @@
+[
+{
+  "modid": "igortweakseaaddon",
+  "name": "Igor Tweaks Electrical Age addon",
+  "description": "An addon to Electrical Age lusty lavende branch",
+  "version": "1.0",
+  "mcversion": "1.7.10",
+  "dependencies": ["required-after:Eln;"]
+}
+]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="net.minecraft.potion.Potion"/>
+    <fullyQualifiedTypeName name="net.minecraft.init.Items"/>
+    <fullyQualifiedTypeName name="ic2.api.item.IC2Items"/>
+    <fullyQualifiedTypeName name="net.minecraftforge.fluids.FluidRegistry"/>
+    <fullyQualifiedTypeName name="ic2.core.Ic2Items"/>
+    <fullyQualifiedTypeName name="ic2.core.Ic2Fluid"/>
+    <fullyQualifiedTypeName name="ic2.core.SemiFluidFuelManager"/>
+</qualifiedTypeNameHistroy>
