@@ -1,7 +1,0 @@
-package com.steve1.igortweaks;
-
-import net.minecraft.item.Item;
-
-public class ItemDistillingCoil extends Item {
-
-}
