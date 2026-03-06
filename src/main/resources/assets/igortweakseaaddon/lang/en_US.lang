@@ -5,3 +5,6 @@ Grid_Electrical_Probe.name=Grid Electrical Probe
 Fuse_For_T1_Power_Lines.name=Fuse For T1 Power Lines
 Fuse_For_T2_Power_Lines.name=Fuse For T2 Power Lines
 Fuse_Blown_For_Power_Lines.name=Blown Fuse For Power Lines
+tile.eln.EnergyConverterElnToOtherVVUBlock.name=3200V Electrical Age to other energy exporter
+Wireless_Nuclear_Alarm.name=Wireless Nuclear Alarm
+Wireless_Standard_Alarm.name=Wireless Standard Alarm

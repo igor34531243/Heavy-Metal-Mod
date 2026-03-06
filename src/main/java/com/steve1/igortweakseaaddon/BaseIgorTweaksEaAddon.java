@@ -4,12 +4,16 @@ import com.steve1.igortweakseaaddon.GridFuse.GridFuseItem;
 import com.steve1.igortweakseaaddon.GridSensor.GridSensorDescriptor;
 import com.steve1.igortweakseaaddon.GridSwitch.GridSwitchDescriptor;
 import com.steve1.igortweakseaaddon.LogicPort.LogicPortDescriptor;
+import com.steve1.igortweakseaaddon.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import mods.eln.Eln;
+import mods.eln.Other;
 import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.i18n.I18N;
 import mods.eln.item.ElectricalFuseDescriptor;
@@ -17,6 +21,10 @@ import mods.eln.misc.Obj3D;
 import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
 import mods.eln.misc.VoltageLevelColor;
+import mods.eln.node.simple.SimpleNodeItem;
+import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
+import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
+import mods.eln.sixnode.electricalalarm.ElectricalAlarmDescriptor;
 import mods.eln.sixnode.electricalcable.ElectricalCableDescriptor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -50,6 +58,7 @@ public class BaseIgorTweaksEaAddon {
 	public static GridFuseItem fuseBlown;
 	public static GridFuseItem fuseT1;
 	public static GridFuseItem fuseT2;
+	public static EnergyConverterElnToOtherBlock elnToOtherBlockVVu;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
@@ -63,6 +72,8 @@ public class BaseIgorTweaksEaAddon {
 		register_fuses();
 		register_grid_devices();
 		register_recipes();
+		register_energy_exporter();
+		registerWirelessAlarm();
 	}
 
 	@EventHandler
@@ -295,5 +306,53 @@ public class BaseIgorTweaksEaAddon {
             throw new RuntimeException(e);
         }
     }
+
+	public void register_energy_exporter() {
+		// another magic fix for energy converter, dont touch that
+		ClassLoader loader = net.minecraft.launchwrapper.LaunchClassLoader.class.getClassLoader();
+		try {
+			//Class<?> block_clname= ReflectionHelper.getClass(loader,"net.minecraft.block.Block");
+			Method registerBlock=GameRegistry.class.getDeclaredMethod(
+					"registerBlock",
+					net.minecraft.block.Block.class,
+					Class.class,
+					String.class);
+			String blockName = TR_NAME(I18N.Type.TILE, "eln.EnergyConverterElnToOtherVVUBlock");
+			EnergyConverterElnToOtherDescriptor.ElnDescriptor elnDesc = new EnergyConverterElnToOtherDescriptor.ElnDescriptor(VVU, Eln.instance.VVP());
+			EnergyConverterElnToOtherDescriptor.Ic2Descriptor ic2Desc = new EnergyConverterElnToOtherDescriptor.Ic2Descriptor(512, 3);
+			EnergyConverterElnToOtherDescriptor.OcDescriptor ocDesc = new EnergyConverterElnToOtherDescriptor.OcDescriptor(ic2Desc.outMax * Other.getElnToOcConversionRatio() / Other.getElnToIc2ConversionRatio());
+			EnergyConverterElnToOtherDescriptor desc =
+					new EnergyConverterElnToOtherDescriptor("EnergyConverterElnToOtherVVU", elnDesc, ic2Desc, ocDesc);
+			elnToOtherBlockVVu = new EnergyConverterElnToOtherBlock(desc);
+			elnToOtherBlockVVu.setCreativeTab(creativeTab).setBlockName(blockName);
+			//GameRegistry.registerBlock(elnToOtherBlockVVu, SimpleNodeItem.class, blockName);
+			registerBlock.invoke(null,elnToOtherBlockVVu, SimpleNodeItem.class, blockName);
+		} catch (Exception e) {
+			logger.error("failed to load energy exporter, here are logs:");
+			e.printStackTrace();
+		}
+	}
+
+	private void registerWirelessAlarm() {
+		int id =103;
+		int subId, completId;
+		String name;
+		WirelessAlarmDescriptor desc;
+		{
+			subId = 2;
+			name = TR_NAME(I18N.Type.NONE, "Wireless Nuclear Alarm");
+			desc = new WirelessAlarmDescriptor(name,
+					obj.getObj("alarmmedium"), 7, "eln:alarma", 11, 1f, wirelessTxRange);
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+		}
+		{
+			subId = 3;
+			name = TR_NAME(I18N.Type.NONE, "Wireless Standard Alarm");
+			desc = new WirelessAlarmDescriptor(name,
+					obj.getObj("alarmmedium"), 7, "eln:smallalarm_critical",
+					1.2, 2f, wirelessTxRange);
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+		}
+	}
 
 }

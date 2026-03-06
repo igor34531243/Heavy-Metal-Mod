@@ -1,0 +1,29 @@
+
+1) add voltage and thermal watchdogs to my stuff
+
+2) add neon signs
+
+3) add trafic lights
+
+done) add alarm that has built in signal reciever and relay
+
+4) *maybe* add grid converter from eln to other blocks
+
+5) add stirling generator
+
+6) add thermal interface to interact with the world
+-- this one might not be possible due to some limitations
+
+7) add GIANT flywheel as energy storage
+
+8) add pneumatic (before flywheel, its needed for it)
+
+8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
+
+9) add eln's own liquid pipes system and pumps and steam gens (after pneumatics)
+
+10) add discrete logic
+
+11) add fuorier transform?
+
+12) find usages for pipes and pneumatics

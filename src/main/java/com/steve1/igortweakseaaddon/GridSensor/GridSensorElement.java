@@ -127,32 +127,6 @@ public class GridSensorElement extends IgorGridLogicElement implements IConfigur
     }
 
     @Override
-    public Map<String, String> getWaila() {
-        Map<String, String> info = new HashMap<String, String>();
-        double outv=0;
-        if (port_interface.safe_to_get("output1")) {
-            outv=port_interface.get_port_u("output1");
-        }
-        info.put(I18N.tr("Output voltage"), Utils.plotVolt("", outv));
-        if (Eln.wailaEasyMode) {
-            switch (typeOfSensor) {
-                case voltageType:
-                    info.put(I18N.tr("Measured voltage"), Utils.plotVolt("", loadA.getU()));
-                    break;
-
-                case currantType:
-                    info.put(I18N.tr("Measured current"), Utils.plotAmpere("", loadA.getI()));
-                    break;
-
-                case powerType:
-                    info.put(I18N.tr("Measured power"), Utils.plotPower("", loadA.getU() * loadA.getI()));
-                    break;
-            }
-        }
-        return info;
-    }
-
-    @Override
     public void networkSerialize(DataOutputStream stream) {
         super.networkSerialize(stream);
         try {
