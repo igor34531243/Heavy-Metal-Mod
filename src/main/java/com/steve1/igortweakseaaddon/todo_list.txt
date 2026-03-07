@@ -1,18 +1,7 @@
 
+TODO:
+
 1) add voltage and thermal watchdogs to my stuff
-
-2) add neon signs
-
-3) add trafic lights
-
-done) add alarm that has built in signal reciever and relay
-
-4) *maybe* add grid converter from eln to other blocks
-
-5) add stirling generator
-
-6) add thermal interface to interact with the world
--- this one might not be possible due to some limitations
 
 7) add GIANT flywheel as energy storage
 
@@ -24,6 +13,25 @@ done) add alarm that has built in signal reciever and relay
 
 10) add discrete logic
 
-11) add fuorier transform?
+ALREADY DONE
+
+5) add stirling engine
+
+3.5) add alarm that has built in signal receiver and relay
+
+CONCEPT LIMBO
+
+13) add engine to start up the rotating systems with shafts and stuff
+
+2) add neon signs
+
+3) add traffic lights
 
 12) find usages for pipes and pneumatics
+
+11) add furrier transform?
+
+4) *maybe* add grid converter from eln to other blocks
+
+6) add thermal interface to interact with the world
+-- this one might not be possible due to some limitations

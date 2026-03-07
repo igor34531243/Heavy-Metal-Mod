@@ -4,6 +4,8 @@ import com.steve1.igortweakseaaddon.GridFuse.GridFuseItem;
 import com.steve1.igortweakseaaddon.GridSensor.GridSensorDescriptor;
 import com.steve1.igortweakseaaddon.GridSwitch.GridSwitchDescriptor;
 import com.steve1.igortweakseaaddon.LogicPort.LogicPortDescriptor;
+import com.steve1.igortweakseaaddon.StirlingEngine.StirlingEngineDescriptor;
+import com.steve1.igortweakseaaddon.StirlingEngine.StirlingEngineElement;
 import com.steve1.igortweakseaaddon.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
 import cpw.mods.fml.common.Mod;
@@ -22,6 +24,7 @@ import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
 import mods.eln.misc.VoltageLevelColor;
 import mods.eln.node.simple.SimpleNodeItem;
+import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
 import mods.eln.sixnode.electricalalarm.ElectricalAlarmDescriptor;
@@ -46,7 +49,7 @@ import static cpw.mods.fml.common.registry.GameRegistry.addRecipe;
 import static mods.eln.Eln.*;
 import static mods.eln.i18n.I18N.TR_NAME;
 
-@Mod (modid = "igortweakseaaddon", name="Igor Tweaks Electrical Age addon", version = "1.0", dependencies = "required-after:Eln;")
+@Mod (modid = "igortweakseaaddon", name="Heavy Metal (Electrical Age Addon)", version = "1.0", dependencies = "required-after:Eln;")
 
 public class BaseIgorTweaksEaAddon {
 	public static CreativeTabs tabIgorTweaks;
@@ -59,6 +62,9 @@ public class BaseIgorTweaksEaAddon {
 	public static GridFuseItem fuseT1;
 	public static GridFuseItem fuseT2;
 	public static EnergyConverterElnToOtherBlock elnToOtherBlockVVu;
+	public static WirelessAlarmDescriptor wirelessStandardAlarm;
+	public static WirelessAlarmDescriptor wirelessNuclearAlarm;
+	public static StirlingEngineDescriptor stirlingEngineDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
@@ -73,7 +79,8 @@ public class BaseIgorTweaksEaAddon {
 		register_grid_devices();
 		register_recipes();
 		register_energy_exporter();
-		registerWirelessAlarm();
+		register_wireless_alarms();
+		register_stirling_engine();
 	}
 
 	@EventHandler
@@ -333,26 +340,41 @@ public class BaseIgorTweaksEaAddon {
 		}
 	}
 
-	private void registerWirelessAlarm() {
+	private void register_wireless_alarms() {
 		int id =103;
 		int subId, completId;
 		String name;
-		WirelessAlarmDescriptor desc;
 		{
 			subId = 2;
 			name = TR_NAME(I18N.Type.NONE, "Wireless Nuclear Alarm");
-			desc = new WirelessAlarmDescriptor(name,
+			wirelessNuclearAlarm = new WirelessAlarmDescriptor(name,
 					obj.getObj("alarmmedium"), 7, "eln:alarma", 11, 1f, wirelessTxRange);
-			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+			sixNodeItem.addDescriptor(subId + (id << 6), wirelessNuclearAlarm);
 		}
 		{
 			subId = 3;
 			name = TR_NAME(I18N.Type.NONE, "Wireless Standard Alarm");
-			desc = new WirelessAlarmDescriptor(name,
+			wirelessStandardAlarm = new WirelessAlarmDescriptor(name,
 					obj.getObj("alarmmedium"), 7, "eln:smallalarm_critical",
 					1.2, 2f, wirelessTxRange);
-			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+			sixNodeItem.addDescriptor(subId + (id << 6), wirelessStandardAlarm);
 		}
+	}
+
+	public void register_stirling_engine() {
+		int id =4;
+		int subId, completId;
+		String name;
+
+		subId=22;
+
+
+		name = TR_NAME(I18N.Type.NONE, "Stirling Engine");
+		stirlingEngineDescriptor= new StirlingEngineDescriptor(name,obj.getObj("StirlingEngine"));
+
+		stirlingEngineDescriptor.setDefaultIcon("stirlingengine");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
 	}
 
 }
