@@ -1,17 +1,29 @@
 
 TODO:
 
-1) add voltage and thermal watchdogs to my stuff
+1) add special sixnode and transparent node classes that will support pneumatic and liquid pipes
+
+1.2) add subtype of special node that will be a gridnode so i can integrate this stuff with grid
+
+1.5) add voltage and thermal watchdogs to my stuff
+
+x) add reactor for grid
 
 7) add GIANT flywheel as energy storage
 
 8) add pneumatic (before flywheel, its needed for it)
+
+8.1) add pneumatic compressor that sucks air from atmosphere, add pneumatic release port that can release air to atmosphere, add pneumatic valve, add pneumatic turbine
+
+8.2) add pneumatic sensor to detect parameters of air inside a pipe
 
 8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
 
 9) add eln's own liquid pipes system and pumps and steam gens (after pneumatics)
 
 10) add discrete logic
+
+x) add grid auto transformer
 
 ALREADY DONE
 

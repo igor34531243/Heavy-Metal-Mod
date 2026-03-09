@@ -102,14 +102,6 @@ def fix_obj(input_path,mtl_name, group,first_group,shiftv,shiftvt,shiftvn):
     return res,mnumv,mnumvt,mnumvn
 
 if __name__ == "__main__":
-    #combine(["GridBreaker.obj","GridBreaker_nofuse.obj","GridBreaker_broken.obj"],
-            #"GridBreaker.obj",
-            #"GridBreaker.mtl",
-            #["nofuse","broken"])
-    #combine(["GridBreaker_hasfuse.obj"],
-            #"GridBreaker_hasfuse.obj",
-            #"GridBreaker.mtl",
-            #["main"])
     #combine(["fuse_rods_spent.obj","fuse_rods_set.obj","GridBreaker_nofuse.obj"],
             #"GridBreaker.obj",
             #"GridBreaker.mtl",
@@ -122,10 +114,14 @@ if __name__ == "__main__":
                 #"GridFuseHand.obj",
                 #"GridFuseHand.mtl",
                 #["main"])
-    combine(["stirling_engine_static.obj","stirling_engine_rotating.obj"],
-                "StirlingEngine.obj",
-                "StirlingEngine.mtl",
-                ["static","rotating"])
+    #combine(["stirling_engine_static.obj","stirling_engine_rotating.obj"],
+                #"StirlingEngine.obj",
+                #"StirlingEngine.mtl",
+                #["static","rotating"])
+    combine(["pneumatic_hub.obj"],
+                "PneumaticHub.obj",
+                "PneumaticHub.mtl",
+                ["main"])    
     
     """
     шаблон для заполнения:

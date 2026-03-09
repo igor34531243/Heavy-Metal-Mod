@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.misc;
 
-import com.steve1.igortweakseaaddon.LogicPort.SlavePort;
+import com.steve1.igortweakseaaddon.misc.LogicPort.SlavePort;
 import mods.eln.Eln;
 import mods.eln.ghost.GhostBlock;
 import mods.eln.ghost.GhostGroup;

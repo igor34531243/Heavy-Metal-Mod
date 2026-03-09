@@ -1,46 +1,51 @@
 package com.steve1.igortweakseaaddon;
-import com.steve1.igortweakseaaddon.GridFuse.GridFuseDescriptor;
-import com.steve1.igortweakseaaddon.GridFuse.GridFuseItem;
-import com.steve1.igortweakseaaddon.GridSensor.GridSensorDescriptor;
-import com.steve1.igortweakseaaddon.GridSwitch.GridSwitchDescriptor;
-import com.steve1.igortweakseaaddon.LogicPort.LogicPortDescriptor;
-import com.steve1.igortweakseaaddon.StirlingEngine.StirlingEngineDescriptor;
-import com.steve1.igortweakseaaddon.StirlingEngine.StirlingEngineElement;
-import com.steve1.igortweakseaaddon.WirelessAlarm.WirelessAlarmDescriptor;
+import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseDescriptor;
+import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseItem;
+import com.steve1.igortweakseaaddon.grid.GridSensor.GridSensorDescriptor;
+import com.steve1.igortweakseaaddon.grid.GridSwitch.GridSwitchDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNode;
+import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeBlock;
+import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeEntity;
+import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeItem;
+import com.steve1.igortweakseaaddon.misc.LogicPort.LogicPortDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticHub.PneumaticHubDescriptor;
+import com.steve1.igortweakseaaddon.misc.StirlingEngine.StirlingEngineDescriptor;
+import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorCommonProxy;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import mods.eln.Eln;
 import mods.eln.Other;
-import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.i18n.I18N;
-import mods.eln.item.ElectricalFuseDescriptor;
 import mods.eln.misc.Obj3D;
 import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
-import mods.eln.misc.VoltageLevelColor;
+import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
-import mods.eln.node.transparent.TransparentNodeDescriptor;
+import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
-import mods.eln.sixnode.electricalalarm.ElectricalAlarmDescriptor;
-import mods.eln.sixnode.electricalcable.ElectricalCableDescriptor;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.misc.Unsafe;
+import sun.reflect.ReflectionFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.security.CodeSource;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -49,6 +54,7 @@ import static cpw.mods.fml.common.registry.GameRegistry.addRecipe;
 import static mods.eln.Eln.*;
 import static mods.eln.i18n.I18N.TR_NAME;
 
+@SuppressWarnings("all")
 @Mod (modid = "igortweakseaaddon", name="Heavy Metal (Electrical Age Addon)", version = "1.0", dependencies = "required-after:Eln;")
 
 public class BaseIgorTweaksEaAddon {
@@ -65,14 +71,24 @@ public class BaseIgorTweaksEaAddon {
 	public static WirelessAlarmDescriptor wirelessStandardAlarm;
 	public static WirelessAlarmDescriptor wirelessNuclearAlarm;
 	public static StirlingEngineDescriptor stirlingEngineDescriptor;
+	public static PneumaticHubDescriptor pneumaticHubDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
 
+	@SidedProxy(clientSide = "com.steve1.igortweakseaaddon.misc.IgorClientProxy",
+			    serverSide = "com.steve1.igortweakseaaddon.misc.IgorCommonProxy")
+	public static IgorCommonProxy proxy;
+
+	public static IgorTransparentNodeBlock igorTransparentNodeBlock;
+	public static IgorTransparentNodeItem igorTransparentNodeItem;
+
+	public static EntityMetaTag igorTransparentMetatag;
+
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
-		testcube=obj.getObj("TestCube");
+		initialize_mod();
 		loadAllElnAddonModels();
 		register_logic_port();
 		register_fuses();
@@ -81,13 +97,46 @@ public class BaseIgorTweaksEaAddon {
 		register_energy_exporter();
 		register_wireless_alarms();
 		register_stirling_engine();
+		register_pneumatics();
 	}
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		// empty for now could be used later
+		proxy.registerRenderers();
 	}
 
+	public void initialize_mod() {
+		testcube=obj.getObj("TestCube");
+
+		add_neumatic_metaTag();
+
+        try {
+            Method registerBlock=GameRegistry.class.getDeclaredMethod(
+                    "registerBlock",
+                    net.minecraft.block.Block.class,
+                    Class.class,
+                    String.class);
+
+			igorTransparentNodeBlock = (IgorTransparentNodeBlock) new IgorTransparentNodeBlock(
+					Material.iron,
+					IgorTransparentNodeEntity.class)
+					.setCreativeTab(creativeTab)
+					.setBlockTextureName("iron_block");
+
+			registerBlock.invoke(null,igorTransparentNodeBlock, IgorTransparentNodeItem.class, "Eln.IgorTransparentNode");
+
+			NodeManager.registerUuid(igorTransparentNodeBlock.getNodeUuid(), IgorTransparentNode.class);
+
+			igorTransparentNodeItem = (IgorTransparentNodeItem) Item.getItemFromBlock(igorTransparentNodeBlock);
+
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	public void register_recipes() {
         Method findItemStackMethod = null;
@@ -114,8 +163,8 @@ public class BaseIgorTweaksEaAddon {
 
 			Object output = fuseDescriptor.newItemStack();//findItemStackMethod.invoke(instance,"Grid_High_Voltage_Fuse");
 
-			if (output == null || vhv_cable == null || item_rubber == null || alloy_plate==null || lead_plate==null) {
-				throw new RuntimeException("Один из предметов ELN не найден! Проверьте названия строк.");
+			if (vhv_cable == null || alloy_plate==null || cinnabar==null) {
+				throw new RuntimeException("One of the eln items for crafting is not found.");
 			}
 
 			addRecipeMethod.invoke(instance, output,
@@ -159,6 +208,19 @@ public class BaseIgorTweaksEaAddon {
 			e.printStackTrace();
         }
     }
+
+	public void register_pneumatics() {
+		int id=133;
+		int subId;
+
+		subId=0;
+
+		pneumaticHubDescriptor = new PneumaticHubDescriptor("Pneumatic_Hub",obj.getObj("PneumaticHub"));
+
+		pneumaticHubDescriptor.setDefaultIcon("pneumatichub");
+
+		igorTransparentNodeItem.addDescriptor(subId + (id << 6), pneumaticHubDescriptor);
+	}
 
 	public void register_fuses() {
 
@@ -377,4 +439,66 @@ public class BaseIgorTweaksEaAddon {
 		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
 	}
 
+	// this is once again a magic fix for metatag system from eln
+	// i have to do this if i want to add a custom block type for transparent node
+	// scary stuff going on here, it causes compile warnings but it should be fine
+	@SuppressWarnings("all") // this part doesent help aganist warnings
+	public static void add_neumatic_metaTag() {
+		try {
+			Field valuesField = EntityMetaTag.class.getDeclaredField("$VALUES");
+			valuesField.setAccessible(true);
+
+			EntityMetaTag[] oldValues = (EntityMetaTag[]) valuesField.get(null);
+			EntityMetaTag[] newValues = Arrays.copyOf(oldValues, oldValues.length + 1);
+
+			Constructor<?> constructor = EntityMetaTag.class.getDeclaredConstructors()[0];
+			constructor.setAccessible(true);
+
+			igorTransparentMetatag = createPneumaticEnum("IgorTransparent",oldValues.length,12,IgorTransparentNodeEntity.class);
+
+			newValues[oldValues.length] = igorTransparentMetatag;
+
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+			modifiersField.setAccessible(true);
+			modifiersField.setInt(valuesField, valuesField.getModifiers() & ~Modifier.FINAL);
+
+			//valuesField.set(null, newValues);
+			setStaticFinalField(valuesField,newValues);
+
+			System.out.println("Pneumatic MetaTag successfully injected!");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("all")
+	public static EntityMetaTag createPneumaticEnum(String name, int ordinal, int meta, Class<?> cls) {
+		ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
+		try {
+			Constructor<?> con = EntityMetaTag.class.getDeclaredConstructor(
+					String.class,
+					int.class,
+					int.class,
+					Class.class
+			);
+			con.setAccessible(true);
+
+			return (EntityMetaTag) rf.newConstructorAccessor(con)
+					.newInstance(new Object[] { name, ordinal, meta, cls });
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("all")
+	public static void setStaticFinalField(Field field, Object value) throws Exception {
+		Field unsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+		unsafeField.setAccessible(true);
+		Unsafe unsafe = (Unsafe) unsafeField.get(null);
+
+		Object base = unsafe.staticFieldBase(field);
+		long offset = unsafe.staticFieldOffset(field);
+
+		unsafe.putObject(base, offset, value);
+	}
 }
