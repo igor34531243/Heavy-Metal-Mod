@@ -10,10 +10,10 @@ public class GridSwitchDescriptor extends IgorGridDescriptor {
 
     public GridSwitchDescriptor(String name, Obj3D obj) {
         super(name, obj, GridSwitchElement.class, GridSwitchRender.class);
-        add_cable_point(XN.left(),0,0,4,0);
-        add_cable_point(XN.left(),1,1,4,0);
-        add_cable_point(XN.right(),0,0,4,1);
-        add_cable_point(XN.right(),1,1,4,1);
+        add_cable_point(XN.left(),0,0.25-0.5,5.13-0.5,-0.7-0.5);
+        add_cable_point(XN.left(),1,2.73-0.5,5.13-0.5,-0.7-0.5);
+        add_cable_point(XN.right(),0,0.25-0.5,5.13-0.5,3.7-0.5);
+        add_cable_point(XN.right(),1,2.73-0.5,5.13-0.5,3.7-0.5);
     }
 
     @Override
