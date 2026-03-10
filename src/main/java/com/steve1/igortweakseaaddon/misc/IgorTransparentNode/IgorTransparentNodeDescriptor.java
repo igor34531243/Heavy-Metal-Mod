@@ -17,7 +17,6 @@ public class IgorTransparentNodeDescriptor extends TransparentNodeDescriptor {
 
     public void draw_initial(TransparentNodeElementRender render) {
         if (model!=null) {
-            logger.info("drawing model: "+model_main_group);
             model.draw(model_main_group);
             draw(render);
         }

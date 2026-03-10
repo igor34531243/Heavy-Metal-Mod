@@ -8,4 +8,9 @@ public class PneumaticHubDescriptor extends IgorTransparentNodeDescriptor {
     public PneumaticHubDescriptor(String name, Obj3D model) {
         super(name, model, PneumaticHubElement.class, PneumaticHubRender.class);
     }
+
+    @Override
+    public boolean mustHaveFloor() {
+        return false;
+    }
 }

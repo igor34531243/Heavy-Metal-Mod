@@ -13,27 +13,39 @@ import com.steve1.igortweakseaaddon.misc.StirlingEngine.StirlingEngineDescriptor
 import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.IgorCommonProxy;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.eln.Eln;
 import mods.eln.Other;
+import mods.eln.entity.ReplicatorPopProcess;
 import mods.eln.i18n.I18N;
+import mods.eln.item.electricalinterface.ItemEnergyInventoryProcess;
 import mods.eln.misc.Obj3D;
 import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
+import mods.eln.misc.WindProcess;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
 import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
+import mods.eln.sixnode.lampsocket.LightBlockEntity;
+import mods.eln.sixnode.lampsupply.LampSupplyElement;
+import mods.eln.sixnode.modbusrtu.ModbusTcpServer;
+import mods.eln.sixnode.wirelesssignal.tx.WirelessSignalTxElement;
+import mods.eln.transparentnode.teleporter.TeleporterElement;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.misc.Unsafe;
@@ -54,7 +66,6 @@ import static cpw.mods.fml.common.registry.GameRegistry.addRecipe;
 import static mods.eln.Eln.*;
 import static mods.eln.i18n.I18N.TR_NAME;
 
-@SuppressWarnings("all")
 @Mod (modid = "igortweakseaaddon", name="Heavy Metal (Electrical Age Addon)", version = "1.0", dependencies = "required-after:Eln;")
 
 public class BaseIgorTweaksEaAddon {
@@ -85,6 +96,14 @@ public class BaseIgorTweaksEaAddon {
 
 	public static EntityMetaTag igorTransparentMetatag;
 
+	public static final double base_air_resistance = 0.999;
+	public static final double base_armospheric_pressure = 101325;
+	public static final double small_pneumatic_area = 0.05;
+	public static final double small_pneumatic_volume = 0.05;
+
+	public static PneumaticSimulator pneumatic_simulator;
+	public static int pneumaticMask = (1<<13);
+
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
@@ -105,10 +124,17 @@ public class BaseIgorTweaksEaAddon {
 		proxy.registerRenderers();
 	}
 
+	@EventHandler
+	public void onServerStart(FMLServerAboutToStartEvent ev) {
+		Eln.simulator.addSlowProcess(pneumatic_simulator);
+	}
+
 	public void initialize_mod() {
 		testcube=obj.getObj("TestCube");
 
-		add_neumatic_metaTag();
+		pneumatic_simulator=new PneumaticSimulator(0.002);
+
+		add_pneumatic_metaTag();
 
         try {
             Method registerBlock=GameRegistry.class.getDeclaredMethod(
@@ -124,6 +150,8 @@ public class BaseIgorTweaksEaAddon {
 					.setBlockTextureName("iron_block");
 
 			registerBlock.invoke(null,igorTransparentNodeBlock, IgorTransparentNodeItem.class, "Eln.IgorTransparentNode");
+
+			TileEntity.addMapping(IgorTransparentNodeEntity.class, "IgorTransparentNodeEntity");
 
 			NodeManager.registerUuid(igorTransparentNodeBlock.getNodeUuid(), IgorTransparentNode.class);
 
@@ -443,7 +471,7 @@ public class BaseIgorTweaksEaAddon {
 	// i have to do this if i want to add a custom block type for transparent node
 	// scary stuff going on here, it causes compile warnings but it should be fine
 	@SuppressWarnings("all") // this part doesent help aganist warnings
-	public static void add_neumatic_metaTag() {
+	public static void add_pneumatic_metaTag() {
 		try {
 			Field valuesField = EntityMetaTag.class.getDeclaredField("$VALUES");
 			valuesField.setAccessible(true);
@@ -500,5 +528,40 @@ public class BaseIgorTweaksEaAddon {
 		long offset = unsafe.staticFieldOffset(field);
 
 		unsafe.putObject(base, offset, value);
+	}
+
+	public static double sanitize_number(double number,double deafult) {
+		if (Double.isNaN(number)||Double.isInfinite(number)) {
+			return deafult;
+		}
+		return number;
+	}
+
+	public static double sanitize_number(double number) {
+		return sanitize_number(number,0);
+	}
+
+	public static String plot_pressure(double pressure) {
+		if (pressure >= 1000000.0) {
+			return String.format("%.2f MPa", pressure / 1000000.0);
+		} else if (pressure >= 1000.0) {
+			return String.format("%.2f kPa", pressure / 1000.0);
+		} else {
+			return String.format("%.2f Pa", pressure);
+		}
+	}
+
+	public static String plot_speed(double speed) {
+		if (speed >= 1000.0) {
+			return String.format("%.2f KM/S", speed / 1000.0);
+		} else if (speed>=1) {
+			return String.format("%.2f M/S", speed);
+		} else if (speed>=0.01) {
+			return String.format("%.2f SM/S", speed * 100);
+		} else if (speed>=0.001) {
+			return String.format("%.2f MM/S", speed * 1000);
+		} else {
+			return String.format("%.2f µM/S", speed * 1000000);
+		}
 	}
 }

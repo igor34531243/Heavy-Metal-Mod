@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.misc.Direction.XN;
 
 public class GridSwitchElement extends IgorGridLogicElement {

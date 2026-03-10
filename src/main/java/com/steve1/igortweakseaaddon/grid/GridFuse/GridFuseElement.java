@@ -1,5 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridFuse;
 
+import com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridElement;
 import mods.eln.item.GenericItemUsingDamageDescriptorUpgrade;
 import mods.eln.misc.Direction;

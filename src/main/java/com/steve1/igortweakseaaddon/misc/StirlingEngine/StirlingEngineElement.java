@@ -65,18 +65,4 @@ public class StirlingEngineElement extends SimpleShaftElement {
     public boolean onBlockActivated(EntityPlayer entityPlayer, Direction direction, float v, float v1, float v2) {
         return false;
     }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        thermal_load_1.writeToNBT(nbt,"thermal_load_1");
-        thermal_load_2.writeToNBT(nbt,"thermal_load_2");
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        thermal_load_1.readFromNBT(nbt,"thermal_load_1");
-        thermal_load_2.readFromNBT(nbt,"thermal_load_2");
-    }
 }

@@ -44,14 +44,6 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
         super(node, descriptor);
         coordonate=node.coordonate;
         desc= (LogicPortDescriptor) descriptor;
-        if (is_input) {
-            gate = new NbtElectricalGateInput("control");
-        } else {
-            gate = new NbtElectricalGateOutput("control");
-            outputGateProcess=new NbtElectricalGateOutputProcess("outputGateProcess", gate);
-            electricalComponentList.add(outputGateProcess);
-        }
-        electricalLoadList.add(gate);
     }
 
     @Override
@@ -99,7 +91,7 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
         if (nbt.hasKey("port_name") && nbt.hasKey("port_is_input")) {
             set_logic_values(nbt.getString("port_name"),nbt.getBoolean("port_is_input"));
         }
-        if (nbt.hasKey("current_signal")) {
+        if (nbt.hasKey("current_signal") && !is_input) {
             gate.setU(nbt.getDouble("current_signal"));
         }
     }
@@ -154,6 +146,16 @@ public class LogicPortElement extends TransparentNodeElement implements SlavePor
 
     @Override
     public void initialize() {
+
+        if (is_input) {
+            gate = new NbtElectricalGateInput("control");
+        } else {
+            gate = new NbtElectricalGateOutput("control");
+            outputGateProcess=new NbtElectricalGateOutputProcess("outputGateProcess", gate);
+            electricalComponentList.add(outputGateProcess);
+        }
+        electricalLoadList.add(gate);
+
         connect();
         master_attached();
     }

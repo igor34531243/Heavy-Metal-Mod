@@ -17,6 +17,8 @@ x) add reactor for grid
 
 8.2) add pneumatic sensor to detect parameters of air inside a pipe
 
+8.3) add one way valve
+
 8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
 
 9) add eln's own liquid pipes system and pumps and steam gens (after pneumatics)

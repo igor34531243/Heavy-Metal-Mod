@@ -18,7 +18,6 @@ public class IgorTransparentNodeElementRender extends TransparentNodeElementRend
 
     @Override
     public void draw() {
-        logger.info("trying to draw model");
         GL11.glPushMatrix();
         front.glRotateXnRef();
         GL11.glTranslated(-0.5, -0.5, -0.5);
