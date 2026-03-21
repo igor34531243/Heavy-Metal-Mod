@@ -49,7 +49,7 @@ dependencies {
 }
 
 jar {
-    destinationDirectory  = "C:/Users/PC/AppData/Roaming/.minecraft/mods" as File
+    destinationDirectory  = "C:/Users/Stefan-PC/AppData/Roaming/.minecraft/mods" as File
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     exclude '**/*.kotlin_metadata'

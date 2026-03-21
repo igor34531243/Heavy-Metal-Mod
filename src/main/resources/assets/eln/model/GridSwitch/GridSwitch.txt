@@ -1,0 +1,32 @@
+o mech1
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech2
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech3_1
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech3_2
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech4_1
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech4_2
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech4_3
+f originX 0.0
+f originY 0.0
+f originZ 0.0
+o mech4_4
+f originX 0.0
+f originY 0.0
+f originZ 0.0
