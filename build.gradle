@@ -49,7 +49,7 @@ dependencies {
 }
 
 jar {
-    destinationDirectory  = "C:/Users/Stefan-PC/AppData/Roaming/.minecraft/mods" as File
+    destinationDirectory  = file(project.hasProperty("modDestDir") ? project.modDestDir : "build/libs")
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     exclude '**/*.kotlin_metadata'
