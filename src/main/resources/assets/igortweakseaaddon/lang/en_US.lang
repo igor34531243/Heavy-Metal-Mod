@@ -10,3 +10,5 @@ Wireless_Nuclear_Alarm.name=Wireless Nuclear Alarm
 Wireless_Standard_Alarm.name=Wireless Standard Alarm
 com.steve1.igortweakseaaddon.IgorTransparentNode.IgorTransparentNodeItem.name=Pneumatic Hub
 Pneumatic_Hub.name=Pneumatic Hub
+Pneumatic_Outlet.name=Pneumatic Outlet
+Pneumatic_Source.name=Pneumatic Source

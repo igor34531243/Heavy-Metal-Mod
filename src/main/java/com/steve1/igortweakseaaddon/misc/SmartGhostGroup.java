@@ -1,5 +1,6 @@
 package com.steve1.igortweakseaaddon.misc;
 
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNode;
 import com.steve1.igortweakseaaddon.misc.LogicPort.SlavePort;
 import mods.eln.Eln;
 import mods.eln.ghost.GhostBlock;
@@ -184,7 +185,7 @@ public class SmartGhostGroup extends GhostGroup {
 
                 world.setBlockToAir(x, y, z);
 
-                TransparentNode node = new TransparentNode();
+                TransparentNode node = new IgorTransparentNode();
                 node.onBlockPlacedBy(coord, front, player, stack);
 
                 world.setBlock(x, y, z, Block.getBlockFromItem(transparentNodeItem), element.meta, 0x03);//caca1.5.1

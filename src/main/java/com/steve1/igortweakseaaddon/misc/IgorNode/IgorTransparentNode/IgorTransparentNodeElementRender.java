@@ -1,11 +1,9 @@
-package com.steve1.igortweakseaaddon.misc.IgorTransparentNode;
+package com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode;
 
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.node.transparent.TransparentNodeElementRender;
 import mods.eln.node.transparent.TransparentNodeEntity;
 import org.lwjgl.opengl.GL11;
-
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public class IgorTransparentNodeElementRender extends TransparentNodeElementRender {
 

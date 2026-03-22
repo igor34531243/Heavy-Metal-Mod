@@ -1,6 +1,8 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticHub;
+package com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.AtmosphereLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
@@ -8,18 +10,23 @@ import mods.eln.node.transparent.TransparentNode;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.sim.ElectricalLoad;
 import mods.eln.sim.ThermalLoad;
-import net.minecraft.entity.player.EntityPlayer;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
-public class PneumaticHubElement extends IgorTransparentNodeElement {
+public class PneumaticOutletElement extends IgorTransparentNodeElement {
     public PneumaticLoad pneumatic_load;
+    public AtmosphereLoad atmosphere_load;
+    public PneumaticConnection pneumatic_connection;
 
-    public PneumaticHubElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
+    public PneumaticOutletElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
         pneumatic_load=new PneumaticLoad("pneumatic_load");
         pneumaticLoadList.add(pneumatic_load);
+        atmosphere_load=new AtmosphereLoad("atmosphere_load");
+        pneumaticLoadList.add(atmosphere_load);
+        pneumatic_connection=new PneumaticConnection(pneumatic_load,atmosphere_load);
+        pneumaticComponentList.add(pneumatic_connection);
     }
 
     @Override
@@ -51,10 +58,4 @@ public class PneumaticHubElement extends IgorTransparentNodeElement {
     public String thermoMeterString(Direction direction) {
         return "";
     }
-
-    @Override
-    public boolean onBlockActivated(EntityPlayer entityPlayer, Direction side, float vx, float vy, float vz) {
-        pneumatic_load.set_mass(0);
-        return true;
-    };
 }

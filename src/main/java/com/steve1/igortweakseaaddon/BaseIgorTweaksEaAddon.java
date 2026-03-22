@@ -3,44 +3,31 @@ import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseDescriptor;
 import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseItem;
 import com.steve1.igortweakseaaddon.grid.GridSensor.GridSensorDescriptor;
 import com.steve1.igortweakseaaddon.grid.GridSwitch.GridSwitchDescriptor;
-import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNode;
-import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeBlock;
-import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeEntity;
-import com.steve1.igortweakseaaddon.misc.IgorTransparentNode.IgorTransparentNodeItem;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNode;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNode;
 import com.steve1.igortweakseaaddon.misc.LogicPort.LogicPortDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticHub.PneumaticHubDescriptor;
 import com.steve1.igortweakseaaddon.misc.StirlingEngine.StirlingEngineDescriptor;
 import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
-import com.steve1.igortweakseaaddon.misc.IgorCommonProxy;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.eln.Eln;
 import mods.eln.Other;
-import mods.eln.entity.ReplicatorPopProcess;
 import mods.eln.i18n.I18N;
-import mods.eln.item.electricalinterface.ItemEnergyInventoryProcess;
 import mods.eln.misc.Obj3D;
 import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
-import mods.eln.misc.WindProcess;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
 import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
-import mods.eln.sixnode.lampsocket.LightBlockEntity;
-import mods.eln.sixnode.lampsupply.LampSupplyElement;
-import mods.eln.sixnode.modbusrtu.ModbusTcpServer;
-import mods.eln.sixnode.wirelesssignal.tx.WirelessSignalTxElement;
-import mods.eln.transparentnode.teleporter.TeleporterElement;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -83,16 +70,11 @@ public class BaseIgorTweaksEaAddon {
 	public static WirelessAlarmDescriptor wirelessNuclearAlarm;
 	public static StirlingEngineDescriptor stirlingEngineDescriptor;
 	public static PneumaticHubDescriptor pneumaticHubDescriptor;
+	public static PneumaticOutletDescriptor pneumaticOutletDescriptor;
+	public static PneumaticSourceDescriptor pneumaticSourceDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
-
-	@SidedProxy(clientSide = "com.steve1.igortweakseaaddon.misc.IgorClientProxy",
-			    serverSide = "com.steve1.igortweakseaaddon.misc.IgorCommonProxy")
-	public static IgorCommonProxy proxy;
-
-	public static IgorTransparentNodeBlock igorTransparentNodeBlock;
-	public static IgorTransparentNodeItem igorTransparentNodeItem;
 
 	public static EntityMetaTag igorTransparentMetatag;
 
@@ -121,12 +103,17 @@ public class BaseIgorTweaksEaAddon {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		proxy.registerRenderers();
+
 	}
 
 	@EventHandler
 	public void onServerStart(FMLServerAboutToStartEvent ev) {
-		Eln.simulator.addSlowProcess(pneumatic_simulator);
+		pneumatic_simulator.start();
+	}
+
+	@EventHandler
+	public void onServerStopped(FMLServerStoppedEvent ev) {
+		pneumatic_simulator.stop();
 	}
 
 	public void initialize_mod() {
@@ -134,36 +121,9 @@ public class BaseIgorTweaksEaAddon {
 
 		pneumatic_simulator=new PneumaticSimulator(0.002);
 
-		add_pneumatic_metaTag();
+		NodeManager.registerUuid(sixNodeBlock.getNodeUuid(), IgorSixNode.class);
 
-        try {
-            Method registerBlock=GameRegistry.class.getDeclaredMethod(
-                    "registerBlock",
-                    net.minecraft.block.Block.class,
-                    Class.class,
-                    String.class);
-
-			igorTransparentNodeBlock = (IgorTransparentNodeBlock) new IgorTransparentNodeBlock(
-					Material.iron,
-					IgorTransparentNodeEntity.class)
-					.setCreativeTab(creativeTab)
-					.setBlockTextureName("iron_block");
-
-			registerBlock.invoke(null,igorTransparentNodeBlock, IgorTransparentNodeItem.class, "Eln.IgorTransparentNode");
-
-			TileEntity.addMapping(IgorTransparentNodeEntity.class, "IgorTransparentNodeEntity");
-
-			NodeManager.registerUuid(igorTransparentNodeBlock.getNodeUuid(), IgorTransparentNode.class);
-
-			igorTransparentNodeItem = (IgorTransparentNodeItem) Item.getItemFromBlock(igorTransparentNodeBlock);
-
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+		NodeManager.registerUuid(transparentNodeBlock.getNodeUuid(), IgorTransparentNode.class);
     }
 
 	public void register_recipes() {
@@ -247,7 +207,23 @@ public class BaseIgorTweaksEaAddon {
 
 		pneumaticHubDescriptor.setDefaultIcon("pneumatichub");
 
-		igorTransparentNodeItem.addDescriptor(subId + (id << 6), pneumaticHubDescriptor);
+		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticHubDescriptor);
+
+		subId=1;
+
+		pneumaticOutletDescriptor = new PneumaticOutletDescriptor("Pneumatic_Outlet",obj.getObj("PneumaticOutlet"));
+
+		pneumaticOutletDescriptor.setDefaultIcon("pneumaticoutlet");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticOutletDescriptor);
+
+		subId=2;
+
+		pneumaticSourceDescriptor = new PneumaticSourceDescriptor("Pneumatic_Source",obj.getObj("PneumaticSource"));
+
+		pneumaticSourceDescriptor.setDefaultIcon("pneumaticsource");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticSourceDescriptor);
 	}
 
 	public void register_fuses() {
@@ -465,103 +441,5 @@ public class BaseIgorTweaksEaAddon {
 		stirlingEngineDescriptor.setDefaultIcon("stirlingengine");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
-	}
-
-	// this is once again a magic fix for metatag system from eln
-	// i have to do this if i want to add a custom block type for transparent node
-	// scary stuff going on here, it causes compile warnings but it should be fine
-	@SuppressWarnings("all") // this part doesent help aganist warnings
-	public static void add_pneumatic_metaTag() {
-		try {
-			Field valuesField = EntityMetaTag.class.getDeclaredField("$VALUES");
-			valuesField.setAccessible(true);
-
-			EntityMetaTag[] oldValues = (EntityMetaTag[]) valuesField.get(null);
-			EntityMetaTag[] newValues = Arrays.copyOf(oldValues, oldValues.length + 1);
-
-			Constructor<?> constructor = EntityMetaTag.class.getDeclaredConstructors()[0];
-			constructor.setAccessible(true);
-
-			igorTransparentMetatag = createPneumaticEnum("IgorTransparent",oldValues.length,12,IgorTransparentNodeEntity.class);
-
-			newValues[oldValues.length] = igorTransparentMetatag;
-
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
-			modifiersField.setInt(valuesField, valuesField.getModifiers() & ~Modifier.FINAL);
-
-			//valuesField.set(null, newValues);
-			setStaticFinalField(valuesField,newValues);
-
-			System.out.println("Pneumatic MetaTag successfully injected!");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@SuppressWarnings("all")
-	public static EntityMetaTag createPneumaticEnum(String name, int ordinal, int meta, Class<?> cls) {
-		ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
-		try {
-			Constructor<?> con = EntityMetaTag.class.getDeclaredConstructor(
-					String.class,
-					int.class,
-					int.class,
-					Class.class
-			);
-			con.setAccessible(true);
-
-			return (EntityMetaTag) rf.newConstructorAccessor(con)
-					.newInstance(new Object[] { name, ordinal, meta, cls });
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@SuppressWarnings("all")
-	public static void setStaticFinalField(Field field, Object value) throws Exception {
-		Field unsafeField = Unsafe.class.getDeclaredField("theUnsafe");
-		unsafeField.setAccessible(true);
-		Unsafe unsafe = (Unsafe) unsafeField.get(null);
-
-		Object base = unsafe.staticFieldBase(field);
-		long offset = unsafe.staticFieldOffset(field);
-
-		unsafe.putObject(base, offset, value);
-	}
-
-	public static double sanitize_number(double number,double deafult) {
-		if (Double.isNaN(number)||Double.isInfinite(number)) {
-			return deafult;
-		}
-		return number;
-	}
-
-	public static double sanitize_number(double number) {
-		return sanitize_number(number,0);
-	}
-
-	public static String plot_pressure(double pressure) {
-		if (pressure >= 1000000.0) {
-			return String.format("%.2f MPa", pressure / 1000000.0);
-		} else if (pressure >= 1000.0) {
-			return String.format("%.2f kPa", pressure / 1000.0);
-		} else {
-			return String.format("%.2f Pa", pressure);
-		}
-	}
-
-	public static String plot_speed(double speed) {
-		if (speed >= 1000.0) {
-			return String.format("%.2f KM/S", speed / 1000.0);
-		} else if (speed>=1) {
-			return String.format("%.2f M/S", speed);
-		} else if (speed>=0.01) {
-			return String.format("%.2f SM/S", speed * 100);
-		} else if (speed>=0.001) {
-			return String.format("%.2f MM/S", speed * 1000);
-		} else {
-			return String.format("%.2f µM/S", speed * 1000000);
-		}
 	}
 }

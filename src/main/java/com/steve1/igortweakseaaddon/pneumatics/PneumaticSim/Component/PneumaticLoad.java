@@ -5,6 +5,8 @@ import mods.eln.sim.mna.state.State;
 import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.check_for_nan;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
 
 public class PneumaticLoad extends State implements INBTTReady {
 
@@ -12,9 +14,9 @@ public class PneumaticLoad extends State implements INBTTReady {
     public double speed;
     public double resistance;
     public double volume;
-    public double length;
     public double area;
     public double inv_volume;
+    public double R_T_inv_volume;
 
     public double next_speed=0;
     public double next_mass=0;
@@ -34,6 +36,7 @@ public class PneumaticLoad extends State implements INBTTReady {
         volume=small_pneumatic_volume;
         state=base_armospheric_pressure*volume/R_T_gas;
         inv_volume=1/volume;
+        R_T_inv_volume=R_T_gas*inv_volume;
     }
 
     public void add_next(double added_speed,double added_mass) {
@@ -56,7 +59,8 @@ public class PneumaticLoad extends State implements INBTTReady {
         next_mass_coefficient=1;
         if (next_mass<0) {
 
-            next_mass_coefficient = 0.99 * state / state-next_mass;
+            next_mass_coefficient = 0.99 * state / (state-next_mass);
+
             // adding 99 to ensure that we dont drop mass to 0
             // or at boundary it could cause mass to go negative
             // due to floating point errors
@@ -70,10 +74,10 @@ public class PneumaticLoad extends State implements INBTTReady {
 
         speed=next_speed;
 
-        double static_pressure=state*R_T_gas/volume;
-        double dynami_pressure= get_density()*speed*speed/2;
+        double static_pressure=state*R_T_inv_volume;
+        double dynamic_pressure= get_density()*speed*speed/2;
 
-        pressure=static_pressure-dynami_pressure;
+        pressure=static_pressure/(1+dynamic_pressure/(static_pressure+0.00000001));
         if (pressure<0) {
             pressure=0;
         }
@@ -87,9 +91,6 @@ public class PneumaticLoad extends State implements INBTTReady {
     public void sanitize() {
         pressure=sanitize_number(pressure,base_armospheric_pressure);
         speed=sanitize_number(speed,0);
-        area=sanitize_number(area,small_pneumatic_area);
-        volume=sanitize_number(volume,area*length);
-        resistance=sanitize_number(resistance,base_air_resistance);
         state=sanitize_number(state,base_armospheric_pressure*volume/R_T_gas);
     }
 
@@ -172,6 +173,7 @@ public class PneumaticLoad extends State implements INBTTReady {
         }
         volume=new_volume;
         inv_volume=1/volume;
+        R_T_inv_volume=R_T_gas*inv_volume;
     }
 
     public void set_resistance(double new_resistance) {
@@ -193,12 +195,16 @@ public class PneumaticLoad extends State implements INBTTReady {
         speed=inbt.getDouble("speed");
         resistance=inbt.getDouble("resistance");
         volume=inbt.getDouble("volume");
+        inv_volume=1/volume;
+        R_T_inv_volume=R_T_gas*inv_volume;
         area=inbt.getDouble("area");
+        sanitize();
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt, String str) {
         NBTTagCompound inbt= new NBTTagCompound();
+        sanitize();
         inbt.setDouble("mass",state);
         inbt.setDouble("pressure",pressure);
         inbt.setDouble("speed",speed);

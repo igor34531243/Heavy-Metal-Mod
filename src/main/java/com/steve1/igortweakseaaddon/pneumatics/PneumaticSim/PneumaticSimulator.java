@@ -25,7 +25,19 @@ public class PneumaticSimulator implements IProcess {
         this.one_call_time=one_call_time;
     }
 
-    public void free() {
+    public void start() {
+        pneumatic_components.clear();
+        pneumatic_loads.clear();
+        pneumatic_processes.clear();
+
+        Eln.simulator.addSlowProcess(this);
+    }
+
+    public void stop() {
+        pneumatic_components.clear();
+        pneumatic_loads.clear();
+        pneumatic_processes.clear();
+
         Eln.simulator.removeSlowProcess(this);
     }
 

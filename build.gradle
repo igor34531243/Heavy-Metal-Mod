@@ -18,7 +18,7 @@ buildscript {
 
     dependencies {
         classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
-            changing = true
+            //changing = true
         }
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
     }
@@ -55,7 +55,17 @@ jar {
     exclude '**/*.kotlin_metadata'
     exclude '**/*.kotlin_module'
     exclude '**/*.kotlin_builtins'
+
+    manifest {
+        attributes (
+                'FMLCorePlugin': 'ASM_Igor.ElnCorePlugin',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'ForceLoadAsMod': 'true', // Обязательно для 1.7.10 в папке /mods
+                'ModSide': 'CLIENT' // Или 'BOTH'
+        )
+    }
 }
+
 
 idea {
     module {

@@ -1,5 +1,7 @@
-package com.steve1.igortweakseaaddon.misc.IgorTransparentNode;
+package com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode;
 
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeInterface;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
@@ -14,10 +16,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.igorTransparentNodeBlock;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
 
-public abstract class IgorTransparentNodeElement extends TransparentNodeElement {
+public abstract class IgorTransparentNodeElement extends TransparentNodeElement implements IgorElementInterface {
 
     public ArrayList<PneumaticConnection> pneumaticComponentList = new ArrayList<PneumaticConnection>();
     public ArrayList<PneumaticLoad> pneumaticLoadList = new ArrayList<PneumaticLoad>();
@@ -27,12 +28,7 @@ public abstract class IgorTransparentNodeElement extends TransparentNodeElement 
         super(transparentNode, descriptor);
     }
 
-    public ItemStack getDropItemStack() {
-        ItemStack itemStack = new ItemStack(igorTransparentNodeBlock, 1, node.elementId);
-        itemStack.setTagCompound(getItemStackNBT());
-        return itemStack;
-    }
-
+    @Override
     public abstract PneumaticLoad getPneumaticLoad(Direction direction, LRDU lrdu);
 
     @Override
