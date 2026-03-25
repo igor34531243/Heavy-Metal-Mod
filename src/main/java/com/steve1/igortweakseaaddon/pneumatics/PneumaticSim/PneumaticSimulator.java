@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
 public class PneumaticSimulator implements IProcess {
 
@@ -30,7 +31,7 @@ public class PneumaticSimulator implements IProcess {
         pneumatic_loads.clear();
         pneumatic_processes.clear();
 
-        Eln.simulator.addSlowProcess(this);
+        Eln.simulator.addThermalFastProcess(this);
     }
 
     public void stop() {
@@ -38,7 +39,7 @@ public class PneumaticSimulator implements IProcess {
         pneumatic_loads.clear();
         pneumatic_processes.clear();
 
-        Eln.simulator.removeSlowProcess(this);
+        Eln.simulator.removeThermalFastProcess(this);
     }
 
     @Override
@@ -54,6 +55,12 @@ public class PneumaticSimulator implements IProcess {
     }
 
     public void sim_step(double time) {
+
+        for (PneumaticConnection connection: pneumatic_components) {
+            connection.sanitize();
+            //logger.info("speed: "+plot_speed(connection.speed));//+", pdiff: "+plot_pascals(connection.load1.pressure-connection.load2.pressure));
+        }
+
         for (PneumaticConnection connection: pneumatic_components) {
             connection.start_step(time);
         }
@@ -74,12 +81,12 @@ public class PneumaticSimulator implements IProcess {
 
         for (PneumaticLoad load: pneumatic_loads) {
             load.sanitize();
-            //logger.info("mass: "+load.get_mass()+", speed: "+load.speed);
+            //logger.info("mass: "+load.get_mass()+", speed: "+plot_speed(load.speed)+", pressure: "+plot_pascals(load.get_pressure()));
         }
 
         for (PneumaticConnection connection: pneumatic_components) {
             connection.sanitize();
-            //logger.info("speed: "+connection.speed+", pdiff: "+(connection.load1.pressure-connection.load2.pressure));
+            //logger.info("speed: "+plot_speed(connection.speed));//+", pdiff: "+plot_pascals(connection.load1.pressure-connection.load2.pressure));
         }
     }
 
@@ -107,16 +114,8 @@ public class PneumaticSimulator implements IProcess {
         pneumatic_processes.remove(p_process);
     }
 
-    public void addAllPneumaticComponent(Collection<PneumaticConnection> p_components) {
-        pneumatic_components.addAll(p_components);
-    }
-
     public void addPneumaticComponent(PneumaticConnection p_component) {
         pneumatic_components.add(p_component);
-    }
-
-    public void removeAllPneumaticComponent(Collection<PneumaticConnection> p_components) {
-        pneumatic_components.removeAll(p_components);
     }
 
     public void removePneumaticComponent(PneumaticConnection p_component) {

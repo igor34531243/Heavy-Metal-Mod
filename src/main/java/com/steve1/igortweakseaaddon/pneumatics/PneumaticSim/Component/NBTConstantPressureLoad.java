@@ -5,12 +5,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
 
-public class ConstantPressureLoad extends PneumaticLoad{
+public class NBTConstantPressureLoad extends NBTPneumaticLoad{
 
     public double constant_pressure;
     public double constant_density;
 
-    public ConstantPressureLoad(String name, double constant_pressure) {
+    public NBTConstantPressureLoad(String name, double constant_pressure) {
         super(name);
         state=Double.POSITIVE_INFINITY;
         volume=Double.POSITIVE_INFINITY;

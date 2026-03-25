@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.misc;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.base_armospheric_pressure;
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.base_atmospheric_pressure;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public class igorUTILS {
@@ -22,6 +22,10 @@ public class igorUTILS {
         return sanitize_number(number,0);
     }
 
+    public static String plot_pascals_atmospheres(double pressure) {
+        return plot_pascals(pressure)+" "+plot_atmospheres(pressure);
+    }
+
     public static String plot_pascals(double pressure) {
         if (pressure >= 1000000.0) {
             return String.format("%.2f MPa", pressure / 1000000.0);
@@ -37,12 +41,18 @@ public class igorUTILS {
     }
 
     public static String plot_atmospheres(double pressure) {
-        if (pressure >= base_armospheric_pressure) {
-            return String.format("%.2f Atm", pressure/base_armospheric_pressure);
-        } else if (pressure >= base_armospheric_pressure/1000) {
-            return String.format("%.2f mAtm", 1000*pressure/base_armospheric_pressure);
+        if (pressure >= base_atmospheric_pressure *100) {
+            return String.format("%.0f Atm", pressure/ base_atmospheric_pressure);
+        } else if (pressure >= base_atmospheric_pressure *10) {
+            return String.format("%.1f Atm", pressure/ base_atmospheric_pressure);
+        } else if (pressure >= base_atmospheric_pressure *0.95) {
+            return String.format("%.2f Atm", pressure/ base_atmospheric_pressure);
+        } else if (pressure >= base_atmospheric_pressure *0.1) {
+            return String.format("%.3f Atm", pressure/ base_atmospheric_pressure);
+        } else if (pressure >= base_atmospheric_pressure /1000) {
+            return String.format("%.2f mAtm", 1000*pressure/ base_atmospheric_pressure);
         } else {
-            return String.format("%.2f µAtm", 1000000*pressure/base_armospheric_pressure);
+            return String.format("%.2f µAtm", 1000000*pressure/ base_atmospheric_pressure);
         }
     }
 

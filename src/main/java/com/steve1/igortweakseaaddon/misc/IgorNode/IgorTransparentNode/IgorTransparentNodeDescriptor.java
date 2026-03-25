@@ -5,8 +5,6 @@ import mods.eln.node.transparent.EntityMetaTag;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.node.transparent.TransparentNodeElementRender;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.igorTransparentMetatag;
-
 public class IgorTransparentNodeDescriptor extends TransparentNodeDescriptor {
     public Obj3D model;
     public String model_main_group="main";

@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode;
+package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
@@ -6,25 +6,24 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumat
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
-import mods.eln.node.transparent.TransparentNode;
-import mods.eln.node.transparent.TransparentNodeDescriptor;
-import mods.eln.node.transparent.TransparentNodeElement;
+import mods.eln.node.six.SixNode;
+import mods.eln.node.six.SixNodeDescriptor;
+import mods.eln.node.six.SixNodeElement;
 import mods.eln.sim.IProcess;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
 
-public abstract class IgorTransparentNodeElement extends TransparentNodeElement implements IgorElementInterface {
+public abstract class IgorSixNodeElement extends SixNodeElement implements IgorElementInterface {
 
     public ArrayList<NBTPneumaticConnection> pneumaticComponentList = new ArrayList<NBTPneumaticConnection>();
     public ArrayList<NBTPneumaticLoad> pneumaticLoadList = new ArrayList<NBTPneumaticLoad>();
     public ArrayList<IProcess> pneumaticProcessList = new ArrayList<IProcess>();
 
-    public IgorTransparentNodeElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
-        super(transparentNode, descriptor);
+    public IgorSixNodeElement(SixNode sixNode, Direction side, SixNodeDescriptor descriptor) {
+        super(sixNode, side, descriptor);
     }
 
     @Override
@@ -34,7 +33,7 @@ public abstract class IgorTransparentNodeElement extends TransparentNodeElement 
     public void connectJob() {
         super.connectJob();
 
-        if (node != null && node.isDestructing()) return;
+        if (sixNode != null && sixNode.isDestructing()) return;
 
         for (NBTPneumaticConnection connection : pneumaticComponentList) pneumatic_simulator.addPneumaticComponent(connection);
         for (NBTPneumaticLoad load :pneumaticLoadList) pneumatic_simulator.addPneumaticLoad(load);
@@ -83,11 +82,6 @@ public abstract class IgorTransparentNodeElement extends TransparentNodeElement 
 
     @Override
     public void initialize() {
-        node.connect();
-    }
 
-    @Override
-    public boolean onBlockActivated(EntityPlayer entityPlayer, Direction side, float vx, float vy, float vz) {
-        return false;
-    };
+    }
 }

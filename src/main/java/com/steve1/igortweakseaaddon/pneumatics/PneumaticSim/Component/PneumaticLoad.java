@@ -1,42 +1,30 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
-import mods.eln.misc.INBTTReady;
 import mods.eln.sim.mna.state.State;
-import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.check_for_nan;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
 
-public class PneumaticLoad extends State implements INBTTReady {
+public class PneumaticLoad extends State {
 
-    public double pressure;
-    public double speed;
-    public double resistance;
-    public double volume;
-    public double area;
-    public double inv_volume;
-    public double R_T_inv_volume;
+    public double pressure= base_atmospheric_pressure;
+    public double speed=0;
+    public double resistance=base_air_resistance;
+    public double volume=small_pneumatic_volume;
+    public double area=small_pneumatic_area;
+    public double inv_volume=1/volume;
+    public double R_T_inv_volume=R_T_gas*inv_volume;
 
     public double next_speed=0;
-    public double next_mass=0;
+    public double next_mass=state;
     public double next_amount=0;
     public double next_mass_coefficient=1;
 
     public static final double R_T_gas=2437; // R*T at T=20 celsius
+    public static final double R_T_gas_inv=1/R_T_gas;
 
-    public String nbt_name;
-
-    public PneumaticLoad(String name) {
-        nbt_name=name;
-        resistance=base_air_resistance;
-        speed=0;
-        pressure=base_armospheric_pressure;
-        area=small_pneumatic_area;
-        volume=small_pneumatic_volume;
-        state=base_armospheric_pressure*volume/R_T_gas;
-        inv_volume=1/volume;
-        R_T_inv_volume=R_T_gas*inv_volume;
+    public PneumaticLoad() {
+        state=pressure*volume*R_T_gas_inv;
     }
 
     public void add_next(double added_speed,double added_mass) {
@@ -46,7 +34,7 @@ public class PneumaticLoad extends State implements INBTTReady {
         // or it would cause some weird issues
 
         next_speed=(next_speed*next_amount+added_speed)/(next_amount+1);
-        next_mass=(next_mass*next_amount+added_mass)/(next_amount+1);
+        next_mass+=added_mass;
         next_amount+=1;
     }
 
@@ -57,9 +45,13 @@ public class PneumaticLoad extends State implements INBTTReady {
         // how much mass is safe to actualy move
 
         next_mass_coefficient=1;
-        if (next_mass<0) {
+        if (next_mass<=0) {
 
             next_mass_coefficient = 0.99 * state / (state-next_mass);
+
+            if (next_mass_coefficient<0.00001) {
+                next_mass_coefficient=0;
+            }
 
             // adding 99 to ensure that we dont drop mass to 0
             // or at boundary it could cause mass to go negative
@@ -83,15 +75,15 @@ public class PneumaticLoad extends State implements INBTTReady {
         }
 
         next_mass_coefficient=1;
-        next_speed=0;
-        next_mass=0;
+        next_speed=speed;
+        next_mass=state;
         next_amount=0;
     }
 
     public void sanitize() {
-        pressure=sanitize_number(pressure,base_armospheric_pressure);
+        pressure=sanitize_number(pressure, base_atmospheric_pressure);
         speed=sanitize_number(speed,0);
-        state=sanitize_number(state,base_armospheric_pressure*volume/R_T_gas);
+        state=sanitize_number(state, base_atmospheric_pressure *volume/R_T_gas);
     }
 
     public void set_mass(double new_mass) {
@@ -180,37 +172,13 @@ public class PneumaticLoad extends State implements INBTTReady {
         if (new_resistance<0) {
             logger.error("trying to set resistance to negative!");
             return;
-        } else if (new_resistance>1) {
-            logger.error("trying to set resistance to more than 1!");
-            return;
         }
         resistance=new_resistance;
     }
 
-    @Override
-    public void readFromNBT(NBTTagCompound nbt, String str) {
-        NBTTagCompound inbt=nbt.getCompoundTag(str);
-        state=inbt.getDouble("mass");
-        pressure=inbt.getDouble("pressure");
-        speed=inbt.getDouble("speed");
-        resistance=inbt.getDouble("resistance");
-        volume=inbt.getDouble("volume");
-        inv_volume=1/volume;
-        R_T_inv_volume=R_T_gas*inv_volume;
-        area=inbt.getDouble("area");
-        sanitize();
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt, String str) {
-        NBTTagCompound inbt= new NBTTagCompound();
-        sanitize();
-        inbt.setDouble("mass",state);
-        inbt.setDouble("pressure",pressure);
-        inbt.setDouble("speed",speed);
-        inbt.setDouble("resistance",resistance);
-        inbt.setDouble("volume",volume);
-        inbt.setDouble("area",area);
-        nbt.setTag(str,inbt);
+    public void set(double resistance,double area,double volume) {
+        set_resistance(resistance);
+        set_area(area);
+        set_volume(volume);
     }
 }

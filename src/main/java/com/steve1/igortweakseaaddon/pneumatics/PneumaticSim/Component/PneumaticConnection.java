@@ -1,30 +1,32 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
+import mods.eln.misc.INBTTReady;
 import mods.eln.sim.mna.SubSystem;
 import mods.eln.sim.mna.component.Component;
 import mods.eln.sim.mna.state.State;
+import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.check_for_nan;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
-public class PneumaticConnection extends Component {
+public class PneumaticConnection extends Component{
 
     public PneumaticLoad load1;
     public PneumaticLoad load2;
 
     public boolean working=false;
-    public boolean loaded=false;
 
-    public double speed;
-    public double area;
+    public double speed=0;
+    public double area=small_pneumatic_area;
     public double length=1;
-    public double resistance;
+    public double resistance=base_air_resistance;
 
     public double to_move_mass=0;
 
-    public static final double     small_value    = 0.000000000001;
+    public static final double small_value = 0.000000000001;
     public static final double small_bigger_value = 0.00000000001;
+    public static final double stable_d_pressure = base_atmospheric_pressure*0.05;
+    public static final double stable_d_pressure_inv = 1/stable_d_pressure;
 
     public PneumaticConnection() {
         this(null,null);
@@ -46,11 +48,6 @@ public class PneumaticConnection extends Component {
         // we slow down speed by dv=speed*resistance*time
         // and increase it by dv=(pressure1-pressure2)/(length*(average_dencity))*time
         // after the simulation step is finished we apply the parameters to loads
-        // also adding small value in a special way to ensure
-        // that speed of the load from which mass is moving
-        // is higher than the one it moves to (needed for correct loading from nbt
-        // since we cant store a direction inside a load when saving
-        // so it is guessed from the direction of speed decreasing)
 
         double d_pressure=load1.pressure-load2.pressure;
         double averge_dencity=(load1.get_density()+load2.get_density())/2;
@@ -61,9 +58,9 @@ public class PneumaticConnection extends Component {
         }
 
         if ((speed>=0)==(acceleration_pressure>=0)) {
-            acceleration_pressure*=0.1;  // 0.1 to slow it down, or it oscilates wildly
+            acceleration_pressure*=0.05;  // 0.1 to slow it down, or it oscilates wildly
         } else {
-            acceleration_pressure*=0.5;  // 0.5 to allow it to reach balance faster or it becomes a jelly
+            acceleration_pressure*=0.3;  // 0.5 to allow it to reach balance faster or it becomes a jelly
         }
 
         speed+=acceleration_pressure*time;
@@ -81,9 +78,9 @@ public class PneumaticConnection extends Component {
 
         check_for_nan(to_move_mass,"to_move_mass");
 
-        if (Math.abs(speed)>small_bigger_value && Math.abs(acceleration_pressure)>small_bigger_value) {
-            load1.add_next(Math.abs(speed + small_value) - small_value, -to_move_mass);
-            load2.add_next(Math.abs(speed - small_value) - small_value, to_move_mass);
+        if (Math.abs(speed)>small_bigger_value || Math.abs(acceleration_pressure)>small_bigger_value) {
+            load1.add_next(Math.abs(speed), -to_move_mass);
+            load2.add_next(Math.abs(speed), to_move_mass);
         } else {
             to_move_mass=0;
         }
@@ -112,6 +109,10 @@ public class PneumaticConnection extends Component {
 
     public double get_resistance() {
         return resistance;
+    }
+
+    public double get_speed() {
+        return speed;
     }
 
     public void set(double area, double resistance) {
@@ -158,25 +159,20 @@ public class PneumaticConnection extends Component {
         this.length=length;
     }
 
+    public void set_speed(double speed) {
+        this.speed=speed;
+    }
+
     public void set_high_resistance() {
         this.resistance=Double.POSITIVE_INFINITY;
     }
 
     public void load_stats() {
-        if (load1 == null || load2 == null || loaded) {
+        if (load1 == null || load2 == null) {
             return;
         }
         area=(load1.get_area()+load2.get_area())/2;
         resistance=(load1.get_resistance()+load2.get_resistance())/2;
-//        double speed1 = load1.get_speed();
-//        double speed2 = load2.get_speed();
-//        double loaded_speed = (Math.abs(speed1) + Math.abs(speed2)) / 2;
-//        if (speed1 > speed2) {
-//            speed = loaded_speed;
-//        } else {
-//            speed = -loaded_speed;
-//        }
-        loaded=true;
     }
 
     public void connect(PneumaticLoad load1,PneumaticLoad load2) {
@@ -192,10 +188,7 @@ public class PneumaticConnection extends Component {
             load2.add(this);
         }
         if (load1!=null && load2!=null) {
-            load_stats();
-            if (loaded) {
-                working = true;
-            }
+            working = true;
         }
     }
 

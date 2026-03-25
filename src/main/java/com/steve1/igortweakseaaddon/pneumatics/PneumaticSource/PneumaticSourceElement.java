@@ -1,8 +1,9 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticSource;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.ConstantPressureLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTConstantPressureLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
@@ -21,19 +22,19 @@ import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceRender.setPressureId;
 
 public class PneumaticSourceElement extends IgorTransparentNodeElement {
-    public PneumaticLoad pneumatic_load;
-    public ConstantPressureLoad constant_pressure_load;
-    public PneumaticConnection pneumatic_connection;
+    public NBTPneumaticLoad pneumatic_load;
+    public NBTConstantPressureLoad constant_pressure_load;
+    public NBTPneumaticConnection pneumatic_connection;
     public double constant_pressure;
 
     public PneumaticSourceElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
-        constant_pressure=base_armospheric_pressure;
-        pneumatic_load=new PneumaticLoad("pneumatic_load");
+        constant_pressure= base_atmospheric_pressure;
+        pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
         pneumaticLoadList.add(pneumatic_load);
-        constant_pressure_load=new ConstantPressureLoad("const_load",constant_pressure);
+        constant_pressure_load=new NBTConstantPressureLoad("const_load",constant_pressure);
         pneumaticLoadList.add(constant_pressure_load);
-        pneumatic_connection=new PneumaticConnection(pneumatic_load,constant_pressure_load);
+        pneumatic_connection=new NBTPneumaticConnection("pneumatic_connection",pneumatic_load,constant_pressure_load);
         pneumaticComponentList.add(pneumatic_connection);
     }
 

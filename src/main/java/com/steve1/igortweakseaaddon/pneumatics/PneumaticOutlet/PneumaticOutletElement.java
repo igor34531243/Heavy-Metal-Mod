@@ -1,8 +1,9 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.AtmosphereLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTAtmosphereLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
@@ -15,17 +16,17 @@ import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
 public class PneumaticOutletElement extends IgorTransparentNodeElement {
-    public PneumaticLoad pneumatic_load;
-    public AtmosphereLoad atmosphere_load;
-    public PneumaticConnection pneumatic_connection;
+    public NBTPneumaticLoad pneumatic_load;
+    public NBTAtmosphereLoad atmosphere_load;
+    public NBTPneumaticConnection pneumatic_connection;
 
     public PneumaticOutletElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
-        pneumatic_load=new PneumaticLoad("pneumatic_load");
+        pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
         pneumaticLoadList.add(pneumatic_load);
-        atmosphere_load=new AtmosphereLoad("atmosphere_load");
+        atmosphere_load=new NBTAtmosphereLoad("atmosphere_load");
         pneumaticLoadList.add(atmosphere_load);
-        pneumatic_connection=new PneumaticConnection(pneumatic_load,atmosphere_load);
+        pneumatic_connection=new NBTPneumaticConnection("pneumatic_connection",pneumatic_load,atmosphere_load);
         pneumaticComponentList.add(pneumatic_connection);
     }
 

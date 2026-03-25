@@ -41,14 +41,14 @@ public class ElnNodeTransformer implements IClassTransformer {
                     if (insn.getOpcode() == Opcodes.NEW) {
                         TypeInsnNode typeInsn = (TypeInsnNode) insn;
                         if (typeInsn.desc.equals(classs_to_remove)) {
-                            typeInsn.desc = class_to_set; // ТВОЙ КЛАСС
+                            typeInsn.desc = class_to_set;
                         }
                     }
 
                     if (insn.getOpcode() == Opcodes.INVOKESPECIAL) {
                         MethodInsnNode methInsn = (MethodInsnNode) insn;
                         if (methInsn.owner.equals(classs_to_remove) && methInsn.name.equals("<init>")) {
-                            methInsn.owner = class_to_set; // ТВОЙ КЛАСС
+                            methInsn.owner = class_to_set;
                         }
                     }
                 }

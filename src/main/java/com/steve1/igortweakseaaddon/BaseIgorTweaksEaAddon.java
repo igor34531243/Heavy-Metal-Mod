@@ -11,6 +11,7 @@ import com.steve1.igortweakseaaddon.misc.StirlingEngine.StirlingEngineDescriptor
 import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
 import cpw.mods.fml.common.Mod;
@@ -19,24 +20,21 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.eln.Eln;
 import mods.eln.Other;
+import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.i18n.I18N;
 import mods.eln.misc.Obj3D;
 import mods.eln.misc.Obj3DFolder;
 import mods.eln.misc.Utils;
+import mods.eln.misc.VoltageLevelColor;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
 import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.misc.Unsafe;
-import sun.reflect.ReflectionFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,17 +42,14 @@ import java.lang.reflect.*;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.security.CodeSource;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static cpw.mods.fml.common.registry.GameRegistry.addRecipe;
 import static mods.eln.Eln.*;
 import static mods.eln.i18n.I18N.TR_NAME;
 
 @Mod (modid = "igortweakseaaddon", name="Heavy Metal (Electrical Age Addon)", version = "1.0", dependencies = "required-after:Eln;")
-
 public class BaseIgorTweaksEaAddon {
 	public static CreativeTabs tabIgorTweaks;
 	public static final Logger logger = LogManager.getLogger("MyElnAddon");
@@ -72,19 +67,32 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticHubDescriptor pneumaticHubDescriptor;
 	public static PneumaticOutletDescriptor pneumaticOutletDescriptor;
 	public static PneumaticSourceDescriptor pneumaticSourceDescriptor;
+	public static PneumaticPipeDescriptor smallPneumaticPipeDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
 
-	public static EntityMetaTag igorTransparentMetatag;
+	public static final double base_air_resistance = 10;
+	public static final double base_atmospheric_pressure = 101325;
+	public static final double small_pneumatic_resistance = base_air_resistance;
+	public static final double small_pneumatic_area = 0.0003;
+	public static final double small_pneumatic_volume = small_pneumatic_area*1;
+	public static final double small_pneumatic_max_pressure = base_atmospheric_pressure * 20;
+	public static final double t2_pneumatic_resistance = base_air_resistance;
+	public static final double t2_pneumatic_area = 0.0003;
+	public static final double t2_pneumatic_volume = t2_pneumatic_area*1;
+	public static final double t2_pneumatic_max_pressure = base_atmospheric_pressure * 200;
 
-	public static final double base_air_resistance = 0.999;
-	public static final double base_armospheric_pressure = 101325;
-	public static final double small_pneumatic_area = 0.05;
-	public static final double small_pneumatic_volume = 0.05;
+	// plastic  20atm    0.0005 1.5 x 1.5 0.999
+	// copper   200 atm  0.001  2.0 x 2.0 0.995
+	// iron     400 atm  0.003  3.0 x 3.0 0.99
+	// tungsten 600 atm  0.005  4.0 x 4.0 0.98
+	// alloy    1000 atm 0.01   5.0 x 5.0 0.97
 
 	public static PneumaticSimulator pneumatic_simulator;
 	public static int pneumaticMask = (1<<13);
+
+	public static final int pneumatic_steps_per_tick=10;
 
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
@@ -99,6 +107,7 @@ public class BaseIgorTweaksEaAddon {
 		register_wireless_alarms();
 		register_stirling_engine();
 		register_pneumatics();
+		register_pneumatic_pipes();
 	}
 
 	@EventHandler
@@ -119,7 +128,7 @@ public class BaseIgorTweaksEaAddon {
 	public void initialize_mod() {
 		testcube=obj.getObj("TestCube");
 
-		pneumatic_simulator=new PneumaticSimulator(0.002);
+		pneumatic_simulator=new PneumaticSimulator(0.05/pneumatic_steps_per_tick);
 
 		NodeManager.registerUuid(sixNodeBlock.getNodeUuid(), IgorSixNode.class);
 
@@ -198,32 +207,54 @@ public class BaseIgorTweaksEaAddon {
     }
 
 	public void register_pneumatics() {
-		int id=133;
+		int id = 133;
 		int subId;
 
-		subId=0;
+		subId = 0;
 
-		pneumaticHubDescriptor = new PneumaticHubDescriptor("Pneumatic_Hub",obj.getObj("PneumaticHub"));
+		pneumaticHubDescriptor = new PneumaticHubDescriptor("Pneumatic_Hub", obj.getObj("PneumaticHub"));
 
 		pneumaticHubDescriptor.setDefaultIcon("pneumatichub");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticHubDescriptor);
 
-		subId=1;
+		subId = 1;
 
-		pneumaticOutletDescriptor = new PneumaticOutletDescriptor("Pneumatic_Outlet",obj.getObj("PneumaticOutlet"));
+		pneumaticOutletDescriptor = new PneumaticOutletDescriptor("Pneumatic_Outlet", obj.getObj("PneumaticOutlet"));
 
 		pneumaticOutletDescriptor.setDefaultIcon("pneumaticoutlet");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticOutletDescriptor);
 
-		subId=2;
+		subId = 2;
 
-		pneumaticSourceDescriptor = new PneumaticSourceDescriptor("Pneumatic_Source",obj.getObj("PneumaticSource"));
+		pneumaticSourceDescriptor = new PneumaticSourceDescriptor("Pneumatic_Source", obj.getObj("PneumaticSource"));
 
 		pneumaticSourceDescriptor.setDefaultIcon("pneumaticsource");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), pneumaticSourceDescriptor);
+	}
+
+	public void register_pneumatic_pipes() {
+		int id=134;
+		int subId;
+
+		subId = 0;
+
+		CableRenderDescriptor cable_rend_desc;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 1.5f, 1.5f);
+
+		smallPneumaticPipeDescriptor = new PneumaticPipeDescriptor("Small Pneumatic Pipe", cable_rend_desc,0,1);
+
+		smallPneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
+
+		smallPneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		smallPneumaticPipeDescriptor.setDefaultIcon("smallpneumaticpipe");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), smallPneumaticPipeDescriptor);
 	}
 
 	public void register_fuses() {
@@ -326,6 +357,43 @@ public class BaseIgorTweaksEaAddon {
 		transparentNodeItem.addDescriptor(subId + (id << 6), sensorDescriptor);
 	}
 
+	private void register_wireless_alarms() {
+		int id =103;
+		int subId, completId;
+		String name;
+		{
+			subId = 2;
+			name = TR_NAME(I18N.Type.NONE, "Wireless Nuclear Alarm");
+			wirelessNuclearAlarm = new WirelessAlarmDescriptor(name,
+					obj.getObj("alarmmedium"), 7, "eln:alarma", 11, 1f, wirelessTxRange);
+			sixNodeItem.addDescriptor(subId + (id << 6), wirelessNuclearAlarm);
+		}
+		{
+			subId = 3;
+			name = TR_NAME(I18N.Type.NONE, "Wireless Standard Alarm");
+			wirelessStandardAlarm = new WirelessAlarmDescriptor(name,
+					obj.getObj("alarmmedium"), 7, "eln:smallalarm_critical",
+					1.2, 2f, wirelessTxRange);
+			sixNodeItem.addDescriptor(subId + (id << 6), wirelessStandardAlarm);
+		}
+	}
+
+	public void register_stirling_engine() {
+		int id =4;
+		int subId, completId;
+		String name;
+
+		subId=22;
+
+
+		name = TR_NAME(I18N.Type.NONE, "Stirling Engine");
+		stirlingEngineDescriptor= new StirlingEngineDescriptor(name,obj.getObj("StirlingEngine"));
+
+		stirlingEngineDescriptor.setDefaultIcon("stirlingengine");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
+	}
+
 	public void loadAllElnAddonModels() {
 		// this is my magic bypass of eln model loading method
 		// most of this is very unstable
@@ -404,42 +472,5 @@ public class BaseIgorTweaksEaAddon {
 			logger.error("failed to load energy exporter, here are logs:");
 			e.printStackTrace();
 		}
-	}
-
-	private void register_wireless_alarms() {
-		int id =103;
-		int subId, completId;
-		String name;
-		{
-			subId = 2;
-			name = TR_NAME(I18N.Type.NONE, "Wireless Nuclear Alarm");
-			wirelessNuclearAlarm = new WirelessAlarmDescriptor(name,
-					obj.getObj("alarmmedium"), 7, "eln:alarma", 11, 1f, wirelessTxRange);
-			sixNodeItem.addDescriptor(subId + (id << 6), wirelessNuclearAlarm);
-		}
-		{
-			subId = 3;
-			name = TR_NAME(I18N.Type.NONE, "Wireless Standard Alarm");
-			wirelessStandardAlarm = new WirelessAlarmDescriptor(name,
-					obj.getObj("alarmmedium"), 7, "eln:smallalarm_critical",
-					1.2, 2f, wirelessTxRange);
-			sixNodeItem.addDescriptor(subId + (id << 6), wirelessStandardAlarm);
-		}
-	}
-
-	public void register_stirling_engine() {
-		int id =4;
-		int subId, completId;
-		String name;
-
-		subId=22;
-
-
-		name = TR_NAME(I18N.Type.NONE, "Stirling Engine");
-		stirlingEngineDescriptor= new StirlingEngineDescriptor(name,obj.getObj("StirlingEngine"));
-
-		stirlingEngineDescriptor.setDefaultIcon("stirlingengine");
-
-		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
 	}
 }

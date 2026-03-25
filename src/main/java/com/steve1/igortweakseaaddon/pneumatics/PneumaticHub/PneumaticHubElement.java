@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticHub;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
@@ -14,11 +15,11 @@ import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
 public class PneumaticHubElement extends IgorTransparentNodeElement {
-    public PneumaticLoad pneumatic_load;
+    public NBTPneumaticLoad pneumatic_load;
 
     public PneumaticHubElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
-        pneumatic_load=new PneumaticLoad("pneumatic_load");
+        pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
         pneumaticLoadList.add(pneumatic_load);
     }
 

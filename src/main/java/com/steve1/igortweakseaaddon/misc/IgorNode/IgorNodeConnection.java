@@ -22,6 +22,12 @@ public class IgorNodeConnection extends NodeConnection {
 
     public void destroy() {
         super.destroy();
+        if (N1 instanceof IgorNodeInterface) {
+            ((IgorNodeInterface) N1).updatePneumaticConnections();
+        }
+        if (N2 instanceof IgorNodeInterface) {
+            ((IgorNodeInterface) N2).updatePneumaticConnections();
+        }
         for(PneumaticConnection pc : PC) pneumatic_simulator.removePneumaticComponent(pc);
     }
 

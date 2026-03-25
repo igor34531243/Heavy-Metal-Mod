@@ -2,10 +2,10 @@ package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 
-public class AtmosphereLoad extends ConstantPressureLoad {
+public class NBTAtmosphereLoad extends NBTConstantPressureLoad {
 
-    public AtmosphereLoad(String name) {
-        super(name,base_armospheric_pressure);
+    public NBTAtmosphereLoad(String name) {
+        super(name, base_atmospheric_pressure);
     }
 
     @Override
