@@ -87,6 +87,7 @@ public class NBTConstantPressureLoad extends NBTPneumaticLoad{
         this.constant_pressure=constant_pressure;
         pressure=constant_pressure;
         update_cache();
+        activate_connections();
     }
 
     @Override

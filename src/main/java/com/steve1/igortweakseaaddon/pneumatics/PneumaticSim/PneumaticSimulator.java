@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_pascals;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_speed;
 
 public class PneumaticSimulator implements IProcess {
 
@@ -131,7 +133,7 @@ public class PneumaticSimulator implements IProcess {
 
         for (PneumaticConnection connection: active_pneumatic_components) {
             connection.sanitize();
-            //logger.info("speed: "+plot_speed(connection.speed));//+", pdiff: "+plot_pascals(connection.load1.pressure-connection.load2.pressure));
+            //logger.info("speed: "+plot_speed(connection.speed)+", pdiff: "+plot_pascals(connection.load1.pressure-connection.load2.pressure));
         }
     }
 
@@ -149,7 +151,7 @@ public class PneumaticSimulator implements IProcess {
     }
 
     public void update_activation_deactivation() {
-        logger.info("got connections: "+pneumatic_components.size()+", active: "+active_pneumatic_components.size()+", active stored: "+active_pneumatic_components_added.size());
+        //logger.info("got connections: "+pneumatic_components.size()+", active: "+active_pneumatic_components.size()+", active stored: "+active_pneumatic_components_added.size());
         for (PneumaticConnection connection : components_to_activate) {
             if (!active_pneumatic_components_added.add(connection)) {
                 continue;
@@ -209,7 +211,10 @@ public class PneumaticSimulator implements IProcess {
         if (!pneumatic_components_added.add(p_component)) {
             return;
         }
-        activatePneumaticComponent(p_component);
+        pneumatic_components.add(p_component);
+        if (active_pneumatic_components_added.add(p_component)) {
+            active_pneumatic_components.add(p_component);
+        }
         components_to_deactivate.remove(p_component);
         components_to_activate.remove(p_component);
     }

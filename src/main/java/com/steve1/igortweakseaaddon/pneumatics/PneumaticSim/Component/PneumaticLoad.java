@@ -165,6 +165,11 @@ public class PneumaticLoad extends State {
         this.state-=moved_mass;
     }
 
+    public void set_pressure(double pressure) {
+        state=pressure*volume*R_T_gas_inv;
+        update_cache();
+    }
+
     public double get_mass() {
         return state;
     }
