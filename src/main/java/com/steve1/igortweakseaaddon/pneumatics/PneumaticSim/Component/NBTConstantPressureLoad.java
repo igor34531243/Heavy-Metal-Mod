@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
 
 public class NBTConstantPressureLoad extends NBTPneumaticLoad{
 
@@ -39,16 +40,6 @@ public class NBTConstantPressureLoad extends NBTPneumaticLoad{
     }
 
     @Override
-    public void activate_connections() {
-
-    }
-
-    @Override
-    public void check_for_sleeping_connections() {
-
-    }
-
-    @Override
     public void set_mass(double new_mass) {
 
     }
@@ -70,6 +61,11 @@ public class NBTConstantPressureLoad extends NBTPneumaticLoad{
             return;
         }
         move_to.state+=moved_mass;
+    }
+
+    @Override
+    public void set_pressure(double pressure) {
+
     }
 
     @Override
