@@ -28,7 +28,10 @@ public class IgorNodeConnection extends NodeConnection {
         if (N2 instanceof IgorNodeInterface) {
             ((IgorNodeInterface) N2).updatePneumaticConnections();
         }
-        for(PneumaticConnection pc : PC) pneumatic_simulator.removePneumaticComponent(pc);
+        for(PneumaticConnection pc : PC) {
+            pneumatic_simulator.removePneumaticComponent(pc);
+            pc.breakConnection();
+        }
     }
 
     public void addConnection(PneumaticConnection pc) { PC.add(pc); }

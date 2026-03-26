@@ -17,9 +17,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumaticMask;
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
 
 public class PneumaticPipeElement extends IgorSixNodeElement {
 
@@ -35,7 +35,8 @@ public class PneumaticPipeElement extends IgorSixNodeElement {
         this.descriptor= (PneumaticPipeDescriptor) descriptor;
 
         pneumatic_load= new NBTPneumaticLoad("pneumatic_load");
-        ((PneumaticPipeDescriptor) descriptor).apply_to(pneumatic_load);
+        this.descriptor.apply_to(pneumatic_load);
+        pneumatic_load.set_mass(base_atmospheric_pressure*pneumatic_load.volume*R_T_gas_inv);
         pneumaticLoadList.add(pneumatic_load);
 
         pressure_watchdog=new PressureWatchdog();
@@ -46,7 +47,7 @@ public class PneumaticPipeElement extends IgorSixNodeElement {
         slowProcessList.add(pressure_watchdog);
 
         color = 0;
-        colorCare = 1;
+        colorCare = 0;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class PneumaticPipeElement extends IgorSixNodeElement {
 
     @Override
     public int getConnectionMask(LRDU lrdu) {
-        return pneumaticMask | (descriptor.getMaskColor() << NodeBase.maskColorShift) | (descriptor.getMaskColorCare() << NodeBase.maskColorCareShift);
+        return pneumaticMask | (color << NodeBase.maskColorShift) | (colorCare << NodeBase.maskColorCareShift);
     }
 
     @Override

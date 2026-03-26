@@ -1,9 +1,9 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
-import mods.eln.misc.INBTTReady;
+import mods.eln.misc.INBTTReady2;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTPneumaticConnection extends PneumaticConnection implements INBTTReady {
+public class NBTPneumaticConnection extends PneumaticConnection implements INBTTReady2 {
 
     public String nbt_name;
 
@@ -18,17 +18,17 @@ public class NBTPneumaticConnection extends PneumaticConnection implements INBTT
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt, String str) {
-        NBTTagCompound inbt=nbt.getCompoundTag(str);
+    public void readFromNBT(NBTTagCompound nbt) {
+        NBTTagCompound inbt=nbt.getCompoundTag(nbt_name);
         speed=inbt.getDouble("speed");
         sanitize();
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt, String str) {
+    public void writeToNBT(NBTTagCompound nbt) {
         NBTTagCompound inbt= new NBTTagCompound();
         sanitize();
         inbt.setDouble("speed",speed);
-        nbt.setTag(str,inbt);
+        nbt.setTag(nbt_name,inbt);
     }
 }

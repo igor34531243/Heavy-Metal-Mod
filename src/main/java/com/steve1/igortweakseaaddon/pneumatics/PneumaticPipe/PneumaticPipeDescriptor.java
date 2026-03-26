@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PressureWatchdog;
 import mods.eln.cable.CableRenderDescriptor;
@@ -10,19 +11,15 @@ import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
 
     public CableRenderDescriptor cable_render;
-    public int mask_color;
-    public int color_care;
 
     public double resistance=base_air_resistance;
     public double area=small_pneumatic_area;
     public double volume=small_pneumatic_volume;
     public double max_pressure= base_atmospheric_pressure *2;
 
-    public PneumaticPipeDescriptor(String name,CableRenderDescriptor cable_render,int mask_color,int color_care) {
+    public PneumaticPipeDescriptor(String name,CableRenderDescriptor cable_render) {
         super(name, PneumaticPipeElement.class, PneumaticPipeRender.class);
         this.cable_render=cable_render;
-        this.mask_color=mask_color;
-        this.color_care=color_care;
     }
 
     public void set(double resistance,double area,double volume,double max_pressure) {
@@ -34,6 +31,10 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
 
     public void apply_to(PneumaticLoad pload) {
         pload.set(resistance,area,volume);
+    }
+
+    public void apply_to(PneumaticConnection connection) {
+        connection.set(area,resistance,1);
     }
 
     public PressureWatchdog apply_to(PressureWatchdog watchdog) {
@@ -73,13 +74,5 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
             return;
         }
         this.max_pressure=max_pressure;
-    }
-
-    public int getMaskColor() {
-        return mask_color;
-    }
-
-    public int getMaskColorCare() {
-        return color_care;
     }
 }

@@ -68,31 +68,63 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticOutletDescriptor pneumaticOutletDescriptor;
 	public static PneumaticSourceDescriptor pneumaticSourceDescriptor;
 	public static PneumaticPipeDescriptor smallPneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor t2PneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor t3PneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor t4PneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor t5PneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor creativePneumaticPipeDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
 
-	public static final double base_air_resistance = 10;
+	public static final double base_air_resistance = 20;
 	public static final double base_atmospheric_pressure = 101325;
+
 	public static final double small_pneumatic_resistance = base_air_resistance;
-	public static final double small_pneumatic_area = 0.0003;
+	public static final double small_pneumatic_area = 0.0005;
 	public static final double small_pneumatic_volume = small_pneumatic_area*1;
 	public static final double small_pneumatic_max_pressure = base_atmospheric_pressure * 20;
+
 	public static final double t2_pneumatic_resistance = base_air_resistance;
-	public static final double t2_pneumatic_area = 0.0003;
+	public static final double t2_pneumatic_area = 0.001;
 	public static final double t2_pneumatic_volume = t2_pneumatic_area*1;
 	public static final double t2_pneumatic_max_pressure = base_atmospheric_pressure * 200;
 
-	// plastic  20atm    0.0005 1.5 x 1.5 0.999
-	// copper   200 atm  0.001  2.0 x 2.0 0.995
-	// iron     400 atm  0.003  3.0 x 3.0 0.99
-	// tungsten 600 atm  0.005  4.0 x 4.0 0.98
-	// alloy    1000 atm 0.01   5.0 x 5.0 0.97
+	public static final double t3_pneumatic_resistance = base_air_resistance;
+	public static final double t3_pneumatic_area = 0.003;
+	public static final double t3_pneumatic_volume = t3_pneumatic_area*1;
+	public static final double t3_pneumatic_max_pressure = base_atmospheric_pressure * 400;
 
-	public static PneumaticSimulator pneumatic_simulator;
+	public static final double t4_pneumatic_resistance = base_air_resistance*0.8;
+	public static final double t4_pneumatic_area = 0.005;
+	public static final double t4_pneumatic_volume = t4_pneumatic_area*1;
+	public static final double t4_pneumatic_max_pressure = base_atmospheric_pressure * 600;
+
+	public static final double t5_pneumatic_resistance = base_air_resistance*0.6;
+	public static final double t5_pneumatic_area = 0.01;
+	public static final double t5_pneumatic_volume = t5_pneumatic_area*1;
+	public static final double t5_pneumatic_max_pressure = base_atmospheric_pressure * 1000;
+
+	public static final double creative_pneumatic_resistance = base_air_resistance*2;
+	public static final double creative_pneumatic_area = 0.1;
+	public static final double creative_pneumatic_volume = creative_pneumatic_area*1;
+	public static final double creative_pneumatic_max_pressure = base_atmospheric_pressure * 99999;
+
+	// plastic  20atm    0.0005 1.5 x 1.5 1
+	// copper   200 atm  0.001  2.0 x 2.0 1
+	// iron     400 atm  0.003  3.0 x 3.0 1
+	// tungsten 600 atm  0.005  4.0 x 4.0 0.8
+	// alloy    1000 atm 0.01   5.0 x 5.0 0.6
+	// creative 9999 atm 0.1    6.0 x 6.0 0.3
+
 	public static int pneumaticMask = (1<<13);
 
 	public static final int pneumatic_steps_per_tick=10;
+	public static final int pneumatic_steps_for_sleep_update=20;
+	public static PneumaticSimulator pneumatic_simulator=new PneumaticSimulator(
+			0.05/pneumatic_steps_per_tick,
+			pneumatic_steps_for_sleep_update*0.05/pneumatic_steps_per_tick
+	);
 
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
@@ -127,8 +159,6 @@ public class BaseIgorTweaksEaAddon {
 
 	public void initialize_mod() {
 		testcube=obj.getObj("TestCube");
-
-		pneumatic_simulator=new PneumaticSimulator(0.05/pneumatic_steps_per_tick);
 
 		NodeManager.registerUuid(sixNodeBlock.getNodeUuid(), IgorSixNode.class);
 
@@ -246,15 +276,90 @@ public class BaseIgorTweaksEaAddon {
 		cable_rend_desc = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 1.5f, 1.5f);
 
-		smallPneumaticPipeDescriptor = new PneumaticPipeDescriptor("Small Pneumatic Pipe", cable_rend_desc,0,1);
+		smallPneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", cable_rend_desc);
 
 		smallPneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
 
 		smallPneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
-		smallPneumaticPipeDescriptor.setDefaultIcon("smallpneumaticpipe");
+		smallPneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier1");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), smallPneumaticPipeDescriptor);
+
+		subId = 1;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 2f, 2f);
+
+		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper Air Pipe", cable_rend_desc);
+
+		t2PneumaticPipeDescriptor.set(t2_pneumatic_resistance,t2_pneumatic_area,t2_pneumatic_volume,t2_pneumatic_max_pressure);
+
+		t2PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t2PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier2");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticPipeDescriptor);
+
+		subId = 2;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 3f, 3f);
+
+		t3PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Iron Air Pipe", cable_rend_desc);
+
+		t3PneumaticPipeDescriptor.set(t3_pneumatic_resistance,t3_pneumatic_area,t3_pneumatic_volume,t3_pneumatic_max_pressure);
+
+		t3PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t3PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier3");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticPipeDescriptor);
+
+		subId = 3;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 4f, 4f);
+
+		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten Air Pipe", cable_rend_desc);
+
+		t4PneumaticPipeDescriptor.set(t4_pneumatic_resistance,t4_pneumatic_area,t4_pneumatic_volume,t4_pneumatic_max_pressure);
+
+		t4PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t4PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier4");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticPipeDescriptor);
+
+		subId = 4;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 5f, 5f);
+
+		t5PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Alloy Air Pipe", cable_rend_desc);
+
+		t5PneumaticPipeDescriptor.set(t5_pneumatic_resistance,t5_pneumatic_area,t5_pneumatic_volume,t5_pneumatic_max_pressure);
+
+		t5PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t5PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier5");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticPipeDescriptor);
+
+		subId = 5;
+
+		cable_rend_desc = new CableRenderDescriptor("eln",
+				"sprites/cable.png", 6f, 6f);
+
+		creativePneumaticPipeDescriptor = new PneumaticPipeDescriptor("Creative Air Pipe", cable_rend_desc);
+
+		creativePneumaticPipeDescriptor.set(creative_pneumatic_resistance,creative_pneumatic_area,creative_pneumatic_volume,creative_pneumatic_max_pressure);
+
+		creativePneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		creativePneumaticPipeDescriptor.setDefaultIcon("pneumaticpipecreative");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticPipeDescriptor);
 	}
 
 	public void register_fuses() {

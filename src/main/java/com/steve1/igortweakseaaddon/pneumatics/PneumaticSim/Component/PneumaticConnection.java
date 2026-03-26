@@ -1,13 +1,13 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
-import mods.eln.misc.INBTTReady;
 import mods.eln.sim.mna.SubSystem;
 import mods.eln.sim.mna.component.Component;
 import mods.eln.sim.mna.state.State;
-import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_medium;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_small;
 
 public class PneumaticConnection extends Component{
 
@@ -15,6 +15,8 @@ public class PneumaticConnection extends Component{
     public PneumaticLoad load2;
 
     public boolean working=false;
+    public boolean ready_to_sleep=true;
+    public boolean sleeping=false;
 
     public double speed=0;
     public double area=small_pneumatic_area;
@@ -22,9 +24,10 @@ public class PneumaticConnection extends Component{
     public double resistance=base_air_resistance;
 
     public double to_move_mass=0;
+    public double to_move_mass_sleepy=0;
+    public double previous_step_speed=0;
+    public double speed_epsilon=global_pneumatic_epsilon_medium;
 
-    public static final double small_value = 0.000000000001;
-    public static final double small_bigger_value = 0.00000000001;
     public static final double stable_d_pressure = base_atmospheric_pressure*0.05;
     public static final double stable_d_pressure_inv = 1/stable_d_pressure;
 
@@ -46,47 +49,45 @@ public class PneumaticConnection extends Component{
         // and amount of mass moved is dM=(mass/length)*speed*time
         // but the speed changes with some inertia:
         // we slow down speed by dv=speed*resistance*time
-        // and increase it by dv=(pressure1-pressure2)/(length*(average_dencity))*time
+        // and increase it by dv=(pressure1-pressure2)/(length*(average_density))*time
         // after the simulation step is finished we apply the parameters to loads
 
+        // comments are somewhat outdated since i changed the code a lot
+        // but general idea is same
+
         double d_pressure=load1.pressure-load2.pressure;
-        double averge_dencity=(load1.get_density()+load2.get_density())/2;
+        double average_density =(load1.density+load2.density)/2;
 
         double acceleration_pressure=0;
-        if (averge_dencity!=0 && d_pressure!=0) {
-            acceleration_pressure = d_pressure / (length * averge_dencity);
-        }
-
-        if ((speed>=0)==(acceleration_pressure>=0)) {
-            acceleration_pressure*=0.05;  // 0.1 to slow it down, or it oscilates wildly
-        } else {
-            acceleration_pressure*=0.3;  // 0.5 to allow it to reach balance faster or it becomes a jelly
+        if (average_density >1e-12 && d_pressure!=0) {
+            acceleration_pressure = 0.3 * d_pressure / (length * average_density);
         }
 
         speed+=acceleration_pressure*time;
         speed*=(1-resistance*time);
 
-        if (speed>343) {
-            speed=343;
-        } else if (speed<-343) {
-            speed=-343;
+        to_move_mass=average_density*area*speed*time;
+
+        if (Math.abs(speed-previous_step_speed)>speed_epsilon) {
+            ready_to_sleep=false;
+            previous_step_speed=speed;
+            speed_epsilon=speed*0.0001;
         }
 
-        check_for_nan(averge_dencity,"averge_dencity");
-
-        to_move_mass=averge_dencity*area*speed*time;
-
-        check_for_nan(to_move_mass,"to_move_mass");
-
-        if (Math.abs(speed)>small_bigger_value || Math.abs(acceleration_pressure)>small_bigger_value) {
-            load1.add_next(Math.abs(speed), -to_move_mass);
-            load2.add_next(Math.abs(speed), to_move_mass);
+        if (Math.abs(speed)> global_pneumatic_epsilon_small || Math.abs(acceleration_pressure)> global_pneumatic_epsilon_small) {
+            load1.add_next(-to_move_mass);
+            load2.add_next(to_move_mass);
         } else {
             to_move_mass=0;
+            speed=0;
         }
+
     }
 
     public void move_mass_step(double time) {
+        if (!working) {
+            return;
+        }
 
         // done after each load checks if it has enough mass
         // moving only the smallest amount which two loads
@@ -97,6 +98,68 @@ public class PneumaticConnection extends Component{
             double actual_to_move_mass = to_move_mass * mass_cof;
             load1.move_mass(load2, actual_to_move_mass);
         }
+    }
+
+    public void sleepy_step() {
+        this.ready_to_sleep=true;
+    }
+
+    public double get_sleepy_to_move_mass(PneumaticLoad load) {
+        if (!working) {
+            return 0;
+        }
+        if (load==load1) {
+            return -to_move_mass_sleepy;
+        } else if (load==load2) {
+            return to_move_mass_sleepy;
+        }
+        logger.error("Trying to get to_move_mass_sleepy with node not related to connection or null");
+        return 0;
+    }
+
+    public double get_relative_speed(PneumaticLoad load) {
+        if (load==load1) {
+            return -speed;
+        } else if (load==load2) {
+            return speed;
+        }
+        logger.error("Trying to get relative speed with node not related to connection or null");
+        return 0;
+    }
+
+    public void refresh_sleeping() {
+        if (!sleeping && ready_to_sleep) {
+            deactivate();
+        }
+    }
+
+    public void deactivate() {
+        to_move_mass_sleepy=to_move_mass;
+        previous_step_speed=speed;
+        this.sleeping=true;
+        if (load1!=null) {
+            load1.check_for_sleeping_connections();
+        }
+        if (load2!=null) {
+            load2.check_for_sleeping_connections();
+        }
+        pneumatic_simulator.deactivatePneumaticComponent(this);
+    }
+
+    public void activate() {
+        activate_partial(null);
+    }
+
+    public void activate_partial(PneumaticLoad load) {
+        this.sleeping=false;
+        this.ready_to_sleep=false;
+        if (load1!=null && load1!=load) {
+            load1.check_for_sleeping_connections();
+        }
+        if (load2!=null && load2!=load) {
+            load2.check_for_sleeping_connections();
+        }
+        pneumatic_simulator.activatePneumaticComponent(this);
     }
 
     public void sanitize() {
@@ -182,21 +245,31 @@ public class PneumaticConnection extends Component{
         this.load2=load2;
 
         if (load1!=null) {
-            load1.add(this);
+            load1.connections.add(this);
+            load1.check_for_sleeping_connections();
         }
         if (load2!=null) {
-            load2.add(this);
+            load2.connections.add(this);
+            load2.check_for_sleeping_connections();
         }
         if (load1!=null && load2!=null) {
             working = true;
+            activate();
         }
     }
 
     @Override
     public void breakConnection() {
         working=false;
-        if (load1 != null) load1.remove(this);
-        if (load2 != null) load2.remove(this);
+        sleeping=false;
+        if (load1 != null) {
+            load1.connections.remove(this);
+            load1.check_for_sleeping_connections();
+        }
+        if (load2 != null) {
+            load2.connections.remove(this);
+            load2.check_for_sleeping_connections();
+        }
     }
 
     @Override

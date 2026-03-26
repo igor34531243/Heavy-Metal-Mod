@@ -37,7 +37,7 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorE
 
         for (NBTPneumaticConnection connection : pneumaticComponentList) pneumatic_simulator.addPneumaticComponent(connection);
         for (NBTPneumaticLoad load :pneumaticLoadList) pneumatic_simulator.addPneumaticLoad(load);
-        pneumatic_simulator.addAllPneumaticProcess(pneumaticProcessList);
+        for (IProcess process : pneumaticProcessList) pneumatic_simulator.addPneumaticProcess(process);
 
     }
 
@@ -47,7 +47,7 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorE
 
         for (NBTPneumaticConnection connection : pneumaticComponentList) pneumatic_simulator.removePneumaticComponent(connection);
         for (NBTPneumaticLoad load : pneumaticLoadList) pneumatic_simulator.removePneumaticLoad(load);
-        pneumatic_simulator.removeAllPneumaticProcess(pneumaticProcessList);
+        for (IProcess process : pneumaticProcessList) pneumatic_simulator.removePneumaticProcess(process);
     }
 
     @Override
@@ -55,12 +55,12 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorE
         super.writeToNBT(nbt);
         for (NBTPneumaticLoad load : pneumaticLoadList) {
             if (load!=null && load.nbt_name!=null) {
-                load.writeToNBT(nbt, load.nbt_name);
+                load.writeToNBT(nbt);
             }
         }
         for (NBTPneumaticConnection connection : pneumaticComponentList) {
             if (connection!=null && connection.nbt_name!=null) {
-                connection.writeToNBT(nbt, connection.nbt_name);
+                connection.writeToNBT(nbt);
             }
         }
     }
@@ -70,12 +70,12 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorE
         super.readFromNBT(nbt);
         for (NBTPneumaticLoad load : pneumaticLoadList) {
             if (load!=null && load.nbt_name!=null) {
-                load.readFromNBT(nbt, load.nbt_name);
+                load.readFromNBT(nbt);
             }
         }
         for (NBTPneumaticConnection connection : pneumaticComponentList) {
             if (connection!=null && connection.nbt_name!=null) {
-                connection.readFromNBT(nbt, connection.nbt_name);
+                connection.readFromNBT(nbt);
             }
         }
     }

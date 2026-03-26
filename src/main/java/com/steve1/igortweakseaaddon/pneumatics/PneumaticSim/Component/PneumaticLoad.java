@@ -2,40 +2,48 @@ package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
 
 import mods.eln.sim.mna.state.State;
 
+import java.util.HashSet;
+
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_speed;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.*;
 
 public class PneumaticLoad extends State {
 
-    public double pressure= base_atmospheric_pressure;
-    public double speed=0;
-    public double resistance=base_air_resistance;
-    public double volume=small_pneumatic_volume;
-    public double area=small_pneumatic_area;
-    public double inv_volume=1/volume;
-    public double R_T_inv_volume=R_T_gas*inv_volume;
+    public double pressure;
+    public double resistance;
+    public double volume;
+    public double area;
+    public double inv_volume;
+    public double inv_volume_density;
+    public double R_T_inv_volume;
+    public double density;
 
-    public double next_speed=0;
     public double next_mass=state;
-    public double next_amount=0;
     public double next_mass_coefficient=1;
-
-    public static final double R_T_gas=2437; // R*T at T=20 celsius
-    public static final double R_T_gas_inv=1/R_T_gas;
+    public boolean has_sleeping_connection=false;
+    public boolean changed_pressure=false;
+    public HashSet<PneumaticConnection> connections=new HashSet<>();
+    public double sleeping_mass_change=0;
+    public double previous_step_pressure=0;
+    public double pressure_epsilon=global_pneumatic_epsilon_big;
 
     public PneumaticLoad() {
-        state=pressure*volume*R_T_gas_inv;
+        resistance=base_air_resistance;
+        volume=small_pneumatic_volume;
+        area=small_pneumatic_area;
+        state=base_atmospheric_pressure*volume*R_T_gas_inv;
+        update_cache();
     }
 
-    public void add_next(double added_speed,double added_mass) {
+    public void add_next(double added_mass) {
         // queing values for next steps
         // we dont apply them right away to ensure
         // that no connection gets priority over another
         // or it would cause some weird issues
 
-        next_speed=(next_speed*next_amount+added_speed)/(next_amount+1);
         next_mass+=added_mass;
-        next_amount+=1;
     }
 
     public void check_mass_step() {
@@ -43,6 +51,13 @@ public class PneumaticLoad extends State {
         // checking that we dont draw more mass than is present
         // and if we are then informing pneumatic connections
         // how much mass is safe to actualy move
+
+        state+=sleeping_mass_change;
+
+        if (state<0) {
+            state=0;
+            activate_connections();
+        }
 
         next_mass_coefficient=1;
         if (next_mass<=0) {
@@ -64,26 +79,57 @@ public class PneumaticLoad extends State {
         // finaly applying the speed and pressure values
         // and resetting collected along the step values
 
-        speed=next_speed;
+        pressure=state*R_T_inv_volume;
+        changed_pressure=Math.abs(previous_step_pressure-pressure)> pressure_epsilon;
 
-        double static_pressure=state*R_T_inv_volume;
-        double dynamic_pressure= get_density()*speed*speed/2;
-
-        pressure=static_pressure/(1+dynamic_pressure/(static_pressure+0.00000001));
-        if (pressure<0) {
-            pressure=0;
-        }
+        density=state*inv_volume_density;
 
         next_mass_coefficient=1;
-        next_speed=speed;
         next_mass=state;
-        next_amount=0;
+
+        if (changed_pressure) {
+            activate_connections();
+            previous_step_pressure=pressure;
+            pressure_epsilon=pressure*0.0001;
+        }
+    }
+
+    public void activate_connections() {
+        if (has_sleeping_connection) {
+            for (PneumaticConnection connection : connections) {
+                if (connection.sleeping) {
+                    connection.activate_partial(this);
+                }
+            }
+            check_for_sleeping_connections();
+        }
+    }
+
+    public void check_for_sleeping_connections() {
+        has_sleeping_connection=false;
+        sleeping_mass_change=0;
+        for (PneumaticConnection connection : connections) {
+            if (connection.sleeping) {
+                has_sleeping_connection=true;
+                sleeping_mass_change+=connection.get_sleepy_to_move_mass(this);
+            }
+        }
     }
 
     public void sanitize() {
-        pressure=sanitize_number(pressure, base_atmospheric_pressure);
-        speed=sanitize_number(speed,0);
         state=sanitize_number(state, base_atmospheric_pressure *volume/R_T_gas);
+    }
+
+    public void update_cache() {
+        inv_volume=1/volume;
+        if (volume!=0) {
+            inv_volume_density=inv_volume;
+        } else {
+            inv_volume_density=0;
+        }
+        R_T_inv_volume=R_T_gas*inv_volume;
+        pressure=state*R_T_inv_volume;
+        density=state*inv_volume;
     }
 
     public void set_mass(double new_mass) {
@@ -128,7 +174,17 @@ public class PneumaticLoad extends State {
     }
 
     public double get_speed() {
-        return speed;
+        double speed_positive=0;
+        double speed_negative=0;
+        for (PneumaticConnection connection : connections) {
+            double speed=connection.get_relative_speed(this);
+            if (speed>0) {
+                speed_positive+=speed;
+            } else {
+                speed_negative-=speed;
+            }
+        }
+        return (speed_positive+speed_negative)/2;
     }
 
     public double get_resistance() {
@@ -144,10 +200,7 @@ public class PneumaticLoad extends State {
     }
 
     public double get_density() {
-        if (volume==0) {
-            return 0;
-        }
-        return state*inv_volume;
+        return density;
     }
 
     public void set_area(double new_area) {
@@ -156,6 +209,7 @@ public class PneumaticLoad extends State {
             return;
         }
         area=new_area;
+        update_cache();
     }
 
     public void set_volume(double new_volume) {
@@ -164,8 +218,7 @@ public class PneumaticLoad extends State {
             return;
         }
         volume=new_volume;
-        inv_volume=1/volume;
-        R_T_inv_volume=R_T_gas*inv_volume;
+        update_cache();
     }
 
     public void set_resistance(double new_resistance) {
@@ -174,6 +227,7 @@ public class PneumaticLoad extends State {
             return;
         }
         resistance=new_resistance;
+        update_cache();
     }
 
     public void set(double resistance,double area,double volume) {
