@@ -3,8 +3,15 @@ package com.steve1.igortweakseaaddon.grid.GridSwitch;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
 import mods.eln.misc.Obj3D;
-import java.util.HashMap;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+import static mods.eln.i18n.I18N.tr;
 import static mods.eln.misc.Direction.XN;
 
 public class GridSwitchDescriptor extends IgorGridDescriptor {
@@ -28,17 +35,37 @@ public class GridSwitchDescriptor extends IgorGridDescriptor {
             }
         }
     }
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
+        super.addInformation(itemStack, entityPlayer, list, par4);
+        Collections.addAll(list, tr("A grid switch is an electrical device used\nto control grid circuit continuity").split("\n"));
+    }
 
-//    @Override
-//    public void draw(IgorGridRender render) {
-//        super.draw(render);
-//        if (model != null) {
-//            model.draw("static")
-//            if (((GridSwitchRender)render).is_open) {
-//                // no model for that yet, just basic shape
-//            } else {
-//            }
-//        }
-//    }
-//
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        if (type != ItemRenderType.INVENTORY){
+            draw();
+        }else{
+            super.renderItem(type, item, data);
+        }
+    }
+    void draw(){
+        if (model != null){
+            model.draw("static");
+        }else{
+            logger.info("no model given!");
+        }
+    }
+    @Override
+    public void draw(IgorGridRender render) {
+        super.draw(render);
+        if (model != null) {
+            model.draw("static");
+            if (((GridSwitchRender)render).is_open) {
+                // no model for that yet, just basic shape
+            } else {
+            }
+        }
+    }
+
 }

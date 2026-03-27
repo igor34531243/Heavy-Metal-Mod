@@ -3,8 +3,14 @@ package com.steve1.igortweakseaaddon.grid.GridFuse;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
 import mods.eln.misc.Obj3D;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.fuseBlown;
+import static mods.eln.i18n.I18N.tr;
 import static mods.eln.misc.Direction.XN;
 
 public class GridFuseDescriptor extends IgorGridDescriptor {
@@ -15,6 +21,13 @@ public class GridFuseDescriptor extends IgorGridDescriptor {
         add_cable_point(XN,1,0.5,2.8,1.58);
         add_cable_point(XN.getInverse(),0,2.4,4.8,-1.58);
         add_cable_point(XN.getInverse(),1,2.4,4.8,1.58);
+    }
+
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
+        super.addInformation(itemStack, entityPlayer, list, par4);
+        Collections.addAll(list, tr("A grid breaker is an electrical device used to automatically\nsever electrical connections upon exceeding the\nrated cable current.").split("\n"));
+        Collections.addAll(list, tr("The grid breaker accepts only T1 and T2 grid fuses.\n").split("\n"));
     }
 
     @Override

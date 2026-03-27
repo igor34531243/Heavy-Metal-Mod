@@ -59,6 +59,8 @@ public class BaseIgorTweaksEaAddon {
 	public static GridFuseItem fuseBlown;
 	public static GridFuseItem fuseT1;
 	public static GridFuseItem fuseT2;
+	public static PowerSocketDescriptor Socket800;
+	public static PowerSocketDescriptor Socket3200;
 	public static EnergyConverterElnToOtherBlock elnToOtherBlockVVu;
 	public static WirelessAlarmDescriptor wirelessStandardAlarm;
 	public static WirelessAlarmDescriptor wirelessNuclearAlarm;
@@ -133,13 +135,14 @@ public class BaseIgorTweaksEaAddon {
 		register_logic_port();
 		register_fuses();
 		register_grid_devices();
-		register_recipes();
 		register_energy_exporter();
 		register_sockets();
 		register_wireless_alarms();
 		register_stirling_engine();
 		register_pneumatics();
 		register_pneumatic_pipes();
+
+		register_recipes();
 	}
 
 	@EventHandler
@@ -181,19 +184,20 @@ public class BaseIgorTweaksEaAddon {
 
         try {
 			Object vhv_cable=findItemStackMethod.invoke(instance,"Very High Voltage Cable");
+			Object hv_cable=findItemStackMethod.invoke(instance, "High Voltage Cable");
 			Object iron_plate="plateIron";
+			Object copper_plate="plateCopper";
 			Object item_rubber="itemRubber";
 			Object alloy_plate=findItemStackMethod.invoke(instance,"Alloy Plate");
 			Object lead_plate="plateLead";
 			Object lead_ingot="ingotLead";
 			Object cinnabar=findItemStackMethod.invoke(instance,"Cinnabar Dust");
 
-			Object output = fuseDescriptor.newItemStack();//findItemStackMethod.invoke(instance,"Grid_High_Voltage_Fuse");
-
-			if (vhv_cable == null || alloy_plate==null || cinnabar==null) {
+			if (vhv_cable == null || alloy_plate==null || cinnabar==null || hv_cable==null) {
 				throw new RuntimeException("One of the eln items for crafting is not found.");
 			}
 
+			Object output = fuseDescriptor.newItemStack();//findItemStackMethod.invoke(instance,"Grid_High_Voltage_Fuse");
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"RPR",
@@ -206,7 +210,6 @@ public class BaseIgorTweaksEaAddon {
             );
 
 			output = fuseT1.newItemStack();
-
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"RPR",
@@ -219,7 +222,6 @@ public class BaseIgorTweaksEaAddon {
 			);
 
 			output = fuseT2.newItemStack();
-
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"RIR",
@@ -230,7 +232,31 @@ public class BaseIgorTweaksEaAddon {
 							'R', item_rubber
 					}
 			);
-
+			output = Socket800.newItemStack();
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"RCR",
+							"AHA",
+							"   ",
+							'A', alloy_plate,
+							'C', copper_plate,
+							'R', item_rubber,
+							'H', hv_cable
+					}
+			);
+			output = Socket3200.newItemStack();
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"RCR",
+							"AHA",
+							"   ",
+							'A', alloy_plate,
+							'C', copper_plate,
+							'R', item_rubber,
+							'H', vhv_cable
+					}
+			);
+			//TODO: add recipe for vhv eln energy exporter
         } catch (Exception e) {
 			e.printStackTrace();
         }
@@ -415,7 +441,7 @@ public class BaseIgorTweaksEaAddon {
 		subId = 9;
 
 		fuseDescriptor = new GridFuseDescriptor(
-				"Grid High Voltage Fuse",
+				"Grid High Voltage Breaker",
 				obj.getObj("GridBreaker")
 		);
 
@@ -500,10 +526,11 @@ public class BaseIgorTweaksEaAddon {
 	}
 
 	public void register_sockets() {
-		int id =67;
+		int id =67; //haha six-seven
 		int subId, completId;
 		String name;
 		PowerSocketDescriptor desc;
+
 		try {
 			subId = 3;
 			name = TR_NAME(I18N.Type.NONE, "800V Power Socket");
@@ -513,6 +540,7 @@ public class BaseIgorTweaksEaAddon {
 			);
 
 			desc.voltageLevelColor=VoltageLevelColor.HighVoltage;
+			Socket800 = desc;
 
 			Obj3D model=obj.getObj("PowerSocket800");
 
@@ -534,6 +562,7 @@ public class BaseIgorTweaksEaAddon {
 			);
 
 			desc.voltageLevelColor=VoltageLevelColor.VeryHighVoltage;
+			Socket3200 = desc;
 
 			Obj3D model=obj.getObj("PowerSocket3200");
 

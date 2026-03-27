@@ -122,9 +122,9 @@ if __name__ == "__main__":
                 #"PneumaticHub.obj",
                 #"PneumaticHub.mtl",
                 #["main"])
-    combine(["socket800+.obj"],
-                "PowerSocket3200.obj",
-                "PowerSocket3200.mtl",
+    combine(["socket800.obj"],
+                "PowerSocket800.obj",
+                "PowerSocket800.mtl",
                 ["main"])
     
     """
