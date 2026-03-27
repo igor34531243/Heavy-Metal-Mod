@@ -118,10 +118,14 @@ if __name__ == "__main__":
                 #"StirlingEngine.obj",
                 #"StirlingEngine.mtl",
                 #["static","rotating"])
-    combine(["pneumatic_hub.obj"],
-                "PneumaticHub.obj",
-                "PneumaticHub.mtl",
-                ["main"])    
+    #combine(["pneumatic_hub.obj"],
+                #"PneumaticHub.obj",
+                #"PneumaticHub.mtl",
+                #["main"])
+    combine(["socket800+.obj"],
+                "PowerSocket3200.obj",
+                "PowerSocket3200.mtl",
+                ["main"])
     
     """
     шаблон для заполнения:

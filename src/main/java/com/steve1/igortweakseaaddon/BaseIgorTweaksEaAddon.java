@@ -22,15 +22,13 @@ import mods.eln.Eln;
 import mods.eln.Other;
 import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.i18n.I18N;
-import mods.eln.misc.Obj3D;
-import mods.eln.misc.Obj3DFolder;
-import mods.eln.misc.Utils;
-import mods.eln.misc.VoltageLevelColor;
+import mods.eln.misc.*;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
 import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
+import mods.eln.sixnode.powersocket.PowerSocketDescriptor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +45,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static mods.eln.Eln.*;
+import static mods.eln.Eln.obj;
 import static mods.eln.i18n.I18N.TR_NAME;
 
 @Mod (modid = "igortweakseaaddon", name="Heavy Metal (Electrical Age Addon)", version = "1.0", dependencies = "required-after:Eln;")
@@ -136,6 +135,7 @@ public class BaseIgorTweaksEaAddon {
 		register_grid_devices();
 		register_recipes();
 		register_energy_exporter();
+		register_sockets();
 		register_wireless_alarms();
 		register_stirling_engine();
 		register_pneumatics();
@@ -497,6 +497,55 @@ public class BaseIgorTweaksEaAddon {
 		stirlingEngineDescriptor.setDefaultIcon("stirlingengine");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), stirlingEngineDescriptor);
+	}
+
+	public void register_sockets() {
+		int id =67;
+		int subId, completId;
+		String name;
+		PowerSocketDescriptor desc;
+		try {
+			subId = 3;
+			name = TR_NAME(I18N.Type.NONE, "800V Power Socket");
+			desc = new PowerSocketDescriptor(
+					subId, name, null,
+					10 //Range for plugged devices (without obstacles)
+			);
+
+			desc.voltageLevelColor=VoltageLevelColor.HighVoltage;
+
+			Obj3D model=obj.getObj("PowerSocket800");
+
+			Field base=PowerSocketDescriptor.class.getDeclaredField("base");
+			base.setAccessible(true);
+			base.set(desc,model.getPart("main"));
+
+			desc.setPlaceDirection(new Direction[]{Direction.XP, Direction.XN, Direction.ZP, Direction.ZN});
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			subId = 4;
+			name = TR_NAME(I18N.Type.NONE, "3200V Power Socket");
+			desc = new PowerSocketDescriptor(
+					subId, name, null,
+					10 //Range for plugged devices (without obstacles)
+			);
+
+			desc.voltageLevelColor=VoltageLevelColor.VeryHighVoltage;
+
+			Obj3D model=obj.getObj("PowerSocket3200");
+
+			Field base=PowerSocketDescriptor.class.getDeclaredField("base");
+			base.setAccessible(true);
+			base.set(desc,model.getPart("main"));
+
+			desc.setPlaceDirection(new Direction[]{Direction.XP, Direction.XN, Direction.ZP, Direction.ZN});
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void loadAllElnAddonModels() {

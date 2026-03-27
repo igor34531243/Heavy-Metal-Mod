@@ -88,7 +88,9 @@ public class PneumaticLoad extends State {
         next_mass=state;
 
         if (changed_pressure) {
-            activate_connections();
+            if (has_sleeping_connection) {
+                activate_connections();
+            }
             previous_step_pressure=pressure;
             pressure_epsilon=pressure*0.0001;
         }

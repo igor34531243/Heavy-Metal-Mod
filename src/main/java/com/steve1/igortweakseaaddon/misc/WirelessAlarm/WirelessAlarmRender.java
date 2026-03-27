@@ -38,7 +38,9 @@ public class WirelessAlarmRender extends SixNodeElementRender {
     @Override
     public void draw() {
         super.draw();
-
+        if (side.isY()) {
+            front.glRotateOnX();
+        }
         descriptor.draw(warm, rotAlpha);
     }
 

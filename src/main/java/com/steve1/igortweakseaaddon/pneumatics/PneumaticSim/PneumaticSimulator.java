@@ -143,11 +143,11 @@ public class PneumaticSimulator implements IProcess {
             connection.refresh_sleeping();
         }
 
+        update_activation_deactivation();
+
         for (PneumaticConnection connection: active_pneumatic_components) {
             connection.sleepy_step();
         }
-
-        update_activation_deactivation();
     }
 
     public void update_activation_deactivation() {

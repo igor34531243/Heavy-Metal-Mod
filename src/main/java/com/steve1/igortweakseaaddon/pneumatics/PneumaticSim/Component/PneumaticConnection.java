@@ -17,6 +17,7 @@ public class PneumaticConnection extends Component{
     public boolean working=false;
     public boolean ready_to_sleep=true;
     public boolean sleeping=false;
+    public boolean can_fall_asleep=true;
 
     public double speed=0;
     public double area=small_pneumatic_area;
@@ -128,7 +129,7 @@ public class PneumaticConnection extends Component{
     }
 
     public void refresh_sleeping() {
-        if (!sleeping && ready_to_sleep) {
+        if (!sleeping && ready_to_sleep && can_fall_asleep) {
             deactivate();
         }
     }
