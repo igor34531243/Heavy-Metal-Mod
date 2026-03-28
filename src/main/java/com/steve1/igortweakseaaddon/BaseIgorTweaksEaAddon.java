@@ -169,20 +169,13 @@ public class BaseIgorTweaksEaAddon {
     }
 
 	public void register_recipes() {
-        Method findItemStackMethod = null;
-		Method addRecipeMethod = null;
         try {
-            findItemStackMethod = Eln.class.getDeclaredMethod("findItemStack", String.class);
-			addRecipeMethod = Eln.class.getDeclaredMethod("addRecipe", ItemStack.class, Object[].class);
+			Method findItemStackMethod = Eln.class.getDeclaredMethod("findItemStack", String.class);
+			Method addRecipeMethod = Eln.class.getDeclaredMethod("addRecipe", ItemStack.class, Object[].class);
 
 			findItemStackMethod.setAccessible(true);
 			addRecipeMethod.setAccessible(true);
-		} catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
 
-
-        try {
 			Object vhv_cable=findItemStackMethod.invoke(instance,"Very High Voltage Cable");
 			Object hv_cable=findItemStackMethod.invoke(instance, "High Voltage Cable");
 			Object iron_plate="plateIron";
@@ -192,6 +185,8 @@ public class BaseIgorTweaksEaAddon {
 			Object lead_plate="plateLead";
 			Object lead_ingot="ingotLead";
 			Object cinnabar=findItemStackMethod.invoke(instance,"Cinnabar Dust");
+			Object iron_cable=findItemStackMethod.invoke(instance,"Iron Cable");
+			Object alloy_ingot=findItemStackMethod.invoke(instance,"Alloy Ingot");
 
 			if (vhv_cable == null || alloy_plate==null || cinnabar==null || hv_cable==null) {
 				throw new RuntimeException("One of the eln items for crafting is not found.");
@@ -256,9 +251,23 @@ public class BaseIgorTweaksEaAddon {
 							'H', vhv_cable
 					}
 			);
-			//TODO: add recipe for vhv eln energy exporter
+
+			output = new ItemStack(elnToOtherBlockVVu);
+
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"III",
+							"cCR",
+							"III",
+							'C', dictAdvancedChip,
+							'c', vhv_cable,
+							'I', iron_cable,
+							'R', alloy_ingot
+					}
+			);
+
         } catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
         }
     }
 
