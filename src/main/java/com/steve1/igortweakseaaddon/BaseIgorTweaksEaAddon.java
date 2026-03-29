@@ -14,6 +14,7 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDe
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticValve.PneumaticValveDescriptor;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.*;
@@ -25,7 +26,6 @@ import mods.eln.i18n.I18N;
 import mods.eln.misc.*;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
-import mods.eln.node.transparent.*;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
 import mods.eln.sixnode.powersocket.PowerSocketDescriptor;
@@ -68,55 +68,65 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticHubDescriptor pneumaticHubDescriptor;
 	public static PneumaticOutletDescriptor pneumaticOutletDescriptor;
 	public static PneumaticSourceDescriptor pneumaticSourceDescriptor;
-	public static PneumaticPipeDescriptor smallPneumaticPipeDescriptor;
+	public static PneumaticPipeDescriptor t1PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor t2PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor t3PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor t4PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor t5PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor creativePneumaticPipeDescriptor;
+	public static PneumaticValveDescriptor t1PneumaticValveDescriptor;
+	public static PneumaticValveDescriptor t2PneumaticValveDescriptor;
+	public static PneumaticValveDescriptor t3PneumaticValveDescriptor;
+	public static PneumaticValveDescriptor t4PneumaticValveDescriptor;
+	public static PneumaticValveDescriptor t5PneumaticValveDescriptor;
+	public static PneumaticValveDescriptor creativePneumaticValveDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
 
 	public static final double base_air_resistance = 20;
 	public static final double base_atmospheric_pressure = 101325;
+	public static final double logic_pressure_min=base_atmospheric_pressure*5;
+	public static final double logic_pressure_max=base_atmospheric_pressure*10;
+	public static final double logic_pressure_range=logic_pressure_max-logic_pressure_min;
+	public static final double logic_pressure_range_inv=1/logic_pressure_range;
 
 	public static final double small_pneumatic_resistance = base_air_resistance;
 	public static final double small_pneumatic_area = 0.0005;
 	public static final double small_pneumatic_volume = small_pneumatic_area*1;
 	public static final double small_pneumatic_max_pressure = base_atmospheric_pressure * 20;
 
-	public static final double t2_pneumatic_resistance = base_air_resistance;
+	public static final double t2_pneumatic_resistance = base_air_resistance*1.2;
 	public static final double t2_pneumatic_area = 0.001;
 	public static final double t2_pneumatic_volume = t2_pneumatic_area*1;
 	public static final double t2_pneumatic_max_pressure = base_atmospheric_pressure * 200;
 
-	public static final double t3_pneumatic_resistance = base_air_resistance;
+	public static final double t3_pneumatic_resistance = base_air_resistance*1.5;
 	public static final double t3_pneumatic_area = 0.003;
 	public static final double t3_pneumatic_volume = t3_pneumatic_area*1;
 	public static final double t3_pneumatic_max_pressure = base_atmospheric_pressure * 400;
 
-	public static final double t4_pneumatic_resistance = base_air_resistance*0.8;
+	public static final double t4_pneumatic_resistance = base_air_resistance*2;
 	public static final double t4_pneumatic_area = 0.005;
 	public static final double t4_pneumatic_volume = t4_pneumatic_area*1;
 	public static final double t4_pneumatic_max_pressure = base_atmospheric_pressure * 600;
 
-	public static final double t5_pneumatic_resistance = base_air_resistance*0.6;
+	public static final double t5_pneumatic_resistance = base_air_resistance*2.5;
 	public static final double t5_pneumatic_area = 0.01;
 	public static final double t5_pneumatic_volume = t5_pneumatic_area*1;
 	public static final double t5_pneumatic_max_pressure = base_atmospheric_pressure * 1000;
 
-	public static final double creative_pneumatic_resistance = base_air_resistance*2;
+	public static final double creative_pneumatic_resistance = base_air_resistance*3;
 	public static final double creative_pneumatic_area = 0.1;
 	public static final double creative_pneumatic_volume = creative_pneumatic_area*1;
 	public static final double creative_pneumatic_max_pressure = base_atmospheric_pressure * 99999;
 
-	// plastic  20atm    0.0005 1.5 x 1.5 1
-	// copper   200 atm  0.001  2.0 x 2.0 1
-	// iron     400 atm  0.003  3.0 x 3.0 1
-	// tungsten 600 atm  0.005  4.0 x 4.0 0.8
-	// alloy    1000 atm 0.01   5.0 x 5.0 0.6
-	// creative 9999 atm 0.1    6.0 x 6.0 0.3
+	// plastic  20atm    0.0005 1.5 x 1.5 1.0
+	// copper   200 atm  0.001  2.0 x 2.0 1.2
+	// iron     400 atm  0.003  3.0 x 3.0 1.5
+	// tungsten 600 atm  0.005  4.0 x 4.0 2.0
+	// alloy    1000 atm 0.01   5.0 x 5.0 2.5
+	// creative 9999 atm 0.1    6.0 x 6.0 3.0
 
 	public static int pneumaticMask = (1<<13);
 
@@ -311,15 +321,15 @@ public class BaseIgorTweaksEaAddon {
 		cable_rend_desc = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 1.5f, 1.5f);
 
-		smallPneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", cable_rend_desc);
+		t1PneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", cable_rend_desc);
 
-		smallPneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
+		t1PneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
 
-		smallPneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+		t1PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
-		smallPneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier1");
+		t1PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier1");
 
-		sixNodeItem.addDescriptor(subId + (id << 6), smallPneumaticPipeDescriptor);
+		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticPipeDescriptor);
 
 		subId = 1;
 
@@ -395,6 +405,66 @@ public class BaseIgorTweaksEaAddon {
 		creativePneumaticPipeDescriptor.setDefaultIcon("pneumaticpipecreative");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticPipeDescriptor);
+
+		subId = 6;
+
+		t1PneumaticValveDescriptor = new PneumaticValveDescriptor("PVC Air Valve", t1PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		t1PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t1PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet1");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticValveDescriptor);
+
+		subId = 7;
+
+		t2PneumaticValveDescriptor = new PneumaticValveDescriptor("Copper Air Valve",t2PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		t2PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t2PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet2");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticValveDescriptor);
+
+		subId = 8;
+
+		t3PneumaticValveDescriptor = new PneumaticValveDescriptor("Iron Air Valve",t3PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		t3PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t3PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet3");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticValveDescriptor);
+
+		subId = 9;
+
+		t4PneumaticValveDescriptor = new PneumaticValveDescriptor("Tungsten Air Valve",t4PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		t4PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t4PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet4");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticValveDescriptor);
+
+		subId = 10;
+
+		t5PneumaticValveDescriptor = new PneumaticValveDescriptor("Alloy Air Valve",t5PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		t5PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		t5PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet5");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticValveDescriptor);
+
+		subId = 11;
+
+		creativePneumaticValveDescriptor = new PneumaticValveDescriptor("Creative Air Valve",creativePneumaticPipeDescriptor,obj.getObj("RelayBig"));
+
+		creativePneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
+
+		creativePneumaticValveDescriptor.setDefaultIcon("pneumaticvalvecreative");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticValveDescriptor);
 	}
 
 	public void register_fuses() {

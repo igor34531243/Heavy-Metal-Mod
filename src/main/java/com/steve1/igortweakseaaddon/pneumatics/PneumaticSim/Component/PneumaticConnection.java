@@ -69,7 +69,7 @@ public class PneumaticConnection extends Component{
 
         to_move_mass=average_density*area*speed*time;
 
-        if (Math.abs(speed-previous_step_speed)>speed_epsilon) {
+        if (can_fall_asleep && Math.abs(speed-previous_step_speed)>speed_epsilon) {
             ready_to_sleep=false;
             previous_step_speed=speed;
             speed_epsilon=speed*0.0001;
@@ -102,7 +102,7 @@ public class PneumaticConnection extends Component{
     }
 
     public void sleepy_step() {
-        this.ready_to_sleep=true;
+        this.ready_to_sleep=can_fall_asleep;
     }
 
     public double get_sleepy_to_move_mass(PneumaticLoad load) {
@@ -205,6 +205,12 @@ public class PneumaticConnection extends Component{
             return;
         }
         this.area=area;
+        if (area<1e-10) {
+            speed=0;
+            if (sleeping) {
+                activate();
+            }
+        }
     }
 
     public void set_resistance(double resistance) {

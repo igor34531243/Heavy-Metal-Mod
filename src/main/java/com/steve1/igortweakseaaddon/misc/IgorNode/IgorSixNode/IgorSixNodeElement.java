@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNodeElementInterface;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
 
-public abstract class IgorSixNodeElement extends SixNodeElement implements IgorElementInterface {
+public abstract class IgorSixNodeElement extends SixNodeElement implements IgorSixNodeElementInterface {
 
     public ArrayList<NBTPneumaticConnection> pneumaticComponentList = new ArrayList<NBTPneumaticConnection>();
     public ArrayList<NBTPneumaticLoad> pneumaticLoadList = new ArrayList<NBTPneumaticLoad>();
@@ -25,9 +26,6 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorE
     public IgorSixNodeElement(SixNode sixNode, Direction side, SixNodeDescriptor descriptor) {
         super(sixNode, side, descriptor);
     }
-
-    @Override
-    public abstract PneumaticLoad getPneumaticLoad(Direction direction, LRDU lrdu);
 
     @Override
     public void connectJob() {

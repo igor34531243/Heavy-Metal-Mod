@@ -31,8 +31,10 @@ public class PneumaticSourceElement extends IgorTransparentNodeElement {
         super(transparentNode, descriptor);
         constant_pressure= base_atmospheric_pressure;
         pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
+        creativePneumaticPipeDescriptor.apply_to(pneumatic_load);
         pneumaticLoadList.add(pneumatic_load);
         constant_pressure_load=new NBTConstantPressureLoad("const_load",constant_pressure);
+        creativePneumaticPipeDescriptor.apply_to(constant_pressure_load);
         pneumaticLoadList.add(constant_pressure_load);
         pneumatic_connection=new NBTPneumaticConnection("pneumatic_connection",pneumatic_load,constant_pressure_load);
         creativePneumaticPipeDescriptor.apply_to(pneumatic_connection);

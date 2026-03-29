@@ -23,8 +23,10 @@ public class PneumaticOutletElement extends IgorTransparentNodeElement {
     public PneumaticOutletElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
         pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
+        creativePneumaticPipeDescriptor.apply_to(pneumatic_load);
         pneumaticLoadList.add(pneumatic_load);
         atmosphere_load=new NBTAtmosphereLoad("atmosphere_load");
+        creativePneumaticPipeDescriptor.apply_to(atmosphere_load);
         pneumaticLoadList.add(atmosphere_load);
         pneumatic_connection=new NBTPneumaticConnection("pneumatic_connection",pneumatic_load,atmosphere_load);
         creativePneumaticPipeDescriptor.apply_to(pneumatic_connection);

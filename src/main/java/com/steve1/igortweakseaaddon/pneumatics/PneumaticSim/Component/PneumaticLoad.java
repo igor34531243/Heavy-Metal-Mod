@@ -5,8 +5,7 @@ import mods.eln.sim.mna.state.State;
 import java.util.HashSet;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_speed;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.sanitize_number;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.*;
 
 public class PneumaticLoad extends State {
@@ -28,6 +27,7 @@ public class PneumaticLoad extends State {
     public double sleeping_mass_change=0;
     public double previous_step_pressure=0;
     public double pressure_epsilon=global_pneumatic_epsilon_big;
+    public double deafult_state=0;
 
     public PneumaticLoad() {
         resistance=base_air_resistance;
@@ -119,7 +119,7 @@ public class PneumaticLoad extends State {
     }
 
     public void sanitize() {
-        state=sanitize_number(state, base_atmospheric_pressure *volume/R_T_gas);
+        state=sanitize_number(state, deafult_state);
     }
 
     public void update_cache() {
@@ -132,6 +132,7 @@ public class PneumaticLoad extends State {
         R_T_inv_volume=R_T_gas*inv_volume;
         pressure=state*R_T_inv_volume;
         density=state*inv_volume;
+        deafult_state=base_atmospheric_pressure*volume*R_T_gas_inv;
     }
 
     public void set_mass(double new_mass) {
@@ -178,6 +179,19 @@ public class PneumaticLoad extends State {
 
     public double get_pressure() {
         return pressure;
+    }
+
+    public double get_pressure_normalized() {
+        double res_pressure=pressure-logic_pressure_min;
+        if (res_pressure<0) {
+            logger.info("set to 0, got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure));
+            return 0;
+        } else if (res_pressure>logic_pressure_range) {
+            logger.info("set to 1, got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure));
+            return 1;
+        }
+        logger.info("got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure)+" "+res_pressure*logic_pressure_range_inv);
+        return res_pressure*logic_pressure_range_inv;
     }
 
     public double get_speed() {

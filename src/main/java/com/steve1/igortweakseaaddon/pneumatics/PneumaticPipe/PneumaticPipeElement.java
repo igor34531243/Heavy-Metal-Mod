@@ -65,7 +65,7 @@ public class PneumaticPipeElement extends IgorSixNodeElement {
     }
 
     @Override
-    public PneumaticLoad getPneumaticLoad(Direction direction, LRDU lrdu) {
+    public PneumaticLoad getPneumaticLoad(LRDU lrdu,int mask) {
         return pneumatic_load;
     }
 

@@ -6,7 +6,7 @@ import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 public class igorUTILS {
     public static double sanitize_number(double number,double deafult) {
         if (Double.isNaN(number)||Double.isInfinite(number)) {
-            //logger.warn("number got sanitized! We got: "+number);
+            logger.warn("number got sanitized! We got: "+number+", with deafult: "+deafult);
             return deafult;
         }
         return number;
@@ -67,6 +67,17 @@ public class igorUTILS {
             return String.format("%.2f MM/S", speed * 1000);
         } else {
             return String.format("%.2f µM/S", speed * 1000000);
+        }
+    }
+
+    public static String plot_percent(double value) {
+        value*=100;
+        if (value>=10) {
+            return String.format("%.1f", value) + " %";
+        } else if (value>=1) {
+            return String.format("%.2f", value) + " %";
+        } else {
+            return String.format("%.3f", value) + " %";
         }
     }
 }

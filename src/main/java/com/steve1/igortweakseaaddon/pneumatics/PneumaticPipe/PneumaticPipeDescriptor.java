@@ -37,8 +37,8 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
         connection.set(area,resistance,1);
     }
 
-    public PressureWatchdog apply_to(PressureWatchdog watchdog) {
-        return watchdog.set_max_pressure(max_pressure);
+    public void apply_to(PressureWatchdog watchdog) {
+        watchdog.set_max_pressure(max_pressure);
     }
 
     public void set_resistance(double resistance) {

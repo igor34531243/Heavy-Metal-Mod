@@ -1,10 +1,8 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeConnection;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeInterface;
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeInterface.*;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNodeElementInterface;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.Eln;
@@ -207,12 +205,12 @@ public class IgorSixNode extends SixNode implements IgorNodeInterface {
                 }
 
             }
-            if (element instanceof IgorElementInterface && otherElement instanceof IgorElementInterface) {
+            if (element instanceof IgorSixNodeElementInterface && otherElement instanceof IgorSixNodeElementInterface) {
                 PneumaticLoad pload;
 
-                if ((pload = ((IgorElementInterface)element).getPneumaticLoad(side, lrdu)) != null) {
+                if ((pload = ((IgorSixNodeElementInterface)element).getPneumaticLoad(lrdu,mskOther)) != null) {
 
-                    PneumaticLoad otherPLoad = ((IgorElementInterface)otherElement).getPneumaticLoad(otherSide, otherLRDU);
+                    PneumaticLoad otherPLoad = ((IgorSixNodeElementInterface)otherElement).getPneumaticLoad(otherLRDU,mskThis);
 
                     if (otherPLoad != null) {
 
@@ -381,10 +379,10 @@ public class IgorSixNode extends SixNode implements IgorNodeInterface {
     public PneumaticLoad getPneumaticLoad(Direction direction,LRDU lrdu,int intMask) {
         Direction elementSide = direction.applyLRDU(lrdu);
         SixNodeElement element = sideElementList[elementSide.getInt()];
-        if (element == null || !(element instanceof IgorElementInterface)) {
+        if (element == null || !(element instanceof IgorSixNodeElementInterface)) {
             return null;
         }
-        return ((IgorElementInterface)element).getPneumaticLoad(direction,elementSide.getLRDUGoingTo(direction));
+        return ((IgorSixNodeElementInterface)element).getPneumaticLoad(elementSide.getLRDUGoingTo(direction),intMask);
     }
 
     @Override
