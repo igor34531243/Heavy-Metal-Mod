@@ -5,6 +5,7 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticC
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PressureWatchdog;
 import mods.eln.cable.CableRenderDescriptor;
+import mods.eln.misc.VoltageLevelColor;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 
@@ -19,6 +20,7 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
 
     public PneumaticPipeDescriptor(String name,CableRenderDescriptor cable_render) {
         super(name, PneumaticPipeElement.class, PneumaticPipeRender.class);
+        this.voltageLevelColor= VoltageLevelColor.Neutral;
         this.cable_render=cable_render;
     }
 
@@ -31,6 +33,11 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
 
     public void apply_to(PneumaticLoad pload) {
         pload.set(resistance,area,volume);
+    }
+
+    public void apply_to_reset(PneumaticLoad pload) {
+        apply_to(pload);
+        pload.set_pressure(base_atmospheric_pressure);
     }
 
     public void apply_to(PneumaticConnection connection) {

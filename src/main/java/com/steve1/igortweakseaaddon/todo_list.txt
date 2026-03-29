@@ -1,23 +1,19 @@
 
 TODO:
 
-1) add special sixnode and transparent node classes that will support pneumatic and liquid pipes
-
-1.2) add subtype of special node that will be a gridnode so i can integrate this stuff with grid
-
 1.5) add voltage and thermal watchdogs to my stuff
 
-x) add reactor for grid
+67) add reactor for grid
 
 7) add GIANT flywheel as energy storage
 
-8) add pneumatic (before flywheel, its needed for it)
+8.1) add pneumatic compressor that sucks air from atmosphere, add pneumatic turbine
 
-8.1) add pneumatic compressor that sucks air from atmosphere, add pneumatic release port that can release air to atmosphere, add pneumatic valve, add pneumatic turbine
+8.25) add air tanks
 
 8.2) add pneumatic sensor to detect parameters of air inside a pipe
 
-8.3) add one way valve
+8.3) add one way valve and valve that only opens with enough pressure or pressure difference
 
 8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
 
@@ -33,6 +29,16 @@ ALREADY DONE
 
 3.5) add alarm that has built in signal receiver and relay
 
+1) add special sixnode and transparent node classes that will support pneumatic and liquid pipes
+
+1.2) add subtype of special node that will be a gridnode so i can integrate this stuff with grid
+
+12) find usages for pipes and pneumatics
+
+8) add pneumatic (before flywheel, its needed for it)
+
+8.1) add pneumatic valve, add pneumatic release port that can release air to atmosphere
+
 CONCEPT LIMBO
 
 13) add engine to start up the rotating systems with shafts and stuff
@@ -40,8 +46,6 @@ CONCEPT LIMBO
 2) add neon signs
 
 3) add traffic lights
-
-12) find usages for pipes and pneumatics
 
 11) add furrier transform?
 

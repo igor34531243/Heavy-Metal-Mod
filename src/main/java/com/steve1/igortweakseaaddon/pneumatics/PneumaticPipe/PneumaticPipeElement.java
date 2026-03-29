@@ -35,8 +35,7 @@ public class PneumaticPipeElement extends IgorSixNodeElement {
         this.descriptor= (PneumaticPipeDescriptor) descriptor;
 
         pneumatic_load= new NBTPneumaticLoad("pneumatic_load");
-        this.descriptor.apply_to(pneumatic_load);
-        pneumatic_load.set_pressure(base_atmospheric_pressure);
+        this.descriptor.apply_to_reset(pneumatic_load);
         pneumaticLoadList.add(pneumatic_load);
 
         pressure_watchdog=new PressureWatchdog();

@@ -12,6 +12,7 @@ import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet.PneumaticPipeOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticValve.PneumaticValveDescriptor;
@@ -80,6 +81,7 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticValveDescriptor t4PneumaticValveDescriptor;
 	public static PneumaticValveDescriptor t5PneumaticValveDescriptor;
 	public static PneumaticValveDescriptor creativePneumaticValveDescriptor;
+	public static PneumaticPipeOutletDescriptor pneumaticPipeOutletDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
@@ -325,8 +327,6 @@ public class BaseIgorTweaksEaAddon {
 
 		t1PneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
 
-		t1PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		t1PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier1");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticPipeDescriptor);
@@ -339,8 +339,6 @@ public class BaseIgorTweaksEaAddon {
 		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper Air Pipe", cable_rend_desc);
 
 		t2PneumaticPipeDescriptor.set(t2_pneumatic_resistance,t2_pneumatic_area,t2_pneumatic_volume,t2_pneumatic_max_pressure);
-
-		t2PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
 		t2PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier2");
 
@@ -355,8 +353,6 @@ public class BaseIgorTweaksEaAddon {
 
 		t3PneumaticPipeDescriptor.set(t3_pneumatic_resistance,t3_pneumatic_area,t3_pneumatic_volume,t3_pneumatic_max_pressure);
 
-		t3PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		t3PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier3");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticPipeDescriptor);
@@ -369,8 +365,6 @@ public class BaseIgorTweaksEaAddon {
 		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten Air Pipe", cable_rend_desc);
 
 		t4PneumaticPipeDescriptor.set(t4_pneumatic_resistance,t4_pneumatic_area,t4_pneumatic_volume,t4_pneumatic_max_pressure);
-
-		t4PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
 		t4PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier4");
 
@@ -385,8 +379,6 @@ public class BaseIgorTweaksEaAddon {
 
 		t5PneumaticPipeDescriptor.set(t5_pneumatic_resistance,t5_pneumatic_area,t5_pneumatic_volume,t5_pneumatic_max_pressure);
 
-		t5PneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		t5PneumaticPipeDescriptor.setDefaultIcon("pneumaticpipetier5");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticPipeDescriptor);
@@ -400,8 +392,6 @@ public class BaseIgorTweaksEaAddon {
 
 		creativePneumaticPipeDescriptor.set(creative_pneumatic_resistance,creative_pneumatic_area,creative_pneumatic_volume,creative_pneumatic_max_pressure);
 
-		creativePneumaticPipeDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		creativePneumaticPipeDescriptor.setDefaultIcon("pneumaticpipecreative");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticPipeDescriptor);
@@ -409,8 +399,6 @@ public class BaseIgorTweaksEaAddon {
 		subId = 6;
 
 		t1PneumaticValveDescriptor = new PneumaticValveDescriptor("PVC Air Valve", t1PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t1PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
 		t1PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet1");
 
@@ -420,8 +408,6 @@ public class BaseIgorTweaksEaAddon {
 
 		t2PneumaticValveDescriptor = new PneumaticValveDescriptor("Copper Air Valve",t2PneumaticPipeDescriptor,obj.getObj("RelayBig"));
 
-		t2PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		t2PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet2");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticValveDescriptor);
@@ -429,8 +415,6 @@ public class BaseIgorTweaksEaAddon {
 		subId = 8;
 
 		t3PneumaticValveDescriptor = new PneumaticValveDescriptor("Iron Air Valve",t3PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t3PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
 		t3PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet3");
 
@@ -440,8 +424,6 @@ public class BaseIgorTweaksEaAddon {
 
 		t4PneumaticValveDescriptor = new PneumaticValveDescriptor("Tungsten Air Valve",t4PneumaticPipeDescriptor,obj.getObj("RelayBig"));
 
-		t4PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		t4PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet4");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticValveDescriptor);
@@ -449,8 +431,6 @@ public class BaseIgorTweaksEaAddon {
 		subId = 10;
 
 		t5PneumaticValveDescriptor = new PneumaticValveDescriptor("Alloy Air Valve",t5PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t5PneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
 
 		t5PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet5");
 
@@ -460,11 +440,18 @@ public class BaseIgorTweaksEaAddon {
 
 		creativePneumaticValveDescriptor = new PneumaticValveDescriptor("Creative Air Valve",creativePneumaticPipeDescriptor,obj.getObj("RelayBig"));
 
-		creativePneumaticValveDescriptor.voltageLevelColor=VoltageLevelColor.Neutral;
-
 		creativePneumaticValveDescriptor.setDefaultIcon("pneumaticvalvecreative");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticValveDescriptor);
+
+		subId = 12;
+
+		pneumaticPipeOutletDescriptor = new PneumaticPipeOutletDescriptor("Air release",obj.getObj("PowerSocket800"));
+
+		pneumaticPipeOutletDescriptor.setDefaultIcon("pneumaticpipeoutlet");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticPipeOutletDescriptor);
+
 	}
 
 	public void register_fuses() {

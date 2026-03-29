@@ -20,6 +20,7 @@ public class PneumaticHubElement extends IgorTransparentNodeElement {
     public PneumaticHubElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor);
         pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
+        creativePneumaticPipeDescriptor.apply_to_reset(pneumatic_load);
         pneumaticLoadList.add(pneumatic_load);
     }
 

@@ -3,6 +3,7 @@ package com.steve1.igortweakseaaddon.pneumatics.PneumaticValve;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import mods.eln.misc.Obj3D;
+import mods.eln.misc.VoltageLevelColor;
 
 public class PneumaticValveDescriptor extends IgorSixNodeDescriptor {
 
@@ -12,6 +13,7 @@ public class PneumaticValveDescriptor extends IgorSixNodeDescriptor {
 
     public PneumaticValveDescriptor(String name, PneumaticPipeDescriptor pipe_descriptor, Obj3D model) {
         super(name, PneumaticValveElement.class, PneumaticValveRender.class);
+        this.voltageLevelColor= VoltageLevelColor.Neutral;
         this.pipe_descriptor=pipe_descriptor;
         this.model=model;
         main=model.getPart("main");

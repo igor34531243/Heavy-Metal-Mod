@@ -48,13 +48,13 @@ public class PneumaticValveElement extends IgorSixNodeElement {
 
         max_area=pipe_descriptor.area;
 
-        pipe_descriptor.apply_to(loadA);
-        pipe_descriptor.apply_to(loadB);
+        pipe_descriptor.apply_to_reset(loadA);
+        pipe_descriptor.apply_to_reset(loadB);
         pipe_descriptor.apply_to(pconnection);
         pipe_descriptor.apply_to(pressure_watchdogA);
         pipe_descriptor.apply_to(pressure_watchdogB);
 
-        t1PneumaticPipeDescriptor.apply_to(loadGate);
+        t1PneumaticPipeDescriptor.apply_to_reset(loadGate);
         t1PneumaticPipeDescriptor.apply_to(pressure_watchdogGate);
 
         pconnection.connect(loadA,loadB);
