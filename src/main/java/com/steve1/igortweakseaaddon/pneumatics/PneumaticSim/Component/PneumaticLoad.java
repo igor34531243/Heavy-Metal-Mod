@@ -184,13 +184,10 @@ public class PneumaticLoad extends State {
     public double get_pressure_normalized() {
         double res_pressure=pressure-logic_pressure_min;
         if (res_pressure<0) {
-            logger.info("set to 0, got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure));
             return 0;
         } else if (res_pressure>logic_pressure_range) {
-            logger.info("set to 1, got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure));
             return 1;
         }
-        logger.info("got: "+plot_atmospheres(res_pressure)+" "+plot_atmospheres(pressure)+" "+res_pressure*logic_pressure_range_inv);
         return res_pressure*logic_pressure_range_inv;
     }
 

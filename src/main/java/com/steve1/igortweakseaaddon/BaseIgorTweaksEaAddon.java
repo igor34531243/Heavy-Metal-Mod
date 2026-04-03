@@ -10,6 +10,7 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticHub.PneumaticHubDescript
 import com.steve1.igortweakseaaddon.misc.StirlingEngine.StirlingEngineDescriptor;
 import com.steve1.igortweakseaaddon.misc.WirelessAlarm.WirelessAlarmDescriptor;
 import com.steve1.igortweakseaaddon.misc.SmartGhostGroup;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet.PneumaticPipeOutletDescriptor;
@@ -82,6 +83,12 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticValveDescriptor t5PneumaticValveDescriptor;
 	public static PneumaticValveDescriptor creativePneumaticValveDescriptor;
 	public static PneumaticPipeOutletDescriptor pneumaticPipeOutletDescriptor;
+	public static PneumaticOneWayValveDescriptor t1PneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor t2PneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor t3PneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor t4PneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor t5PneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor creativePneumaticOneWayValveDescriptor;
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
@@ -121,7 +128,7 @@ public class BaseIgorTweaksEaAddon {
 	public static final double creative_pneumatic_resistance = base_air_resistance*3;
 	public static final double creative_pneumatic_area = 0.1;
 	public static final double creative_pneumatic_volume = creative_pneumatic_area*1;
-	public static final double creative_pneumatic_max_pressure = base_atmospheric_pressure * 99999;
+	public static final double creative_pneumatic_max_pressure = base_atmospheric_pressure * 100000;
 
 	// plastic  20atm    0.0005 1.5 x 1.5 1.0
 	// copper   200 atm  0.001  2.0 x 2.0 1.2
@@ -451,6 +458,55 @@ public class BaseIgorTweaksEaAddon {
 		pneumaticPipeOutletDescriptor.setDefaultIcon("pneumaticpipeoutlet");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticPipeOutletDescriptor);
+
+		subId = 13;
+
+		t1PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("PVC One Way Valve",t1PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		t1PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet1");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticOneWayValveDescriptor);
+
+		subId = 14;
+
+		t2PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Copper One Way Valve",t2PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		t2PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet2");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticOneWayValveDescriptor);
+
+		subId = 15;
+
+		t3PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Iron One Way Valve",t3PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		t3PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet3");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticOneWayValveDescriptor);
+
+		subId = 16;
+
+		t4PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Tungsten One Way Valve",t4PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		t4PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet4");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticOneWayValveDescriptor);
+
+		subId = 17;
+
+		t5PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Alloy One Way Valve",t5PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		t5PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet5");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticOneWayValveDescriptor);
+
+		subId = 18;
+
+		creativePneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Creative One Way Valve",creativePneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+
+		creativePneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvecreative");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticOneWayValveDescriptor);
+
 
 	}
 
