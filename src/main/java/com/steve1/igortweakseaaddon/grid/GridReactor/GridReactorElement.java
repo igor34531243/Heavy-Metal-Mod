@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.misc.Direction.XN;
 
 
@@ -44,7 +43,6 @@ public class GridReactorElement extends IgorGridElement {
         electricalComponentList.add(inductor);
         loadA.setAsMustBeFarFromInterSystem();
     }
-    //TODO: Add some shit to actually make this work!
     TransparentNodeElementInventory inventory = new TransparentNodeElementInventory(2, 64, this);
 
     @Override
@@ -54,9 +52,8 @@ public class GridReactorElement extends IgorGridElement {
 
     @Override
     public void initialize() {
+        super.initialize();
         setupPhysical();
-
-        connect();
     }
 
     @Override
@@ -75,9 +72,6 @@ public class GridReactorElement extends IgorGridElement {
     boolean fromNbt = false;
 
     public void setupPhysical() {
-        logger.info("DESCRIPTOR, INVENTORY PAIR");
-        logger.info(descriptor);
-        logger.info(inventory);
         double rs = descriptor.getRsValue(inventory);
         inductor.setL(descriptor.getlValue(inventory));
         loadA.setRs(rs);
@@ -90,12 +84,6 @@ public class GridReactorElement extends IgorGridElement {
         }
     }
 
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
@@ -103,31 +91,7 @@ public class GridReactorElement extends IgorGridElement {
     }
 
     @Override
-    public void networkSerialize(java.io.DataOutputStream stream) {
-        super.networkSerialize(stream);
-        /*
-         * try {
-         *
-         *
-         * } catch (IOException e) {
-         *
-         * e.printStackTrace(); }
-         */
-    }
-
-
-    @Override
-    public byte networkUnserialize(DataInputStream stream) {
-        byte command = super.networkUnserialize(stream);
-
-        if (command==-128) return -128;
-
-        return command;
-    }
-
-    @Override
     public IInventory getInventory() {
-
         return inventory;
     }
 

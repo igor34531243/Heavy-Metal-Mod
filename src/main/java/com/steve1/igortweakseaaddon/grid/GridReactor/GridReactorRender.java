@@ -20,29 +20,6 @@ public class GridReactorRender extends IgorGridRender {
         this.descriptor = (GridReactorDescriptor) descriptor_input;
     }
 
-
-    @Override
-    public void refresh(float deltaT) {
-
-    }
-
-
-    @Override
-    public void networkUnserialize(DataInputStream stream) {
-
-        super.networkUnserialize(stream);
-
-
-	/*	try {
-
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}*/
-
-    }
-
     @Override
     public GuiScreen newGuiDraw(Direction side, EntityPlayer player) {
 

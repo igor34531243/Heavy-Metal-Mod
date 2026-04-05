@@ -2,7 +2,6 @@ package com.steve1.igortweakseaaddon.grid.GridReactor;
 
 import mods.eln.gui.GuiContainerEln;
 import mods.eln.gui.GuiHelperContainer;
-import mods.eln.gui.IGuiObject;
 import mods.eln.misc.Utils;
 import mods.eln.node.transparent.TransparentNodeElementInventory;
 import mods.eln.transparentnode.powerinductor.PowerInductorContainer;
@@ -23,27 +22,10 @@ public class GridReactorGui extends GuiContainerEln {
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
-    }
-
-    @Override
     public void drawGuiContainerBackgroundLayer(float f, int mx, int my) {
         // ide marks this as invalid but it has be be like this
         // it builds fine with this line and breaks totaly without
         super.func_146976_a(f, mx, my);
-    }
-
-
-    @Override
-    public void guiObjectEvent(IGuiObject object) {
-        super.guiObjectEvent(object);
-
-    }
-
-    @Override
-    protected void preDraw(float f, int x, int y) {
-        super.preDraw(f, x, y);
     }
 
     @Override
