@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.fuseBlown;
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.i18n.I18N.tr;
 import static mods.eln.misc.Direction.XN;
 
@@ -21,6 +22,10 @@ public class GridFuseDescriptor extends IgorGridDescriptor {
         add_cable_point(XN,1,0.5,2.8,1.58);
         add_cable_point(XN.getInverse(),0,2.4,4.8,-1.58);
         add_cable_point(XN.getInverse(),1,2.4,4.8,1.58);
+
+        if (obj_model == null) {
+            logger.error("No grid breaker model given!");
+        }
     }
 
     @Override
@@ -28,6 +33,16 @@ public class GridFuseDescriptor extends IgorGridDescriptor {
         super.addInformation(itemStack, entityPlayer, list, par4);
         Collections.addAll(list, tr("A grid breaker is an electrical device used to automatically\nsever electrical connections upon exceeding the\nrated cable current.").split("\n"));
         Collections.addAll(list, tr("The grid breaker accepts only T1 and T2 grid fuses.\n").split("\n"));
+    }
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        if (type != ItemRenderType.INVENTORY){
+            if (model != null) {
+                model.draw("main");
+            }
+        }else{
+            super.renderItem(type, item, data);
+        }
     }
 
     @Override

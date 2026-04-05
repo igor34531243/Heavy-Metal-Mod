@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon;
 import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseDescriptor;
 import com.steve1.igortweakseaaddon.grid.GridFuse.GridFuseItem;
+import com.steve1.igortweakseaaddon.grid.GridReactor.GridReactorDescriptor;
 import com.steve1.igortweakseaaddon.grid.GridSensor.GridSensorDescriptor;
 import com.steve1.igortweakseaaddon.grid.GridSwitch.GridSwitchDescriptor;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNode;
@@ -26,6 +27,7 @@ import mods.eln.Other;
 import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.i18n.I18N;
 import mods.eln.misc.*;
+import mods.eln.misc.series.SerieEE;
 import mods.eln.node.NodeManager;
 import mods.eln.node.simple.SimpleNodeItem;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
@@ -58,6 +60,7 @@ public class BaseIgorTweaksEaAddon {
 	public static GridFuseDescriptor fuseDescriptor;
 	public static GridSwitchDescriptor switchDescriptor;
 	public static GridSensorDescriptor sensorDescriptor;
+	public static GridReactorDescriptor reactorDescriptor;
 	public static GridFuseItem fuseBlown;
 	public static GridFuseItem fuseT1;
 	public static GridFuseItem fuseT2;
@@ -206,11 +209,12 @@ public class BaseIgorTweaksEaAddon {
 			Object cinnabar=findItemStackMethod.invoke(instance,"Cinnabar Dust");
 			Object iron_cable=findItemStackMethod.invoke(instance,"Iron Cable");
 			Object alloy_ingot=findItemStackMethod.invoke(instance,"Alloy Ingot");
+			Object tungsten_cable=findItemStackMethod.invoke(instance, "Tungsten Cable");
 
 			if (vhv_cable == null || alloy_plate==null || cinnabar==null || hv_cable==null) {
 				throw new RuntimeException("One of the eln items for crafting is not found.");
 			}
-
+			//Grid breaker
 			Object output = fuseDescriptor.newItemStack();//findItemStackMethod.invoke(instance,"Grid_High_Voltage_Fuse");
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
@@ -222,7 +226,7 @@ public class BaseIgorTweaksEaAddon {
 							'R', item_rubber
 					}
             );
-
+			//Grid fuses
 			output = fuseT1.newItemStack();
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
@@ -246,7 +250,9 @@ public class BaseIgorTweaksEaAddon {
 							'R', item_rubber
 					}
 			);
+			//Sockets
 			output = Socket800.newItemStack();
+			((ItemStack)output).stackSize = 16;
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"RCR",
@@ -259,6 +265,7 @@ public class BaseIgorTweaksEaAddon {
 					}
 			);
 			output = Socket3200.newItemStack();
+			((ItemStack)output).stackSize = 16;
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"RCR",
@@ -270,9 +277,8 @@ public class BaseIgorTweaksEaAddon {
 							'H', vhv_cable
 					}
 			);
-
+			//Converter
 			output = new ItemStack(elnToOtherBlockVVu);
-
 			addRecipeMethod.invoke(instance, output,
 					new Object[]{
 							"III",
@@ -284,7 +290,47 @@ public class BaseIgorTweaksEaAddon {
 							'R', alloy_ingot
 					}
 			);
-
+			//Pneumatics
+			output = t2PneumaticPipeDescriptor.newItemStack();
+			((ItemStack)output).stackSize = 6;
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"CCC",
+							"   ",
+							"CCC",
+							'C', copper_plate
+					}
+			);
+			output = t3PneumaticPipeDescriptor.newItemStack();
+			((ItemStack)output).stackSize = 6;
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"III",
+							"   ",
+							"III",
+							'I', iron_plate
+					}
+			);
+			output = t4PneumaticPipeDescriptor.newItemStack();
+			((ItemStack)output).stackSize = 3;
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"TTT",
+							"   ",
+							"TTT",
+							'T', tungsten_cable
+					}
+			);
+			output = t5PneumaticPipeDescriptor.newItemStack();
+			((ItemStack)output).stackSize = 6;
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"AAA",
+							"   ",
+							"AAA",
+							'A', alloy_plate
+					}
+			);
         } catch (Exception e) {
 			throw new RuntimeException(e);
         }
@@ -608,6 +654,23 @@ public class BaseIgorTweaksEaAddon {
 		sensorDescriptor.setDefaultIcon("gridsensor");
 
 		transparentNodeItem.addDescriptor(subId + (id << 6), sensorDescriptor);
+
+		subId = 12;
+
+
+		reactorDescriptor = new GridReactorDescriptor(
+				"Grid Power Reactor",
+				obj.getObj("GridReactor"),
+				SerieEE.newE12(-1)
+		);
+		g = new SmartGhostGroup();
+		g.addRectangle(0,1,0,2,0,1);
+
+		reactorDescriptor.setGhostGroup(g);
+
+		reactorDescriptor.setDefaultIcon("gridreactor");
+
+		transparentNodeItem.addDescriptor(subId +(id << 6), reactorDescriptor);
 	}
 
 	private void register_wireless_alarms() {

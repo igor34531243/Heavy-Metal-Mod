@@ -2,9 +2,11 @@ package com.steve1.igortweakseaaddon.grid.GridSwitch;
 
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
 import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import mods.eln.misc.Direction;
 import mods.eln.misc.Obj3D;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ public class GridSwitchDescriptor extends IgorGridDescriptor {
                     OnOff.put(part, new float[]{obj.getPart(part).getFloat("A1"), obj.getPart(part).getFloat("A2")});
                 }
             }
+        }else{
+            logger.error("No grid switch model given!");
         }
     }
     @Override
@@ -44,18 +48,20 @@ public class GridSwitchDescriptor extends IgorGridDescriptor {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         if (type != ItemRenderType.INVENTORY){
-            draw();
+            if (model != null) {
+                objItemScale(model);
+                Direction.ZN.glRotateXnRef();
+                GL11.glPushMatrix();
+                GL11.glTranslatef(5f, 6f, -4f);
+                GL11.glScalef(0.8f, 0.8f, 0.8f);
+                model.draw("static");
+                GL11.glPopMatrix();
+            }
         }else{
             super.renderItem(type, item, data);
         }
     }
-    void draw(){
-        if (model != null){
-            model.draw("static");
-        }else{
-            logger.info("no model given!");
-        }
-    }
+
     @Override
     public void draw(IgorGridRender render) {
         super.draw(render);
