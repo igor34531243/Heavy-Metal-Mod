@@ -27,13 +27,14 @@ public class igorUTILS {
     }
 
     public static String plot_pascals(double pressure) {
-        if (pressure >= 1000000.0) {
+        double abs_val=Math.abs(pressure);
+        if (abs_val >= 1000000.0) {
             return String.format("%.2f MPa", pressure / 1000000.0);
-        } else if (pressure >= 1000.0) {
+        } else if (abs_val >= 1000.0) {
             return String.format("%.2f kPa", pressure / 1000.0);
-        } else if (pressure >= 1) {
+        } else if (abs_val >= 1) {
             return String.format("%.2f Pa", pressure);
-        } else if (pressure >= 0.001) {
+        } else if (abs_val >= 0.001) {
             return String.format("%.2f kPa", pressure * 1000);
         } else {
             return String.format("%.2f µPa", pressure * 1000000);
@@ -41,15 +42,16 @@ public class igorUTILS {
     }
 
     public static String plot_atmospheres(double pressure) {
-        if (pressure >= base_atmospheric_pressure *100) {
+        double abs_val=Math.abs(pressure);
+        if (abs_val >= base_atmospheric_pressure *100) {
             return String.format("%.0f Atm", pressure/ base_atmospheric_pressure);
-        } else if (pressure >= base_atmospheric_pressure *10) {
+        } else if (abs_val >= base_atmospheric_pressure *10) {
             return String.format("%.1f Atm", pressure/ base_atmospheric_pressure);
-        } else if (pressure >= base_atmospheric_pressure *0.95) {
+        } else if (abs_val >= base_atmospheric_pressure *0.95) {
             return String.format("%.2f Atm", pressure/ base_atmospheric_pressure);
-        } else if (pressure >= base_atmospheric_pressure *0.1) {
+        } else if (abs_val >= base_atmospheric_pressure *0.1) {
             return String.format("%.3f Atm", pressure/ base_atmospheric_pressure);
-        } else if (pressure >= base_atmospheric_pressure /1000) {
+        } else if (abs_val >= base_atmospheric_pressure /1000) {
             return String.format("%.2f mAtm", 1000*pressure/ base_atmospheric_pressure);
         } else {
             return String.format("%.2f µAtm", 1000000*pressure/ base_atmospheric_pressure);
@@ -57,13 +59,14 @@ public class igorUTILS {
     }
 
     public static String plot_speed(double speed) {
-        if (speed >= 1000.0) {
+        double abs_val=Math.abs(speed);
+        if (abs_val >= 1000.0) {
             return String.format("%.2f KM/S", speed / 1000.0);
-        } else if (speed>=1) {
+        } else if (abs_val>=1) {
             return String.format("%.2f M/S", speed);
-        } else if (speed>=0.01) {
+        } else if (abs_val>=0.01) {
             return String.format("%.2f SM/S", speed * 100);
-        } else if (speed>=0.001) {
+        } else if (abs_val>=0.001) {
             return String.format("%.2f MM/S", speed * 1000);
         } else {
             return String.format("%.2f µM/S", speed * 1000000);
@@ -72,12 +75,32 @@ public class igorUTILS {
 
     public static String plot_percent(double value) {
         value*=100;
-        if (value>=10) {
+        double abs_val=Math.abs(value);
+        if (abs_val>=10) {
             return String.format("%.1f", value) + " %";
-        } else if (value>=1) {
+        } else if (abs_val>=1) {
             return String.format("%.2f", value) + " %";
         } else {
             return String.format("%.3f", value) + " %";
+        }
+    }
+
+    public static String plot_area(double value) {
+        double abs_val=Math.abs(value);
+        if (abs_val>=1) {
+            return String.format("%.2f M²", value);
+        } else if (abs_val>=0.1) {
+            return String.format("%.3f M²", value);
+        } else if (abs_val>=1e-4) {
+            return String.format("%.2f sm²", value*1e4);
+        } else if (abs_val>=1e-5) {
+            return String.format("%.3f sm²", value*1e4);
+        } else if (abs_val>=1e-6) {
+            return String.format("%.4f sm²", value*1e4);
+        } else if (abs_val>=1e-9) {
+            return String.format("%.2f mm²", value*1e9);
+        } else {
+            return String.format("%.3f mm²", value*1e9);
         }
     }
 }

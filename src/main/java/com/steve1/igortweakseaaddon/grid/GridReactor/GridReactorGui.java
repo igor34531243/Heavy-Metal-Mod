@@ -1,5 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridReactor;
 
+import com.steve1.igortweakseaaddon.misc.IgorGuiContainerEln;
 import mods.eln.gui.GuiContainerEln;
 import mods.eln.gui.GuiHelperContainer;
 import mods.eln.misc.Utils;
@@ -10,7 +11,7 @@ import net.minecraft.inventory.IInventory;
 
 import static mods.eln.i18n.I18N.tr;
 
-public class GridReactorGui extends GuiContainerEln {
+public class GridReactorGui extends IgorGuiContainerEln {
 
     public TransparentNodeElementInventory inventory;
     GridReactorRender render;
@@ -19,13 +20,6 @@ public class GridReactorGui extends GuiContainerEln {
         super(new PowerInductorContainer(player, inventory));
         this.inventory = (TransparentNodeElementInventory) inventory;
         this.render = render;
-    }
-
-    @Override
-    public void drawGuiContainerBackgroundLayer(float f, int mx, int my) {
-        // ide marks this as invalid but it has be be like this
-        // it builds fine with this line and breaks totaly without
-        super.func_146976_a(f, mx, my);
     }
 
     @Override

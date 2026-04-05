@@ -25,45 +25,6 @@ public class GridSensorRender extends IgorGridRender {
         this.descriptor = descriptor;
     }
 
-    public void clientSetByte(byte id, byte value) {
-        try {
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            DataOutputStream stream = new DataOutputStream(bos);
-
-            preparePacketForServer(stream);
-
-            stream.writeByte(id);
-            stream.writeByte(value);
-
-            sendPacketToServer(bos);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-    }
-
-    public void clientSetFloat(int id, float value1, float value2) {
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            DataOutputStream stream = new DataOutputStream(bos);
-
-            preparePacketForServer(stream);
-
-            stream.writeByte(id);
-            stream.writeFloat(value1);
-            stream.writeFloat(value2);
-
-            sendPacketToServer(bos);
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public void networkUnserialize(DataInputStream stream) {
         super.networkUnserialize(stream);

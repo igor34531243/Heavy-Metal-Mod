@@ -7,13 +7,13 @@ TODO:
 
 7) add GIANT flywheel as energy storage
 
+69) change air valve and smart valve over to pipe slots instead of fixed tiers
+
 8.1) add pneumatic compressor that sucks air from atmosphere, add pneumatic turbine
 
 8.25) add air tanks
 
 8.2) add pneumatic sensor to detect parameters of air inside a pipe
-
-8.3) add one way valve and valve that only opens with enough pressure or pressure difference
 
 8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
 
@@ -38,6 +38,8 @@ ALREADY DONE
 8) add pneumatic (before flywheel, its needed for it)
 
 8.1) add pneumatic valve, add pneumatic release port that can release air to atmosphere
+
+8.3) add one way valve and valve that only opens with enough pressure or pressure difference
 
 CONCEPT LIMBO
 

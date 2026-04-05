@@ -3,14 +3,10 @@ package com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve;
 import mods.eln.gui.*;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
+import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_area;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_pascals_atmospheres;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveElement.setFlagId;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveElement.setPressureId;
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveElement.*;
 
 public class PneumaticOneWayValveGui extends GuiScreenEln {
 
@@ -19,6 +15,8 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
     GuiButtonEln select_mode;
     GuiButtonEln select_side;
     GuiButtonEln select_open;
+    GuiVerticalTrackBar to_open_area;
+    GuiVerticalTrackBar to_close_area;
 
     boolean mode_is_p_diff=true;
     boolean side_is_yellow=true;
@@ -52,11 +50,23 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
         select_open.setComment(1,"valve if pressure is");
         select_open.setComment(2,"above the chosen");
 
+        to_open_area=newGuiVerticalTrackBar(6+80+24, 6 + 2, 20, 100);
+        to_open_area.setStepIdMax((int) 100);
+        to_open_area.setEnable(true);
+        to_open_area.setRange(0f, 1f);
+
+        to_close_area= newGuiVerticalTrackBar(6+80+48, 6 + 2, 20, 100);
+        to_close_area.setStepIdMax((int) 100);
+        to_close_area.setEnable(true);
+        to_close_area.setRange(0f, 1f);
+
         syncWithRender();
     }
 
     public void syncWithRender() {
-        pressure.setValue((float) render.set_pressure /render.max_pressure);
+        pressure.setValue((float) render.set_pressure/render.max_pressure);
+        to_open_area.setValue((float)(render.to_open_area/render.max_area));
+        to_close_area.setValue((float)(render.to_close_area/render.max_area));
 
         mode_is_p_diff=render.mode_is_p_diff;
         side_is_yellow=render.side_is_yellow;
@@ -115,7 +125,7 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
     public void guiObjectEvent(IGuiObject object) {
         super.guiObjectEvent(object);
         if (object == pressure) {
-            clientSetLong(setPressureId, (long)(render.max_pressure*pressure.getValue()));
+            render.clientSetLong(setPressureId,(long)(render.max_pressure*pressure.getValue()));
         } else if (object==select_mode) {
             byte flags=0;
             flags+=1<<4;
@@ -131,23 +141,10 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
             flags+=3<<4;
             flags+= (byte) (open_if_above ? 0 : 1);
             render.clientSetByte(setFlagId, flags);
-        }
-    }
-
-    public void clientSetLong(byte id, long value) {
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            DataOutputStream stream = new DataOutputStream(bos);
-
-            render.preparePacketForServer(stream);
-
-            stream.writeByte(id);
-            stream.writeLong(value);
-
-            render.sendPacketToServer(bos);
-        } catch (IOException e) {
-
-            e.printStackTrace();
+        } else if (object == to_open_area) {
+            render.clientSetDouble(setToOpenAreaId,render.max_area*to_open_area.getValue());
+        } else if (object == to_close_area) {
+            render.clientSetDouble(setToCloseAreaId,render.max_area*to_close_area.getValue());
         }
     }
 
@@ -156,10 +153,12 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
         super.preDraw(f, x, y);
         if (render.hasChanges) syncWithRender();
         pressure.setComment(0, "Pressure is set to "+plot_pascals_atmospheres(pressure.getValue() * render.max_pressure));
+        to_open_area.setComment(0, "Area when open is "+plot_area(to_open_area.getValue() * render.max_area));
+        to_close_area.setComment(0, "Area when closed is "+plot_area(to_close_area.getValue() * render.max_area));
     }
 
     @Override
     protected GuiHelper newHelper() {
-        return new GuiHelper(this, 12 + 20+80, 12 + 100 + 4);
+        return new GuiHelper(this, 12 + 20+80+48, 12 + 100 + 4);
     }
 }

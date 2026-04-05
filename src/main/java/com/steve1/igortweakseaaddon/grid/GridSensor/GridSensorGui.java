@@ -1,5 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridSensor;
 
+import com.steve1.igortweakseaaddon.misc.IgorGuiContainerEln;
 import mods.eln.gui.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,14 +10,14 @@ import java.text.ParseException;
 
 import static mods.eln.i18n.I18N.tr;
 
-public class GridSensorGui extends GuiContainerEln {
+public class GridSensorGui extends GuiScreenEln {
 
     GuiButton validate, voltageType, currentType, powerType, dirType;
     GuiTextFieldEln lowValue, highValue;
     GridSensorRender render;
 
     public GridSensorGui(EntityPlayer player, GridSensorRender render) {
-        super(new GridSensorContainer(player));
+        super();
         this.render = render;
     }
 
@@ -96,14 +97,7 @@ public class GridSensorGui extends GuiContainerEln {
     }
 
     @Override
-    public GuiHelperContainer newHelper() {
-        return new HelperStdContainer(this);
-    }
-
-    @Override
-    public void drawGuiContainerBackgroundLayer(float f, int mx, int my) {
-        // ide marks this as invalid but it has be be like this
-        // it builds fine with this line and breaks totaly without
-        super.func_146976_a(f, mx, my);
+    public GuiHelper newHelper() {
+        return new GuiHelper(this, 176, 8 + 48 + 24 + 4);
     }
 }

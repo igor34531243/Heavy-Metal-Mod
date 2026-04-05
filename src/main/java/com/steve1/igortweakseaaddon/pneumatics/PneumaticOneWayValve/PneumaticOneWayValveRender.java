@@ -21,7 +21,10 @@ public class PneumaticOneWayValveRender extends IgorSixNodeElementRender {
 
     public boolean hasChanges=false;
     public long set_pressure;
+    public double to_open_area;
+    public double to_close_area;
     public long max_pressure;
+    public double max_area;
     public boolean mode_is_p_diff=true;
     public boolean side_is_yellow=true;
     public boolean open_if_above=true;
@@ -31,6 +34,9 @@ public class PneumaticOneWayValveRender extends IgorSixNodeElementRender {
         super(tileEntity, side, descriptor);
         this.descriptor= (PneumaticOneWayValveDescriptor) descriptor;
         max_pressure=(long)this.descriptor.pipe_descriptor.max_pressure;
+        max_area=this.descriptor.pipe_descriptor.area;
+        to_open_area=this.descriptor.pipe_descriptor.area;
+        to_close_area=0;
     }
 
     @Override
@@ -38,6 +44,8 @@ public class PneumaticOneWayValveRender extends IgorSixNodeElementRender {
         super.publishUnserialize(stream);
         try {
             set_pressure=stream.readLong();
+            to_open_area=stream.readDouble();
+            to_close_area=stream.readDouble();
             byte flags=stream.readByte();
             mode_is_p_diff=((flags&1)!=0);
             side_is_yellow=(((flags>>1)&1)!=0);

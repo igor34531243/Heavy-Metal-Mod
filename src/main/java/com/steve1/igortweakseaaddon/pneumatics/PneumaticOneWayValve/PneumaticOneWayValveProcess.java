@@ -8,18 +8,20 @@ import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public class PneumaticOneWayValveProcess implements IProcess {
 
-    PneumaticOneWayValveElement element;
-    PneumaticConnection connection;
-    PneumaticLoad loadA;
-    PneumaticLoad loadB;
+    public PneumaticOneWayValveElement element;
+    public PneumaticConnection connection;
+    public PneumaticLoad loadA;
+    public PneumaticLoad loadB;
 
-    double pressure_set=0;
-    double max_pressure;
-    double max_pressure_inv;
-    double max_area;
-    boolean mode_is_p_diff=true;
-    boolean side_is_yellow=true;
-    boolean open_if_above=true;
+    public double pressure_set=0;
+    public double to_open_area;
+    public double to_close_area;
+    public double max_pressure;
+    public double max_pressure_inv;
+    public double max_area;
+    public boolean mode_is_p_diff=true;
+    public boolean side_is_yellow=true;
+    public boolean open_if_above=true;
 
     public PneumaticOneWayValveProcess(PneumaticOneWayValveElement got_element) {
         element=got_element;
@@ -33,7 +35,9 @@ public class PneumaticOneWayValveProcess implements IProcess {
     }
 
     public void settings_changed() {
-        pressure_set= element.set_pressure;
+        pressure_set=element.set_pressure;
+        to_open_area=element.to_open_area;
+        to_close_area=element.to_close_area;
         mode_is_p_diff=element.mode_is_p_diff;
         side_is_yellow=element.side_is_yellow;
         open_if_above=element.open_if_above;
@@ -56,10 +60,10 @@ public class PneumaticOneWayValveProcess implements IProcess {
             }
         }
         if (open_if_above == (pressure_got>pressure_set)) {
-            connection.set_area(max_area);
+            connection.set_area(to_open_area);
             element.is_open=true;
         } else {
-            connection.set_area(0);
+            connection.set_area(to_close_area);
             element.is_open=false;
         }
     }

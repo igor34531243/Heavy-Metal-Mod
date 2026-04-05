@@ -39,6 +39,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
 
     public double max_area;
     public long set_pressure=0;
+    public double to_open_area;
+    public double to_close_area;
     public boolean mode_is_p_diff=true;
     public boolean side_is_yellow=true;
     public boolean open_if_above=true;
@@ -46,6 +48,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
 
     public final static byte setPressureId=1;
     public final static byte setFlagId=2;
+    public final static byte setToOpenAreaId=3;
+    public final static byte setToCloseAreaId=4;
 
     public PneumaticOneWayValveElement(SixNode sixNode, Direction side, SixNodeDescriptor got_descriptor) {
         super(sixNode, side, got_descriptor);
@@ -53,6 +57,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
         pipe_descriptor=descriptor.pipe_descriptor;
 
         max_area=pipe_descriptor.area;
+        to_open_area=max_area;
+        to_close_area=0;
 
         pipe_descriptor.apply_to_reset(loadA);
         pipe_descriptor.apply_to_reset(loadB);
@@ -88,6 +94,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
         mode_is_p_diff=nbt.getBoolean("mode_is_p_diff");
         side_is_yellow=nbt.getBoolean("side_is_yellow");
         open_if_above=nbt.getBoolean("open_if_above");
+        to_open_area=nbt.getDouble("to_open_area");
+        to_close_area=nbt.getDouble("to_close_area");
         process.settings_changed();
     }
 
@@ -98,6 +106,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
         nbt.setBoolean("mode_is_p_diff",mode_is_p_diff);
         nbt.setBoolean("side_is_yellow",side_is_yellow);
         nbt.setBoolean("open_if_above",open_if_above);
+        nbt.setDouble("to_open_area",to_open_area);
+        nbt.setDouble("to_close_area",to_close_area);
     }
 
     @Override
@@ -110,6 +120,8 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
             flags+=(byte)((open_if_above ? 1 : 0)<<2);
             flags+=(byte)((is_open ? 1 : 0)<<3);
             stream.writeLong(set_pressure);
+            stream.writeDouble(to_open_area);
+            stream.writeDouble(to_close_area);
             stream.writeByte(flags);
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,8 +135,12 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
             switch (stream.readByte()) {
                 case setPressureId:
                     set_pressure=stream.readLong();
-                    process.settings_changed();
-                    needPublish();
+                    break;
+                case setToOpenAreaId:
+                    to_open_area=stream.readDouble();
+                    break;
+                case setToCloseAreaId:
+                    to_close_area=stream.readDouble();
                     break;
                 case setFlagId:
                     byte flags=stream.readByte();
@@ -141,10 +157,10 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
                             open_if_above=(flag_value!=0);
                             break;
                     }
-                    process.settings_changed();
-                    needPublish();
                     break;
             }
+            process.settings_changed();
+            needPublish();
         } catch (IOException e) {
             e.printStackTrace();
         }

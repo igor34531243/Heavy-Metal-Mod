@@ -54,6 +54,7 @@ public class IgorGridElement extends GridElement {
             logger.info("trying to attach gridload to the same side twice");
             return;
         }
+        cable.applyTo(load);
         grid_loads.put(side,load);
     }
 
