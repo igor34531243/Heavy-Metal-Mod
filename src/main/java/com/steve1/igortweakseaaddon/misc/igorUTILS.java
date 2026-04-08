@@ -1,5 +1,8 @@
 package com.steve1.igortweakseaaddon.misc;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.base_atmospheric_pressure;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
@@ -102,5 +105,9 @@ public class igorUTILS {
         } else {
             return String.format("%.3f mm²", value*1e9);
         }
+    }
+
+    public static ItemStack get_stack_in_slot(IInventory inventory, int slot) {
+        return inventory.getStackInSlot(slot);
     }
 }

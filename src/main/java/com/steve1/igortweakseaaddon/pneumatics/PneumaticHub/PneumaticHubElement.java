@@ -53,10 +53,4 @@ public class PneumaticHubElement extends IgorTransparentNodeElement {
     public String thermoMeterString(Direction direction) {
         return "";
     }
-
-    @Override
-    public boolean onBlockActivated(EntityPlayer entityPlayer, Direction side, float vx, float vy, float vz) {
-        pneumatic_load.set_mass(0);
-        return true;
-    };
 }

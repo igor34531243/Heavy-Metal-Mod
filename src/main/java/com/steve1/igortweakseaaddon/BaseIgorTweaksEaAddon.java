@@ -79,19 +79,17 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticPipeDescriptor t4PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor t5PneumaticPipeDescriptor;
 	public static PneumaticPipeDescriptor creativePneumaticPipeDescriptor;
-	public static PneumaticValveDescriptor t1PneumaticValveDescriptor;
-	public static PneumaticValveDescriptor t2PneumaticValveDescriptor;
-	public static PneumaticValveDescriptor t3PneumaticValveDescriptor;
-	public static PneumaticValveDescriptor t4PneumaticValveDescriptor;
-	public static PneumaticValveDescriptor t5PneumaticValveDescriptor;
-	public static PneumaticValveDescriptor creativePneumaticValveDescriptor;
+	public static PneumaticValveDescriptor pneumaticValveDescriptor;
 	public static PneumaticPipeOutletDescriptor pneumaticPipeOutletDescriptor;
-	public static PneumaticOneWayValveDescriptor t1PneumaticOneWayValveDescriptor;
-	public static PneumaticOneWayValveDescriptor t2PneumaticOneWayValveDescriptor;
-	public static PneumaticOneWayValveDescriptor t3PneumaticOneWayValveDescriptor;
-	public static PneumaticOneWayValveDescriptor t4PneumaticOneWayValveDescriptor;
-	public static PneumaticOneWayValveDescriptor t5PneumaticOneWayValveDescriptor;
-	public static PneumaticOneWayValveDescriptor creativePneumaticOneWayValveDescriptor;
+	public static PneumaticOneWayValveDescriptor pneumaticOneWayValveDescriptor;
+
+	public static CableRenderDescriptor t1PneumaticPipeRender;
+	public static CableRenderDescriptor t2PneumaticPipeRender;
+	public static CableRenderDescriptor t3PneumaticPipeRender;
+	public static CableRenderDescriptor t4PneumaticPipeRender;
+	public static CableRenderDescriptor t5PneumaticPipeRender;
+	public static CableRenderDescriptor creativePneumaticPipeRender;
+
 
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
@@ -371,12 +369,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 0;
 
-		CableRenderDescriptor cable_rend_desc;
-
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		t1PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 1.5f, 1.5f);
 
-		t1PneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", cable_rend_desc);
+		t1PneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", t1PneumaticPipeRender);
 
 		t1PneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
 
@@ -386,10 +382,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 1;
 
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		t2PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 2f, 2f);
 
-		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper Air Pipe", cable_rend_desc);
+		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper Air Pipe", t2PneumaticPipeRender);
 
 		t2PneumaticPipeDescriptor.set(t2_pneumatic_resistance,t2_pneumatic_area,t2_pneumatic_volume,t2_pneumatic_max_pressure);
 
@@ -399,10 +395,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 2;
 
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		t3PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 3f, 3f);
 
-		t3PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Iron Air Pipe", cable_rend_desc);
+		t3PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Iron Air Pipe", t3PneumaticPipeRender);
 
 		t3PneumaticPipeDescriptor.set(t3_pneumatic_resistance,t3_pneumatic_area,t3_pneumatic_volume,t3_pneumatic_max_pressure);
 
@@ -412,10 +408,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 3;
 
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		t4PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 4f, 4f);
 
-		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten Air Pipe", cable_rend_desc);
+		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten Air Pipe", t4PneumaticPipeRender);
 
 		t4PneumaticPipeDescriptor.set(t4_pneumatic_resistance,t4_pneumatic_area,t4_pneumatic_volume,t4_pneumatic_max_pressure);
 
@@ -425,10 +421,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 4;
 
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		t5PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 5f, 5f);
 
-		t5PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Alloy Air Pipe", cable_rend_desc);
+		t5PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Alloy Air Pipe", t5PneumaticPipeRender);
 
 		t5PneumaticPipeDescriptor.set(t5_pneumatic_resistance,t5_pneumatic_area,t5_pneumatic_volume,t5_pneumatic_max_pressure);
 
@@ -438,10 +434,10 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 5;
 
-		cable_rend_desc = new CableRenderDescriptor("eln",
+		creativePneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 6f, 6f);
 
-		creativePneumaticPipeDescriptor = new PneumaticPipeDescriptor("Creative Air Pipe", cable_rend_desc);
+		creativePneumaticPipeDescriptor = new PneumaticPipeDescriptor("Creative Air Pipe", creativePneumaticPipeRender);
 
 		creativePneumaticPipeDescriptor.set(creative_pneumatic_resistance,creative_pneumatic_area,creative_pneumatic_volume,creative_pneumatic_max_pressure);
 
@@ -451,53 +447,13 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 6;
 
-		t1PneumaticValveDescriptor = new PneumaticValveDescriptor("PVC Air Valve", t1PneumaticPipeDescriptor,obj.getObj("RelayBig"));
+		pneumaticValveDescriptor = new PneumaticValveDescriptor("Air Valve",obj.getObj("RelayBig"));
 
-		t1PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet1");
+		pneumaticValveDescriptor.setDefaultIcon("pneumaticvalve");
 
-		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticValveDescriptor);
+		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticValveDescriptor);
 
 		subId = 7;
-
-		t2PneumaticValveDescriptor = new PneumaticValveDescriptor("Copper Air Valve",t2PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t2PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet2");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticValveDescriptor);
-
-		subId = 8;
-
-		t3PneumaticValveDescriptor = new PneumaticValveDescriptor("Iron Air Valve",t3PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t3PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet3");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticValveDescriptor);
-
-		subId = 9;
-
-		t4PneumaticValveDescriptor = new PneumaticValveDescriptor("Tungsten Air Valve",t4PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t4PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet4");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticValveDescriptor);
-
-		subId = 10;
-
-		t5PneumaticValveDescriptor = new PneumaticValveDescriptor("Alloy Air Valve",t5PneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		t5PneumaticValveDescriptor.setDefaultIcon("pneumaticvalvet5");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticValveDescriptor);
-
-		subId = 11;
-
-		creativePneumaticValveDescriptor = new PneumaticValveDescriptor("Creative Air Valve",creativePneumaticPipeDescriptor,obj.getObj("RelayBig"));
-
-		creativePneumaticValveDescriptor.setDefaultIcon("pneumaticvalvecreative");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticValveDescriptor);
-
-		subId = 12;
 
 		pneumaticPipeOutletDescriptor = new PneumaticPipeOutletDescriptor("Air release",obj.getObj("PowerSocket800"));
 
@@ -505,53 +461,13 @@ public class BaseIgorTweaksEaAddon {
 
 		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticPipeOutletDescriptor);
 
-		subId = 13;
+		subId = 8;
 
-		t1PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("PVC One Way Valve",t1PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
+		pneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("One Way Air Valve",obj.getObj("ValvePlaceholder"));
 
-		t1PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet1");
+		pneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalve");
 
-		sixNodeItem.addDescriptor(subId + (id << 6), t1PneumaticOneWayValveDescriptor);
-
-		subId = 14;
-
-		t2PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Copper One Way Valve",t2PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
-
-		t2PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet2");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t2PneumaticOneWayValveDescriptor);
-
-		subId = 15;
-
-		t3PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Iron One Way Valve",t3PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
-
-		t3PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet3");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t3PneumaticOneWayValveDescriptor);
-
-		subId = 16;
-
-		t4PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Tungsten One Way Valve",t4PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
-
-		t4PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet4");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t4PneumaticOneWayValveDescriptor);
-
-		subId = 17;
-
-		t5PneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Alloy One Way Valve",t5PneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
-
-		t5PneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvet5");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), t5PneumaticOneWayValveDescriptor);
-
-		subId = 18;
-
-		creativePneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("Creative One Way Valve",creativePneumaticPipeDescriptor,obj.getObj("ValvePlaceholder"));
-
-		creativePneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalvecreative");
-
-		sixNodeItem.addDescriptor(subId + (id << 6), creativePneumaticOneWayValveDescriptor);
+		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticOneWayValveDescriptor);
 
 
 	}

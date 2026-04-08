@@ -1,12 +1,33 @@
 package com.steve1.igortweakseaaddon.misc;
 
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.IgorSixNodeWithInventoryElementRender;
 import mods.eln.gui.GuiContainerEln;
-import net.minecraft.inventory.Container;
+import mods.eln.gui.GuiHelperContainer;
+import mods.eln.misc.BasicContainer;
+import net.minecraft.entity.player.EntityPlayer;
 
-public abstract class IgorGuiContainerEln extends GuiContainerEln {
+public class IgorGuiContainerEln extends GuiContainerEln {
 
-    public IgorGuiContainerEln(Container par1Container) {
-        super(par1Container);
+    public int xsize;
+    public int ysize;
+
+    public IgorGuiContainerEln(EntityPlayer player, IgorSixNodeWithInventoryElementRender render, int xsize, int ysize) {
+        super(render.igorSixNodeDescriptor.make_container(player, render.inventory));
+        this.xsize=Math.min(xsize,176);
+        this.ysize=ysize;
+    }
+
+    public IgorGuiContainerEln(EntityPlayer player, IgorSixNodeWithInventoryElementRender render, int ysize) {
+        this(player,render,176,ysize);
+    }
+
+    public IgorGuiContainerEln(BasicContainer container) {
+        super(container);
+    }
+
+    @Override
+    protected GuiHelperContainer newHelper() {
+        return new GuiHelperContainer(this, xsize, ysize + 82, 8, ysize);
     }
 
     @Override

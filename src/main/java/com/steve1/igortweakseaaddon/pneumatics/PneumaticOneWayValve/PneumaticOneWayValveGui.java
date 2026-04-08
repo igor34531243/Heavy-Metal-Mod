@@ -1,14 +1,14 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve;
 
+import com.steve1.igortweakseaaddon.misc.IgorGuiContainerEln;
 import mods.eln.gui.*;
 import net.minecraft.entity.player.EntityPlayer;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_area;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_pascals_atmospheres;
 import static com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveElement.*;
 
-public class PneumaticOneWayValveGui extends GuiScreenEln {
+public class PneumaticOneWayValveGui extends IgorGuiContainerEln {
 
     PneumaticOneWayValveRender render;
     GuiVerticalTrackBar pressure;
@@ -23,6 +23,8 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
     boolean open_if_above=true;
 
     public PneumaticOneWayValveGui(EntityPlayer player, PneumaticOneWayValveRender render) {
+        super(player,render, 12 + 100 + 4);
+
         this.render = render;
     }
 
@@ -155,10 +157,5 @@ public class PneumaticOneWayValveGui extends GuiScreenEln {
         pressure.setComment(0, "Pressure is set to "+plot_pascals_atmospheres(pressure.getValue() * render.max_pressure));
         to_open_area.setComment(0, "Area when open is "+plot_area(to_open_area.getValue() * render.max_area));
         to_close_area.setComment(0, "Area when closed is "+plot_area(to_close_area.getValue() * render.max_area));
-    }
-
-    @Override
-    protected GuiHelper newHelper() {
-        return new GuiHelper(this, 12 + 20+80+48, 12 + 100 + 4);
     }
 }

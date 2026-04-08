@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeElement;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.WithPipeInventory.IgorSixNodeWithPipeInventoryElement;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTAtmosphereLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
@@ -15,17 +15,16 @@ import mods.eln.sim.ThermalLoad;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
-public class PneumaticPipeOutletElement extends IgorSixNodeElement {
+public class PneumaticPipeOutletElement extends IgorSixNodeWithPipeInventoryElement {
+
     public NBTPneumaticLoad pneumatic_load=new NBTPneumaticLoad("pneumatic_load");
     public NBTAtmosphereLoad atmosphere_load=new NBTAtmosphereLoad("atmosphere_load");
     public NBTPneumaticConnection pneumatic_connection=new NBTPneumaticConnection("pneumatic_connection",pneumatic_load,atmosphere_load);
 
-
     public PneumaticPipeOutletElement(SixNode sixNode, Direction side, SixNodeDescriptor descriptor) {
         super(sixNode, side, descriptor);
-        t5PneumaticPipeDescriptor.apply_to_reset(pneumatic_load);
-        t5PneumaticPipeDescriptor.apply_to_reset(atmosphere_load);
-        t5PneumaticPipeDescriptor.apply_to(pneumatic_connection);
+
+        pipe_descriptor_changed();
 
         pneumaticLoadList.add(pneumatic_load);
         pneumaticLoadList.add(atmosphere_load);
@@ -33,7 +32,17 @@ public class PneumaticPipeOutletElement extends IgorSixNodeElement {
     }
 
     @Override
+    public void pipe_descriptor_changed() {
+        pipe_descriptor.apply_to_reset(pneumatic_load);
+        pipe_descriptor.apply_to_reset(atmosphere_load);
+        pipe_descriptor.apply_to(pneumatic_connection);
+    }
+
+    @Override
     public PneumaticLoad getPneumaticLoad(LRDU lrdu, int mask) {
+        if (!has_item) {
+            return null;
+        }
         return pneumatic_load;
     }
 
@@ -49,6 +58,9 @@ public class PneumaticPipeOutletElement extends IgorSixNodeElement {
 
     @Override
     public int getConnectionMask(LRDU lrdu) {
+        if (!has_item) {
+            return 0;
+        }
         return pneumaticMask;
     }
 

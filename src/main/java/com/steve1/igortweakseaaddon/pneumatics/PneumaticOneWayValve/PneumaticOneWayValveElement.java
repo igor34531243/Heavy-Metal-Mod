@@ -1,7 +1,6 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.WithPipeInventory.IgorSixNodeWithPipeInventoryElement;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
@@ -19,14 +18,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumaticMask;
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
 
-public class PneumaticOneWayValveElement extends IgorSixNodeElement {
+public class PneumaticOneWayValveElement extends IgorSixNodeWithPipeInventoryElement {
 
     public PneumaticOneWayValveDescriptor descriptor;
-    public PneumaticPipeDescriptor pipe_descriptor;
 
     public NBTPneumaticLoad loadA=new NBTPneumaticLoad("loadA");
     public NBTPneumaticLoad loadB=new NBTPneumaticLoad("loadB");
@@ -54,17 +51,9 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
     public PneumaticOneWayValveElement(SixNode sixNode, Direction side, SixNodeDescriptor got_descriptor) {
         super(sixNode, side, got_descriptor);
         descriptor=(PneumaticOneWayValveDescriptor)got_descriptor;
-        pipe_descriptor=descriptor.pipe_descriptor;
 
-        max_area=pipe_descriptor.area;
         to_open_area=max_area;
         to_close_area=0;
-
-        pipe_descriptor.apply_to_reset(loadA);
-        pipe_descriptor.apply_to_reset(loadB);
-        pipe_descriptor.apply_to(connection);
-        pipe_descriptor.apply_to(pressureWatchdogA);
-        pipe_descriptor.apply_to(pressureWatchdogB);
 
         connection.connect(loadA,loadB);
         connection.can_fall_asleep=false;
@@ -85,6 +74,19 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
         pneumaticComponentList.add(connection);
         pneumaticLoadList.add(loadA);
         pneumaticLoadList.add(loadB);
+
+        pipe_descriptor_changed();
+    }
+
+    @Override
+    public void pipe_descriptor_changed() {
+        max_area=pipe_descriptor.area;
+        pipe_descriptor.apply_to_reset(loadA);
+        pipe_descriptor.apply_to_reset(loadB);
+        pipe_descriptor.apply_to(connection);
+        pipe_descriptor.apply_to(pressureWatchdogA);
+        pipe_descriptor.apply_to(pressureWatchdogB);
+        process.settings_changed();
     }
 
     @Override
@@ -96,7 +98,6 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
         open_if_above=nbt.getBoolean("open_if_above");
         to_open_area=nbt.getDouble("to_open_area");
         to_close_area=nbt.getDouble("to_close_area");
-        process.settings_changed();
     }
 
     @Override
@@ -129,10 +130,13 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
     }
 
     @Override
-    public void networkUnserialize(DataInputStream stream) {
-        super.networkUnserialize(stream);
+    public byte igorNetworkUnserialize(DataInputStream stream) {
+        byte res=super.igorNetworkUnserialize(stream);
+        if (res==-128) {
+            return -128;
+        }
         try {
-            switch (stream.readByte()) {
+            switch (res) {
                 case setPressureId:
                     set_pressure=stream.readLong();
                     break;
@@ -158,16 +162,22 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
                             break;
                     }
                     break;
+                default:
+                    return res;
             }
             process.settings_changed();
             needPublish();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return -128;
     }
 
     @Override
     public PneumaticLoad getPneumaticLoad(LRDU lrdu, int mask) {
+        if (!has_item) {
+            return null;
+        }
         if (front.left()==lrdu) {
             return loadA;
         }
@@ -189,6 +199,9 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
 
     @Override
     public int getConnectionMask(LRDU lrdu) {
+        if (!has_item) {
+            return 0;
+        }
         if (front.left()==lrdu || front.right()==lrdu) {
             return pneumaticMask;
         }
@@ -203,10 +216,5 @@ public class PneumaticOneWayValveElement extends IgorSixNodeElement {
     @Override
     public String thermoMeterString() {
         return "";
-    }
-
-    @Override
-    public boolean hasGui() {
-        return true;
     }
 }

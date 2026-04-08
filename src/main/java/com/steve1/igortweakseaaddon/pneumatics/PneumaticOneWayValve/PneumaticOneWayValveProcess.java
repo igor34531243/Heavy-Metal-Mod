@@ -28,13 +28,13 @@ public class PneumaticOneWayValveProcess implements IProcess {
         connection=element.connection;
         loadA=element.loadA;
         loadB=element.loadB;
-        max_pressure=element.descriptor.pipe_descriptor.max_pressure;
-        max_pressure_inv=1/max_pressure;
-        max_area=element.max_area;
         settings_changed();
     }
 
     public void settings_changed() {
+        max_pressure=element.pipe_descriptor.max_pressure;
+        max_pressure_inv=1/max_pressure;
+        max_area=element.max_area;
         pressure_set=element.set_pressure;
         to_open_area=element.to_open_area;
         to_close_area=element.to_close_area;

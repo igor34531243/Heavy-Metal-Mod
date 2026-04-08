@@ -13,8 +13,11 @@ import mods.eln.node.six.SixNodeElement;
 import mods.eln.sim.IProcess;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
 
 public abstract class IgorSixNodeElement extends SixNodeElement implements IgorSixNodeElementInterface {
@@ -23,8 +26,11 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorS
     public ArrayList<NBTPneumaticLoad> pneumaticLoadList = new ArrayList<NBTPneumaticLoad>();
     public ArrayList<IProcess> pneumaticProcessList = new ArrayList<IProcess>();
 
+    public IgorSixNodeDescriptor igorSixNodeDescriptor;
+
     public IgorSixNodeElement(SixNode sixNode, Direction side, SixNodeDescriptor descriptor) {
         super(sixNode, side, descriptor);
+        igorSixNodeDescriptor=(IgorSixNodeDescriptor)descriptor;
     }
 
     @Override
@@ -81,5 +87,30 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorS
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public boolean hasGui() {
+        return igorSixNodeDescriptor.has_gui();
+    }
+
+    @Override
+    public void networkUnserialize(DataInputStream stream) {
+        super.networkUnserialize(stream);
+        byte res=igorNetworkUnserialize(stream);
+        if (res!=-128) {
+            logger.warn("igorNetworkUnserialize did not process this code: "+res);
+        }
+    }
+
+    public byte igorNetworkUnserialize(DataInputStream stream) {
+        try {
+            if (stream.available()==0) {
+                return -128;
+            }
+            return stream.readByte();
+        } catch (IOException e) {
+            return -128;
+        }
     }
 }

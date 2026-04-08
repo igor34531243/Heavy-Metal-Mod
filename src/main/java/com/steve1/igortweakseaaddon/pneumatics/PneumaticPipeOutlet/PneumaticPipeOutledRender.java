@@ -1,17 +1,17 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeElementRender;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.WithPipeInventory.IgorSixNodeWithPipeInventoryElementRender;
 import mods.eln.misc.Direction;
 import mods.eln.node.six.SixNodeDescriptor;
 import mods.eln.node.six.SixNodeEntity;
 
-public class PneumaticPipeOutledRender extends IgorSixNodeElementRender {
+public class PneumaticPipeOutledRender extends IgorSixNodeWithPipeInventoryElementRender {
 
-    PneumaticPipeOutletDescriptor descriptor;
+    public PneumaticPipeOutletDescriptor descriptor;
 
     public PneumaticPipeOutledRender(SixNodeEntity tileEntity, Direction side, SixNodeDescriptor passed_descriptor) {
         super(tileEntity, side, passed_descriptor);
-        descriptor= (PneumaticPipeOutletDescriptor) passed_descriptor;
+        descriptor=(PneumaticPipeOutletDescriptor) passed_descriptor;
     }
 
     @Override
