@@ -12,5 +12,17 @@
     "sounds": [
       "igortweakseaaddon:fusebuzzing"
     ]
+  },
+  "reactor_mains": {
+    "category": "master",
+    "sounds": [
+      "igortweakseaaddon:mainsHum"
+    ]
+  },
+  "reactor_core": {
+    "category": "master",
+    "sounds": [
+      "igortweakseaaddon:coreSaturation"
+    ]
   }
 }

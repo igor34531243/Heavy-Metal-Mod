@@ -33,6 +33,7 @@ public class GridReactorDescriptor extends IgorGridDescriptor {
 
     public double getlValue(int cableCount) {
         if (cableCount == 0) return 0;
+        //logger.info(serie.getValue(cableCount - 1));
         return serie.getValue(cableCount - 1);
     }
 
@@ -41,6 +42,7 @@ public class GridReactorDescriptor extends IgorGridDescriptor {
         if (core == null) {
             return getlValue(0);
         }else {
+            //logger.info(core.stackSize);
             return getlValue(core.stackSize);
         }
     }
@@ -52,7 +54,8 @@ public class GridReactorDescriptor extends IgorGridDescriptor {
         FerromagneticCoreDescriptor coreDescriptor = (FerromagneticCoreDescriptor) FerromagneticCoreDescriptor.getDescriptor(core);
 
         double coreFactor = coreDescriptor.cableMultiplicator;
-
+        //logger.info(coreFactor);
+        //logger.info(Eln.instance.lowVoltageCableDescriptor.electricalRs);
         return Eln.instance.lowVoltageCableDescriptor.electricalRs * coreFactor;
     }
 }
