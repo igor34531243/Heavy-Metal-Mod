@@ -35,7 +35,6 @@ public class GridFuseRender extends IgorGridRender {
     public FuseHumSound buzzer;
     private boolean QuedSoundStart= false;
     private boolean QuedBurnFuseEffect = false;
-    public boolean fuse_blown_processed=true;
     public GridFuseItem blown_fuse_instance = fuseBlown;
 
     public GridFuseRender(@NotNull TransparentNodeEntity tileEntity, @NotNull TransparentNodeDescriptor descriptor_input) {
@@ -52,22 +51,19 @@ public class GridFuseRender extends IgorGridRender {
         try {
             ItemStack stack = Utils.unserialiseItemStack(stream);
             melting_progress = stream.readDouble();
+            boolean just_burned_out=stream.readBoolean();
 
             Object desc = GenericItemUsingDamageDescriptor.getDescriptor(stack);
             if (desc instanceof GridFuseItem) {
-                if (desc == blown_fuse_instance) {
-                    if (!fuse_blown_processed && installedFuseClient != blown_fuse_instance && installedFuseClient!=null) {
-                        QuedBurnFuseEffect=true;
-                    }
-                    fuse_blown_processed = true;
-                } else {
+                if (just_burned_out) {
+                    QuedBurnFuseEffect=true;
+                }
+                if (!((GridFuseItem) desc).is_blown) {
                     QuedSoundStart=true;
-                    fuse_blown_processed=false;
                 }
                 this.installedFuseClient = (GridFuseItem) desc;
             } else {
                 this.installedFuseClient = null;
-                fuse_blown_processed=false;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,7 +114,6 @@ public class GridFuseRender extends IgorGridRender {
                 world.spawnParticle("largesmoke", posx, posy, posz, 0.0D, 0.1D, 0.0D);
             }
         }
-        fuse_blown_processed=true;
     }
 
     public class FuseHumSound implements ITickableSound {

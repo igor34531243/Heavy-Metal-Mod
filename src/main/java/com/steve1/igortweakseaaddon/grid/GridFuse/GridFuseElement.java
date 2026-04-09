@@ -37,16 +37,11 @@ public class GridFuseElement extends IgorGridElement {
     public GridFuseItem installedFuse = null;
     public double melting_progress=0;
     public double last_sent=0;
+    public boolean voltage_joker=true;
+    public boolean just_burned_out=false;
 
     public NbtThermalLoad thermalLoad = new NbtThermalLoad("thermal_laod");
     public ElectricalLoadHeatThermalLoad heater = new ElectricalLoadHeatThermalLoad(loadA,thermalLoad);
-    public VoltageStateWatchDog voltageStateWatchDog = new VoltageStateWatchDog();
-
-    World world;
-
-    public double x = node.coordonate.x;
-    public double y = node.coordonate.y;
-    public double z = node.coordonate.z;
 
     public GridFuseElement(@NotNull TransparentNode transparentNode, @NotNull TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor, 32);
@@ -64,11 +59,6 @@ public class GridFuseElement extends IgorGridElement {
 
         thermalLoadList.add(thermalLoad);
         electricalProcessList.add(heater);
-        voltageStateWatchDog.set(loadA);
-        voltageStateWatchDog.set(new WorldExplosion(this).cableExplosion());
-        voltageStateWatchDog.setUNominal(cable.electricalNominalVoltage);
-        voltageStateWatchDog.setUMaxMin(cable.electricalMaximalVoltage);
-        slowProcessList.add(voltageStateWatchDog);
 
         electricalLoadList.add(loadA);
         electricalLoadList.add(loadB);
@@ -77,7 +67,6 @@ public class GridFuseElement extends IgorGridElement {
         electricalComponentList.add(new Resistor(loadA, null).pullDown());
         electricalComponentList.add(new Resistor(loadB, null).pullDown());
 
-        update_voltage_watchdog();
         refreshSwitchResistor();
 
         IProcess physicsProcess = new IProcess() {
@@ -88,6 +77,17 @@ public class GridFuseElement extends IgorGridElement {
                     temperature = 0.0;
                     melting_progress= 0;
                     return;
+                }
+
+                if (loadA.getU()>installedFuse.voltage_maximal) {
+                    if (voltage_joker) {
+                        voltage_joker=false;
+                    } else {
+                        burnOut();
+                        voltage_joker=true;
+                    }
+                } else {
+                    voltage_joker=true;
                 }
 
                 temperature = thermalLoad.getT();
@@ -110,15 +110,6 @@ public class GridFuseElement extends IgorGridElement {
         };
 
         electricalProcessList.add(physicsProcess);
-    }
-
-    public void update_voltage_watchdog() {
-        if (installedFuse!=null) {
-            voltageStateWatchDog.setUNominal(installedFuse.voltage_regular);
-            voltageStateWatchDog.setUMaxMin(installedFuse.voltage_maximal);
-        } else {
-            voltageStateWatchDog.disable();
-        }
     }
 
     public double getPredictedSteadyStateTemp() {
@@ -161,6 +152,7 @@ public class GridFuseElement extends IgorGridElement {
     public void burnOut() {
         install_fuse(fuseBlown);
         melting_progress=0;
+        just_burned_out=true;
     }
 
     public boolean legit_fuse() {
@@ -169,7 +161,6 @@ public class GridFuseElement extends IgorGridElement {
 
     public void install_fuse(GridFuseItem new_fuse) {
         installedFuse=new_fuse;
-        update_voltage_watchdog();
         refreshSwitchResistor();
         needPublish();
     }
@@ -270,6 +261,8 @@ public class GridFuseElement extends IgorGridElement {
             }
             Utils.serialiseItemStack(stream, stack);
             stream.writeDouble(melting_progress);
+            stream.writeBoolean(just_burned_out);
+            just_burned_out=false;
         } catch (IOException e) {
             e.printStackTrace();
         }

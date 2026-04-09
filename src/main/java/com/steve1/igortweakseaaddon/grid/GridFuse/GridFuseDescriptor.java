@@ -31,7 +31,7 @@ public class GridFuseDescriptor extends IgorGridDescriptor {
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
         super.addInformation(itemStack, entityPlayer, list, par4);
-        Collections.addAll(list, tr("A grid breaker is an electrical device used to automatically\nsever electrical connections upon exceeding the\nrated cable current.").split("\n"));
+        Collections.addAll(list, tr("A grid breaker is an electrical device used to automatically\nsever electrical connections upon exceeding the\nrated cable current or voltage.").split("\n"));
         Collections.addAll(list, tr("The grid breaker accepts only T1 and T2 grid fuses.\n").split("\n"));
     }
     @Override
