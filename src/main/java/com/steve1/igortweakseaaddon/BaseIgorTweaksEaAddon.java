@@ -585,7 +585,7 @@ public class BaseIgorTweaksEaAddon {
 		reactorDescriptor = new GridReactorDescriptor(
 				"Grid Power Reactor",
 				obj.getObj("GridReactor"),
-				SerieEE.newE12(-1)
+				SerieEE.newE12(2.2)
 		);
 		g = new SmartGhostGroup();
 		g.addRectangle(0,1,0,2,0,1);

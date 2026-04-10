@@ -6,6 +6,7 @@ import mods.eln.misc.Utils;
 import mods.eln.node.transparent.TransparentNode;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.node.transparent.TransparentNodeElementInventory;
+import mods.eln.sim.IProcess;
 import mods.eln.sim.mna.component.Inductor;
 import mods.eln.sim.nbt.NbtElectricalLoad;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +14,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
+import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.misc.Direction.XN;
 
 
@@ -25,6 +28,8 @@ public class GridReactorElement extends IgorGridElement {
     NbtElectricalLoad loadB = new NbtElectricalLoad("loadB");
 
     Inductor inductor = new Inductor("inductor", loadA, loadB);
+    public double current;
+    public double last_sent=0;
 
     public GridReactorElement(TransparentNode transparentNode, TransparentNodeDescriptor descriptor) {
         super(transparentNode, descriptor, 32);
@@ -37,6 +42,18 @@ public class GridReactorElement extends IgorGridElement {
         cable.applyTo(loadA);
         cable.applyTo(loadB);
 
+        IProcess physicsProcess = new IProcess() {
+            @Override
+            public void process(double timeStep) {
+                current = inductor.getCurrent();
+                double delta_current = Math.abs(last_sent - current);
+                if (delta_current > 0.05 && current > 0.05 || delta_current > 0.5){
+                    last_sent = inductor.getCurrent();
+                    needPublish();
+                }
+            }
+        };
+        electricalProcessList.add(physicsProcess);
 
         electricalLoadList.add(loadA);
         electricalLoadList.add(loadB);
@@ -47,7 +64,10 @@ public class GridReactorElement extends IgorGridElement {
 
     @Override
     public String multiMeterString(Direction side) {
-        return Utils.plotAmpere("I", inductor.getCurrent());
+        String str = Utils.plotVolt("  U: ", Math.abs(loadA.getU()-loadB.getU()));
+        str += Utils.plotAmpere("I: ", Math.abs(inductor.getCurrent()));
+        str += Utils.plotPower(Math.abs(inductor.getCurrent())*Math.abs(loadA.getU()-loadB.getU()));
+        return str;
     }
 
     @Override
@@ -61,6 +81,15 @@ public class GridReactorElement extends IgorGridElement {
         return null;
     }
 
+    @Override
+    public void networkSerialize(DataOutputStream stream) {
+        super.networkSerialize(stream);
+        try{
+            stream.writeDouble(current);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void inventoryChange(IInventory inventory) {
