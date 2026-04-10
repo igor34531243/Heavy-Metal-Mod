@@ -190,7 +190,7 @@ public class PneumaticValveElement extends IgorSixNodeWithPipeInventoryElement {
 
     @Override
     public String multiMeterString() {
-        return "Open: "+plot_percent(open_value)+", PA: "+plot_pascals_atmospheres(loadA.get_pressure())+", PB: "+plot_pascals_atmospheres(loadB.get_pressure())+", Flow: "+plot_speed(Math.abs(pconnection.get_speed()));
+        return "Open: "+plot_percent(open_value)+", §ePA: "+plot_pascals_atmospheres(loadA.get_pressure())+"§f, §a PB: "+plot_pascals_atmospheres(loadB.get_pressure())+"§f, Flow: "+plot_speed(Math.abs(pconnection.get_speed()));
     }
 
     @Override

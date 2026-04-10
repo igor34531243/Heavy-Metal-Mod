@@ -147,6 +147,12 @@ public class PneumaticConnection extends Component{
         pneumatic_simulator.deactivatePneumaticComponent(this);
     }
 
+    public void wake_up() {
+        if (sleeping) {
+            activate();
+        }
+    }
+
     public void activate() {
         activate_partial(null);
     }
@@ -197,6 +203,7 @@ public class PneumaticConnection extends Component{
         this.area=area;
         this.resistance=resistance;
         this.length=length;
+        wake_up();
     }
 
     public void set_area(double area) {
@@ -207,10 +214,8 @@ public class PneumaticConnection extends Component{
         this.area=area;
         if (area<1e-10) {
             speed=0;
-            if (sleeping) {
-                activate();
-            }
         }
+        wake_up();
     }
 
     public void set_resistance(double resistance) {
@@ -219,6 +224,7 @@ public class PneumaticConnection extends Component{
             return;
         }
         this.resistance=resistance;
+        wake_up();
     }
 
     public void set_length(double length) {
@@ -227,14 +233,21 @@ public class PneumaticConnection extends Component{
             return;
         }
         this.length=length;
+        wake_up();
     }
 
     public void set_speed(double speed) {
         this.speed=speed;
+        wake_up();
+    }
+
+    public void reset_speed() {
+        set_speed(0);
     }
 
     public void set_high_resistance() {
         this.resistance=Double.POSITIVE_INFINITY;
+        wake_up();
     }
 
     public void load_stats() {
@@ -243,6 +256,7 @@ public class PneumaticConnection extends Component{
         }
         area=(load1.get_area()+load2.get_area())/2;
         resistance=(load1.get_resistance()+load2.get_resistance())/2;
+        wake_up();
     }
 
     public void connect(PneumaticLoad load1,PneumaticLoad load2) {
@@ -261,7 +275,7 @@ public class PneumaticConnection extends Component{
         }
         if (load1!=null && load2!=null) {
             working = true;
-            activate();
+            wake_up();
         }
     }
 

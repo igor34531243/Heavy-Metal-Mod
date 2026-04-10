@@ -55,6 +55,25 @@ public class IgorSixNodeElementRender extends SixNodeElementRender {
         }
     }
 
+    public void clientSetDouble(byte id, double value1, double value2) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            DataOutputStream stream = new DataOutputStream(bos);
+
+            preparePacketForServer(stream);
+
+            stream.writeByte(id);
+            stream.writeDouble(value1);
+            stream.writeDouble(value2);
+
+            sendPacketToServer(bos);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public GuiScreen newGuiDraw(Direction side, EntityPlayer player) {
         return igorSixNodeDescriptor.make_gui(side,player,this);

@@ -47,7 +47,7 @@ public class PneumaticValveRender extends IgorSixNodeWithPipeInventoryElementRen
         if (front.left()==lrdu || front.right()==lrdu) {
             return cable_render;
         }
-        return null;
+        return super.getCableRender(lrdu);
     }
 
     @Override

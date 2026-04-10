@@ -210,7 +210,7 @@ public class PneumaticOneWayValveElement extends IgorSixNodeWithPipeInventoryEle
 
     @Override
     public String multiMeterString() {
-        return (is_open ? "Open" :"Closed")+", §ePA: "+plot_pascals_atmospheres(loadA.get_pressure())+"§f, §aPB: "+plot_pascals_atmospheres(loadB.get_pressure())+", Flow: "+plot_speed(Math.abs(connection.get_speed()));
+        return (is_open ? "Open" :"Closed")+", §ePA: "+plot_pascals_atmospheres(loadA.get_pressure())+"§f, §aPB: "+plot_pascals_atmospheres(loadB.get_pressure())+"§f, Flow: "+plot_speed(Math.abs(connection.get_speed()));
     }
 
     @Override

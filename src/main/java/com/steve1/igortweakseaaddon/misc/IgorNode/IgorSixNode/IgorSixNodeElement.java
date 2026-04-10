@@ -4,6 +4,7 @@ import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNodeElementInterface;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
@@ -111,6 +112,18 @@ public abstract class IgorSixNodeElement extends SixNodeElement implements IgorS
             return stream.readByte();
         } catch (IOException e) {
             return -128;
+        }
+    }
+
+    public void reset_all_loads() {
+        for (PneumaticLoad load : pneumaticLoadList) {
+            load.reset_pressure();
+        }
+    }
+
+    public void reset_all_connections() {
+        for (PneumaticConnection connection : pneumaticComponentList) {
+            connection.reset_speed();
         }
     }
 }

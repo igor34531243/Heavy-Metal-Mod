@@ -15,6 +15,7 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOne
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet.PneumaticPipeOutletDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSensor.PneumaticSensorDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticValve.PneumaticValveDescriptor;
@@ -82,6 +83,7 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticValveDescriptor pneumaticValveDescriptor;
 	public static PneumaticPipeOutletDescriptor pneumaticPipeOutletDescriptor;
 	public static PneumaticOneWayValveDescriptor pneumaticOneWayValveDescriptor;
+	public static PneumaticSensorDescriptor pneumaticSensorDescriptor;
 
 	public static CableRenderDescriptor t1PneumaticPipeRender;
 	public static CableRenderDescriptor t2PneumaticPipeRender;
@@ -469,7 +471,13 @@ public class BaseIgorTweaksEaAddon {
 
 		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticOneWayValveDescriptor);
 
+		subId = 9;
 
+		pneumaticSensorDescriptor = new PneumaticSensorDescriptor("Air Probe",obj.getObj("ValvePlaceholder"));
+
+		pneumaticSensorDescriptor.setDefaultIcon("pneumaticsensor");
+
+		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticSensorDescriptor);
 	}
 
 	public void register_fuses() {

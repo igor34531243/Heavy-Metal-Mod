@@ -2,6 +2,7 @@ package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithIn
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.IgorSixNodeWithInventoryElement;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.Utils;
 import mods.eln.node.six.SixNode;
@@ -39,7 +40,12 @@ public abstract class IgorSixNodeWithPipeInventoryElement extends IgorSixNodeWit
 
     public abstract void pipe_descriptor_changed();
 
-    public void update_item() {
+    public void on_item_swapped() {
+        reset_all_loads();
+        reset_all_connections();
+    }
+
+    public void update_item_descriptor() {
         ItemStack pipeStack = get_stack_in_slot(inventory, descriptor_pipe_inv.pipeId);
         PneumaticPipeDescriptor pipe_desc = (PneumaticPipeDescriptor) PneumaticPipeDescriptor.getDescriptor(pipeStack, PneumaticPipeDescriptor.class);
         if (pipe_desc == null) {
@@ -50,6 +56,17 @@ public abstract class IgorSixNodeWithPipeInventoryElement extends IgorSixNodeWit
             has_item=true;
         }
         pipe_descriptor_changed();
+    }
+
+    public void update_item() {
+        update_item_descriptor();
+        reconnect();
+        needPublish();
+    }
+
+    public void update_item_swapped() {
+        update_item_descriptor();
+        on_item_swapped();
         reconnect();
         needPublish();
     }
@@ -63,7 +80,7 @@ public abstract class IgorSixNodeWithPipeInventoryElement extends IgorSixNodeWit
     @Override
     public void inventoryChanged() {
         super.inventoryChanged();
-        update_item();
+        update_item_swapped();
     }
 
 }

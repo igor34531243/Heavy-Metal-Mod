@@ -37,7 +37,7 @@ public class PneumaticPipeDescriptor extends IgorSixNodeDescriptor {
 
     public void apply_to_reset(PneumaticLoad pload) {
         apply_to(pload);
-        pload.set_pressure(base_atmospheric_pressure);
+        pload.reset_pressure();
     }
 
     public void apply_to(PneumaticConnection connection) {

@@ -5,17 +5,15 @@ TODO:
 
 7) add GIANT flywheel as energy storage
 
-8.1) add pneumatic compressor that sucks air from atmosphere, add pneumatic turbine
+8.1) add pneumatic compressor, add pneumatic turbine
 
 8.25) add air tanks
 
-8.2) add pneumatic sensor to detect parameters of air inside a pipe
+8.5) add pneumatic break that consumes breaking pads but stops incredibly well and scales stopping power with pressure applied
 
-8.5) add pneumatic break that doesent consume any parts like clutch does(for balance reasons)
+8.6) add pneumatic clutch that doesent consume any parts like regular clutch does(for balance reasons)
 
 9) add eln's own liquid pipes system and pumps and steam gens (after pneumatics)
-
-10) add discrete logic
 
 x) add grid auto transformer
 
@@ -41,9 +39,9 @@ ALREADY DONE
 
 67) add reactor for grid
 
-CONCEPT LIMBO
+8.2) add pneumatic sensor to detect parameters of air inside a pipe
 
-13) add engine to start up the rotating systems with shafts and stuff
+CONCEPT LIMBO
 
 2) add neon signs
 
