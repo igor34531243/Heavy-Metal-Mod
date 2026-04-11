@@ -52,23 +52,16 @@ public class PneumaticLoad extends State {
         // and if we are then informing pneumatic connections
         // how much mass is safe to actualy move
 
-        state+=sleeping_mass_change;
-
-        if (state<0) {
-            state=0;
-            activate_connections();
-        }
-
         next_mass_coefficient=1;
         if (next_mass<=0) {
 
-            next_mass_coefficient = 0.99 * state / (state-next_mass);
+            next_mass_coefficient = 0.95 * state / (state-next_mass);
 
             if (next_mass_coefficient<0.00001) {
                 next_mass_coefficient=0;
             }
 
-            // adding 99 to ensure that we dont drop mass to 0
+            // adding 0.95 to ensure that we dont drop mass to 0
             // or at boundary it could cause mass to go negative
             // due to floating point errors
         }
@@ -78,6 +71,13 @@ public class PneumaticLoad extends State {
 
         // finaly applying the speed and pressure values
         // and resetting collected along the step values
+
+        state+=sleeping_mass_change;
+
+        if (state<0) {
+            state=0;
+            activate_connections();
+        }
 
         pressure=state*R_T_inv_volume;
         changed_pressure=Math.abs(previous_step_pressure-pressure)> pressure_epsilon;

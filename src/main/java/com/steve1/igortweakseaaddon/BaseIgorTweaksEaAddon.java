@@ -18,6 +18,7 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet.PneumaticPipe
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSensor.PneumaticSensorDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticTank.PneumaticTankDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticValve.PneumaticValveDescriptor;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -84,6 +85,13 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticPipeOutletDescriptor pneumaticPipeOutletDescriptor;
 	public static PneumaticOneWayValveDescriptor pneumaticOneWayValveDescriptor;
 	public static PneumaticSensorDescriptor pneumaticSensorDescriptor;
+	public static PneumaticTankDescriptor t1PneumaticTankDescriptor;
+	public static PneumaticTankDescriptor t2PneumaticTankDescriptor;
+	public static PneumaticTankDescriptor t3PneumaticTankDescriptor;
+	public static PneumaticTankDescriptor t4PneumaticTankDescriptor;
+	public static PneumaticTankDescriptor t5PneumaticTankDescriptor;
+	public static PneumaticTankDescriptor creativePneumaticTankDescriptor;
+
 
 	public static CableRenderDescriptor t1PneumaticPipeRender;
 	public static CableRenderDescriptor t2PneumaticPipeRender;
@@ -374,7 +382,7 @@ public class BaseIgorTweaksEaAddon {
 		t1PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 1.5f, 1.5f);
 
-		t1PneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC Air Pipe", t1PneumaticPipeRender);
+		t1PneumaticPipeDescriptor = new PneumaticPipeDescriptor("PVC_Air_Pipe", t1PneumaticPipeRender);
 
 		t1PneumaticPipeDescriptor.set(small_pneumatic_resistance,small_pneumatic_area,small_pneumatic_volume,small_pneumatic_max_pressure);
 
@@ -387,7 +395,7 @@ public class BaseIgorTweaksEaAddon {
 		t2PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 2f, 2f);
 
-		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper Air Pipe", t2PneumaticPipeRender);
+		t2PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Copper_Air_Pipe", t2PneumaticPipeRender);
 
 		t2PneumaticPipeDescriptor.set(t2_pneumatic_resistance,t2_pneumatic_area,t2_pneumatic_volume,t2_pneumatic_max_pressure);
 
@@ -400,7 +408,7 @@ public class BaseIgorTweaksEaAddon {
 		t3PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 3f, 3f);
 
-		t3PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Iron Air Pipe", t3PneumaticPipeRender);
+		t3PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Iron_Air_Pipe", t3PneumaticPipeRender);
 
 		t3PneumaticPipeDescriptor.set(t3_pneumatic_resistance,t3_pneumatic_area,t3_pneumatic_volume,t3_pneumatic_max_pressure);
 
@@ -413,7 +421,7 @@ public class BaseIgorTweaksEaAddon {
 		t4PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 4f, 4f);
 
-		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten Air Pipe", t4PneumaticPipeRender);
+		t4PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Tungsten_Air_Pipe", t4PneumaticPipeRender);
 
 		t4PneumaticPipeDescriptor.set(t4_pneumatic_resistance,t4_pneumatic_area,t4_pneumatic_volume,t4_pneumatic_max_pressure);
 
@@ -426,7 +434,7 @@ public class BaseIgorTweaksEaAddon {
 		t5PneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 5f, 5f);
 
-		t5PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Alloy Air Pipe", t5PneumaticPipeRender);
+		t5PneumaticPipeDescriptor = new PneumaticPipeDescriptor("Alloy_Air_Pipe", t5PneumaticPipeRender);
 
 		t5PneumaticPipeDescriptor.set(t5_pneumatic_resistance,t5_pneumatic_area,t5_pneumatic_volume,t5_pneumatic_max_pressure);
 
@@ -439,7 +447,7 @@ public class BaseIgorTweaksEaAddon {
 		creativePneumaticPipeRender = new CableRenderDescriptor("eln",
 				"sprites/cable.png", 6f, 6f);
 
-		creativePneumaticPipeDescriptor = new PneumaticPipeDescriptor("Creative Air Pipe", creativePneumaticPipeRender);
+		creativePneumaticPipeDescriptor = new PneumaticPipeDescriptor("Creative_Air_Pipe", creativePneumaticPipeRender);
 
 		creativePneumaticPipeDescriptor.set(creative_pneumatic_resistance,creative_pneumatic_area,creative_pneumatic_volume,creative_pneumatic_max_pressure);
 
@@ -449,7 +457,7 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 6;
 
-		pneumaticValveDescriptor = new PneumaticValveDescriptor("Air Valve",obj.getObj("RelayBig"));
+		pneumaticValveDescriptor = new PneumaticValveDescriptor("Air_Valve",obj.getObj("RelayBig"));
 
 		pneumaticValveDescriptor.setDefaultIcon("pneumaticvalve");
 
@@ -457,7 +465,7 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 7;
 
-		pneumaticPipeOutletDescriptor = new PneumaticPipeOutletDescriptor("Air release",obj.getObj("PowerSocket800"));
+		pneumaticPipeOutletDescriptor = new PneumaticPipeOutletDescriptor("Air_release",obj.getObj("PowerSocket800"));
 
 		pneumaticPipeOutletDescriptor.setDefaultIcon("pneumaticpipeoutlet");
 
@@ -465,7 +473,7 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 8;
 
-		pneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("One Way Air Valve",obj.getObj("ValvePlaceholder"));
+		pneumaticOneWayValveDescriptor = new PneumaticOneWayValveDescriptor("One_Way_Air_Valve",obj.getObj("ValvePlaceholder"));
 
 		pneumaticOneWayValveDescriptor.setDefaultIcon("onewaypneumaticvalve");
 
@@ -473,11 +481,59 @@ public class BaseIgorTweaksEaAddon {
 
 		subId = 9;
 
-		pneumaticSensorDescriptor = new PneumaticSensorDescriptor("Air Probe",obj.getObj("ValvePlaceholder"));
+		pneumaticSensorDescriptor = new PneumaticSensorDescriptor("Air_Probe",obj.getObj("ValvePlaceholder"));
 
 		pneumaticSensorDescriptor.setDefaultIcon("pneumaticsensor");
 
 		sixNodeItem.addDescriptor(subId + (id << 6), pneumaticSensorDescriptor);
+
+		subId = 10;
+
+		t1PneumaticTankDescriptor = new PneumaticTankDescriptor("PVC_Pneumatic_Tank", obj.getObj("PneumaticTank"), t1PneumaticPipeDescriptor);
+
+		t1PneumaticTankDescriptor.setDefaultIcon("pneumatictankt1");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), t1PneumaticTankDescriptor);
+
+		subId = 11;
+
+		t2PneumaticTankDescriptor = new PneumaticTankDescriptor("Copper_Pneumatic_Tank", obj.getObj("PneumaticTank"), t2PneumaticPipeDescriptor);
+
+		t2PneumaticTankDescriptor.setDefaultIcon("pneumatictankt2");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), t2PneumaticTankDescriptor);
+
+		subId = 12;
+
+		t3PneumaticTankDescriptor = new PneumaticTankDescriptor("Iron_Pneumatic_Tank", obj.getObj("PneumaticTank"), t3PneumaticPipeDescriptor);
+
+		t3PneumaticTankDescriptor.setDefaultIcon("pneumatictankt3");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), t3PneumaticTankDescriptor);
+
+		subId = 13;
+
+		t4PneumaticTankDescriptor = new PneumaticTankDescriptor("Tungsten_Pneumatic_Tank", obj.getObj("PneumaticTank"), t4PneumaticPipeDescriptor);
+
+		t4PneumaticTankDescriptor.setDefaultIcon("pneumatictankt4");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), t4PneumaticTankDescriptor);
+
+		subId = 14;
+
+		t5PneumaticTankDescriptor = new PneumaticTankDescriptor("Alloy_Pneumatic_Tank", obj.getObj("PneumaticTank"), t5PneumaticPipeDescriptor);
+
+		t5PneumaticTankDescriptor.setDefaultIcon("pneumatictankt5");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), t5PneumaticTankDescriptor);
+
+		subId = 15;
+
+		creativePneumaticTankDescriptor = new PneumaticTankDescriptor("Creative_Pneumatic_Tank", obj.getObj("PneumaticTank"), creativePneumaticPipeDescriptor);
+
+		creativePneumaticTankDescriptor.setDefaultIcon("pneumatictankcreative");
+
+		transparentNodeItem.addDescriptor(subId + (id << 6), creativePneumaticTankDescriptor);
 	}
 
 	public void register_fuses() {
