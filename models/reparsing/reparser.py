@@ -125,7 +125,11 @@ if __name__ == "__main__":
     combine(["socket800.obj"],
                 "PowerSocket800.obj",
                 "PowerSocket800.mtl",
-                ["main"])
+                ["main"])    
+    #combine(["valve placeholder.obj"],
+                #"ValvePlaceholder.obj",
+                #"ValvePlaceholder.mtl",
+                #["main"])
     
     """
     шаблон для заполнения:
