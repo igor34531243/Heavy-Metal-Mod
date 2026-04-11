@@ -50,6 +50,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
 import static mods.eln.Eln.*;
 import static mods.eln.Eln.obj;
 import static mods.eln.i18n.I18N.TR_NAME;
@@ -104,8 +105,9 @@ public class BaseIgorTweaksEaAddon {
 	public static LogicPortDescriptor logicPortDescriptor;
 	public static Obj3D testcube;
 
-	public static final double base_air_resistance = 20;
 	public static final double base_atmospheric_pressure = 101325;
+	public static final double base_atmospheric_density = base_atmospheric_pressure*R_T_gas_inv;
+	public static final double base_air_resistance = 100*base_atmospheric_density;
 	public static final double logic_pressure_min=base_atmospheric_pressure*5;
 	public static final double logic_pressure_max=base_atmospheric_pressure*10;
 	public static final double logic_pressure_range=logic_pressure_max-logic_pressure_min;
@@ -150,7 +152,7 @@ public class BaseIgorTweaksEaAddon {
 
 	public static int pneumaticMask = (1<<13);
 
-	public static final int pneumatic_steps_per_tick=10;
+	public static final int pneumatic_steps_per_tick=40;
 	public static final int pneumatic_steps_for_sleep_update=20;
 	public static PneumaticSimulator pneumatic_simulator=new PneumaticSimulator(
 			0.05/pneumatic_steps_per_tick,

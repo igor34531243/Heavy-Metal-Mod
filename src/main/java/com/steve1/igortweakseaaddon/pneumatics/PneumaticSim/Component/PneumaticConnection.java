@@ -61,11 +61,15 @@ public class PneumaticConnection extends Component{
 
         double acceleration_pressure=0;
         if (average_density >1e-12 && d_pressure!=0) {
-            acceleration_pressure = 0.3 * d_pressure / (length * average_density);
+            acceleration_pressure = d_pressure / (length * average_density);
         }
 
         speed+=acceleration_pressure*time;
-        speed*=(1-resistance*time);
+        speed*=(1-resistance*time/average_density);
+
+        if (speed>343 || speed<-343) {
+            speed=Math.copySign(343,speed);
+        }
 
         to_move_mass=average_density*area*speed*time;
 
