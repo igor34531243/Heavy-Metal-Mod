@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridSensor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridDescriptor;
 import mods.eln.misc.Obj3D;
 
 import static mods.eln.misc.Direction.XN;

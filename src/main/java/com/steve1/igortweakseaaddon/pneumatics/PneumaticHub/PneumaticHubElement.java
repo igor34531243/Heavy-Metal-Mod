@@ -1,15 +1,14 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticHub;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.transparent.TransparentNode;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.sim.ElectricalLoad;
 import mods.eln.sim.ThermalLoad;
-import net.minecraft.entity.player.EntityPlayer;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;

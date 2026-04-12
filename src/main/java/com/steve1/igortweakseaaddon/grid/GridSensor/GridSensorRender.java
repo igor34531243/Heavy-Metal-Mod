@@ -1,15 +1,13 @@
 package com.steve1.igortweakseaaddon.grid.GridSensor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridRender;
 import mods.eln.misc.Direction;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.node.transparent.TransparentNodeEntity;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class GridSensorRender extends IgorGridRender {

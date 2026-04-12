@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridSwitch;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridRender;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.eln.node.transparent.TransparentNodeDescriptor;

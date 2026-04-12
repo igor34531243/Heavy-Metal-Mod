@@ -1,7 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridFuse;
 
-import com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon;
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridElement;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridElement;
 import mods.eln.item.GenericItemUsingDamageDescriptorUpgrade;
 import mods.eln.misc.Direction;
 import mods.eln.misc.Utils;
@@ -11,14 +10,11 @@ import mods.eln.sim.IProcess;
 import mods.eln.sim.mna.component.Resistor;
 import mods.eln.sim.nbt.NbtElectricalLoad;
 import mods.eln.sim.nbt.NbtThermalLoad;
-import mods.eln.sim.process.destruct.VoltageStateWatchDog;
-import mods.eln.sim.process.destruct.WorldExplosion;
 import mods.eln.sim.process.heater.ElectricalLoadHeatThermalLoad;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutputStream;

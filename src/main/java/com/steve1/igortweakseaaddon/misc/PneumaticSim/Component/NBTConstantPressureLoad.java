@@ -1,10 +1,9 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import net.minecraft.nbt.NBTTagCompound;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
+import static com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator.R_T_gas;
 
 public class NBTConstantPressureLoad extends NBTPneumaticLoad{
 

@@ -1,9 +1,8 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import mods.eln.misc.Utils;
 import mods.eln.sim.IProcess;
 import mods.eln.sim.process.destruct.IDestructable;
-import mods.eln.sim.process.destruct.ValueWatchdog;
 
 public abstract class ValueWatchdogCopy implements IProcess {
     IDestructable destructable;

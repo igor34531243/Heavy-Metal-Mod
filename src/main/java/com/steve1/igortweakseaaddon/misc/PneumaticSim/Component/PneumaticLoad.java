@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import mods.eln.sim.mna.state.State;
 
@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.*;
+import static com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator.*;
 
 public class PneumaticLoad extends State {
 

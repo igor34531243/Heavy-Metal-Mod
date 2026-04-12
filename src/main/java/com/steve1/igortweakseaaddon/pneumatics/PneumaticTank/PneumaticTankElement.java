@@ -2,9 +2,9 @@ package com.steve1.igortweakseaaddon.pneumatics.PneumaticTank;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorTransparentNodeElement;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PressureWatchdog;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PressureWatchdog;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.transparent.TransparentNode;

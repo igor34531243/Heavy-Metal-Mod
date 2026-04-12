@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 

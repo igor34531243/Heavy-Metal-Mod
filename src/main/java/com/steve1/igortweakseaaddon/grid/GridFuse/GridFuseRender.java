@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridFuse;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridRender;
 import mods.eln.generic.GenericItemUsingDamageDescriptor;
 import mods.eln.misc.Utils;
 import mods.eln.node.transparent.TransparentNodeDescriptor;

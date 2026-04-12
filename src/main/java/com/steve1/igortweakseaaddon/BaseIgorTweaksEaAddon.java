@@ -16,9 +16,10 @@ import com.steve1.igortweakseaaddon.pneumatics.PneumaticOutlet.PneumaticOutletDe
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet.PneumaticPipeOutletDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSensor.PneumaticSensorDescriptor;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticSource.PneumaticSourceDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticTank.PneumaticTankDescriptor;
+import com.steve1.igortweakseaaddon.pneumatics.PneumaticTurbine.PneumaticTurbineDescriptor;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticValve.PneumaticValveDescriptor;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -50,7 +51,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
+import static com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
 import static mods.eln.Eln.*;
 import static mods.eln.Eln.obj;
 import static mods.eln.i18n.I18N.TR_NAME;
@@ -92,7 +93,8 @@ public class BaseIgorTweaksEaAddon {
 	public static PneumaticTankDescriptor t4PneumaticTankDescriptor;
 	public static PneumaticTankDescriptor t5PneumaticTankDescriptor;
 	public static PneumaticTankDescriptor creativePneumaticTankDescriptor;
-
+	public static PneumaticTurbineDescriptor pneumaticAirToRotTurbineDescriptor;
+	public static PneumaticTurbineDescriptor pneumaticRotToAirTurbineDescriptor;
 
 	public static CableRenderDescriptor t1PneumaticPipeRender;
 	public static CableRenderDescriptor t2PneumaticPipeRender;
@@ -100,6 +102,8 @@ public class BaseIgorTweaksEaAddon {
 	public static CableRenderDescriptor t4PneumaticPipeRender;
 	public static CableRenderDescriptor t5PneumaticPipeRender;
 	public static CableRenderDescriptor creativePneumaticPipeRender;
+	public static CableRenderDescriptor thermalCableRender = new CableRenderDescriptor("eln",
+			"sprites/tex_thermalcablebase.png", 4, 4);
 
 
 	public static LogicPortDescriptor logicPortDescriptor;

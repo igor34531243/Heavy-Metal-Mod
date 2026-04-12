@@ -1,10 +1,8 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve;
 
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.sim.IProcess;
-
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public class PneumaticOneWayValveProcess implements IProcess {
 

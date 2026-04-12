@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.grid.IgorGrid;
+package com.steve1.igortweakseaaddon.misc.IgorGrid;
 
 import com.steve1.igortweakseaaddon.misc.LogicPort.LogicPortInterface;
 import com.steve1.igortweakseaaddon.misc.LogicPort.LogicPortMaster;

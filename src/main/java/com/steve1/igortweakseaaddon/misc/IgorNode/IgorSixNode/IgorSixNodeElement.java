@@ -1,13 +1,11 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNodeElementInterface;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
-import mods.eln.misc.LRDU;
 import mods.eln.node.six.SixNode;
 import mods.eln.node.six.SixNodeDescriptor;
 import mods.eln.node.six.SixNodeElement;

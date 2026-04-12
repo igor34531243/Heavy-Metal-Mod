@@ -21,6 +21,16 @@ public class IgorGuiContainerEln extends GuiContainerEln {
         this(player,render,176,ysize);
     }
 
+    public IgorGuiContainerEln(BasicContainer container, int xsize, int ysize) {
+        super(container);
+        this.xsize=Math.min(xsize,176);
+        this.ysize=ysize;
+    }
+
+    public IgorGuiContainerEln(BasicContainer container, int ysize) {
+        this(container,176,ysize);
+    }
+
     public IgorGuiContainerEln(BasicContainer container) {
         super(container);
     }

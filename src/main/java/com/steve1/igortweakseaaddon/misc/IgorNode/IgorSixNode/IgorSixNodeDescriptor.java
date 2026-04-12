@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
 import mods.eln.misc.Direction;
+import mods.eln.misc.VoltageLevelColor;
 import mods.eln.node.six.SixNodeDescriptor;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +11,7 @@ import java.lang.reflect.Constructor;
 public class IgorSixNodeDescriptor extends SixNodeDescriptor {
     public IgorSixNodeDescriptor(String name, Class ElementClass, Class RenderClass) {
         super(name, ElementClass, RenderClass);
+        voltageLevelColor= VoltageLevelColor.Neutral;
     }
 
     public boolean has_gui() {

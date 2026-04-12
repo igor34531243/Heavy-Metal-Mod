@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridReactor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridRender;
 import mods.eln.misc.Direction;
 import mods.eln.node.transparent.TransparentNodeDescriptor;
 import mods.eln.node.transparent.TransparentNodeElementInventory;
@@ -14,8 +14,6 @@ import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public class GridReactorRender extends IgorGridRender {
 

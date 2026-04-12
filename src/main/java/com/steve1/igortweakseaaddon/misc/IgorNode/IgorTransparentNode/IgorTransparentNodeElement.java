@@ -1,9 +1,11 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorElementInterface;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.NetLRDUCubeMask;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.transparent.TransparentNode;
@@ -13,6 +15,8 @@ import mods.eln.sim.IProcess;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
@@ -79,6 +83,17 @@ public abstract class IgorTransparentNodeElement extends TransparentNodeElement 
                 connection.readFromNBT(nbt);
             }
         }
+
+    }
+
+    @Override
+    public void networkSerialize(DataOutputStream stream) {
+        super.networkSerialize(stream);
+        try {
+            NetLRDUCubeMask.serialize(node.lrduCubeMask,stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -90,4 +105,16 @@ public abstract class IgorTransparentNodeElement extends TransparentNodeElement 
     public boolean onBlockActivated(EntityPlayer entityPlayer, Direction side, float vx, float vy, float vz) {
         return false;
     };
+
+    public void reset_all_loads() {
+        for (PneumaticLoad load : pneumaticLoadList) {
+            load.reset_pressure();
+        }
+    }
+
+    public void reset_all_connections() {
+        for (PneumaticConnection connection : pneumaticComponentList) {
+            connection.reset_speed();
+        }
+    }
 }

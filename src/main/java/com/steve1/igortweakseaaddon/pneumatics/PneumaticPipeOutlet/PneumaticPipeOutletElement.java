@@ -1,10 +1,10 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticPipeOutlet;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.WithPipeInventory.IgorSixNodeWithPipeInventoryElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTAtmosphereLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTAtmosphereLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.six.SixNode;

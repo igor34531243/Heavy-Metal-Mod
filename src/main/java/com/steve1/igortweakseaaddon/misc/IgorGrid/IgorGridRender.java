@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.grid.IgorGrid;
+package com.steve1.igortweakseaaddon.misc.IgorGrid;
 
 import mods.eln.gridnode.GridRender;
 import mods.eln.node.transparent.TransparentNodeDescriptor;

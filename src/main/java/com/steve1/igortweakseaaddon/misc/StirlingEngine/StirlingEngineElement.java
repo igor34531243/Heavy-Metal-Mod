@@ -1,6 +1,7 @@
 package com.steve1.igortweakseaaddon.misc.StirlingEngine;
 
-import mods.eln.mechanical.SimpleShaftElement;
+import com.steve1.igortweakseaaddon.misc.IgorNode.IgorTransparentNode.IgorSimpleShaft.IgorSimpleShaftElement;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.NodeBase;
@@ -10,10 +11,8 @@ import mods.eln.sim.ElectricalLoad;
 import mods.eln.sim.IProcess;
 import mods.eln.sim.ThermalLoad;
 import mods.eln.sim.nbt.NbtThermalLoad;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 
-public class StirlingEngineElement extends SimpleShaftElement {
+public class StirlingEngineElement extends IgorSimpleShaftElement {
 
     NbtThermalLoad thermal_load_1= new NbtThermalLoad("thermal_load_1");
     NbtThermalLoad thermal_load_2= new NbtThermalLoad("thermal_load_2");
@@ -34,6 +33,11 @@ public class StirlingEngineElement extends SimpleShaftElement {
     }
 
     @Override
+    public PneumaticLoad getPneumaticLoad(Direction direction, LRDU lrdu) {
+        return null;
+    }
+
+    @Override
     public ElectricalLoad getElectricalLoad(Direction direction, LRDU lrdu) {
         return null;
     }
@@ -51,18 +55,10 @@ public class StirlingEngineElement extends SimpleShaftElement {
     @Override
     public int getConnectionMask(Direction direction, LRDU lrdu) {
         if (direction==front || direction==front.getInverse()) {
-            return NodeBase.maskThermal;
+            if (lrdu==LRDU.Down) {
+                return NodeBase.maskThermal;
+            }
         }
         return 0;
-    }
-
-    @Override
-    public String thermoMeterString(Direction direction) {
-        return "";
-    }
-
-    @Override
-    public boolean onBlockActivated(EntityPlayer entityPlayer, Direction direction, float v, float v1, float v2) {
-        return false;
     }
 }

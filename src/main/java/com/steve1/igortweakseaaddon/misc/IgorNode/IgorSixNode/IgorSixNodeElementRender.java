@@ -1,6 +1,11 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 
+import com.steve1.igortweakseaaddon.misc.IgorLoopedSound;
+import com.steve1.igortweakseaaddon.misc.IgorLoopedSoundManager;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticOneWayValve.PneumaticOneWayValveGui;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mods.eln.client.ClientProxy;
 import mods.eln.misc.Direction;
 import mods.eln.node.six.SixNodeDescriptor;
 import mods.eln.node.six.SixNodeElementRender;
@@ -77,5 +82,25 @@ public class IgorSixNodeElementRender extends SixNodeElementRender {
     @Override
     public GuiScreen newGuiDraw(Direction side, EntityPlayer player) {
         return igorSixNodeDescriptor.make_gui(side,player,this);
+    }
+
+    public IgorLoopedSoundManager igorLoopedSoundManager = new IgorLoopedSoundManager();
+
+    @SideOnly(Side.CLIENT)
+    public void addIgorLoopedSound(final IgorLoopedSound loopedSound) {
+        igorLoopedSoundManager.add(loopedSound);
+    }
+
+    @Override
+    public void destructor() {
+        super.destructor();
+
+        igorLoopedSoundManager.dispose();
+    }
+
+    @Override
+    public void refresh(float deltaT) {
+        super.refresh(deltaT);
+        igorLoopedSoundManager.process(deltaT);
     }
 }

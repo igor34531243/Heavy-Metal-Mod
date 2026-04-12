@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.grid.IgorGrid;
+package com.steve1.igortweakseaaddon.misc.IgorGrid;
 
 import mods.eln.Eln;
 import mods.eln.gridnode.GridDescriptor;

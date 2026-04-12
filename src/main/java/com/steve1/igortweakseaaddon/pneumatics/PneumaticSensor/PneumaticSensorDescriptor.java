@@ -23,7 +23,6 @@ public class PneumaticSensorDescriptor extends IgorSixNodeWithPipeInventoryDescr
 
     public PneumaticSensorDescriptor(String name, Obj3D model) {
         super(name, PneumaticSensorElement.class, PneumaticSensorRender.class, 0);
-        voltageLevelColor=VoltageLevelColor.Neutral;
         this.model=model;
         main=model.getPart("main");
     }

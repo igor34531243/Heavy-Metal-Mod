@@ -27,7 +27,6 @@ public class PneumaticPipeOutletDescriptor extends IgorSixNodeWithPipeInventoryD
 
     public PneumaticPipeOutletDescriptor(String name, Obj3D model) {
         super(name, PneumaticPipeOutletElement.class, PneumaticPipeOutledRender.class, 0);
-        this.voltageLevelColor=VoltageLevelColor.Neutral;
         this.model=model;
         main=model.getPart("main");
     }

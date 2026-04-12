@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import mods.eln.misc.INBTTReady2;
 import net.minecraft.nbt.NBTTagCompound;

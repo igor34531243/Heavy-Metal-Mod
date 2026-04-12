@@ -25,7 +25,6 @@ public class PneumaticValveDescriptor extends IgorSixNodeWithPipeInventoryDescri
 
     public PneumaticValveDescriptor(String name, Obj3D model) {
         super(name, PneumaticValveElement.class, PneumaticValveRender.class,0);
-        this.voltageLevelColor= VoltageLevelColor.Neutral;
         this.model=model;
         main=model.getPart("main");
     }

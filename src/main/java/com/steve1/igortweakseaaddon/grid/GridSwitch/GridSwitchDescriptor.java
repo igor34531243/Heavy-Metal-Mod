@@ -1,7 +1,7 @@
 package com.steve1.igortweakseaaddon.grid.GridSwitch;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridRender;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridRender;
 import mods.eln.misc.Direction;
 import mods.eln.misc.Obj3D;
 import net.minecraft.entity.player.EntityPlayer;

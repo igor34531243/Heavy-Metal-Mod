@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridReactor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridElement;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridElement;
 import mods.eln.misc.Direction;
 import mods.eln.misc.Utils;
 import mods.eln.node.transparent.TransparentNode;
@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static mods.eln.misc.Direction.XN;
 
 

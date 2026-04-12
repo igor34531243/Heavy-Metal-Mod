@@ -1,9 +1,9 @@
 package com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe;
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeElement;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.NBTPneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PressureWatchdog;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.NBTPneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PressureWatchdog;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
 import mods.eln.node.NodeBase;
@@ -14,12 +14,8 @@ import mods.eln.sim.ThermalLoad;
 import mods.eln.sim.process.destruct.WorldExplosion;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.R_T_gas_inv;
 
 public class PneumaticPipeElement extends IgorSixNodeElement {
 

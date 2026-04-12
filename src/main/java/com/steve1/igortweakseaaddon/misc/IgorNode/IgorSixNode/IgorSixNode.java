@@ -3,8 +3,8 @@ package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeConnection;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorNodeInterface;
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNodeElementInterface;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.Eln;
 import mods.eln.misc.Coordonate;
 import mods.eln.misc.Direction;
@@ -24,9 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.pneumatic_simulator;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_speed;
 
 public class IgorSixNode extends SixNode implements IgorNodeInterface {
 

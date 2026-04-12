@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridSensor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridLogicElement;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridLogicElement;
 import mods.eln.Eln;
 import mods.eln.item.IConfigurable;
 import mods.eln.misc.*;

@@ -1,14 +1,9 @@
 package com.steve1.igortweakseaaddon.misc.IgorNode;
 
-import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNode;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
-
-import java.util.HashMap;
-
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
 
 public interface IgorNodeInterface {
 

@@ -2,11 +2,11 @@ package com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithIn
 
 import com.steve1.igortweakseaaddon.misc.IgorNode.IgorSixNode.IgorSixNodeWithInventory.IgorSixNodeWithInventoryElement;
 import com.steve1.igortweakseaaddon.pneumatics.PneumaticPipe.PneumaticPipeDescriptor;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.misc.Direction;
 import mods.eln.misc.Utils;
 import mods.eln.node.six.SixNode;
 import mods.eln.node.six.SixNodeDescriptor;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import java.io.DataOutputStream;
@@ -78,9 +78,11 @@ public abstract class IgorSixNodeWithPipeInventoryElement extends IgorSixNodeWit
     }
 
     @Override
-    public void inventoryChanged() {
-        super.inventoryChanged();
-        update_item_swapped();
+    public void inventoryChange(IInventory inventory) {
+        super.inventoryChange(inventory);
+        if (inventory==this.inventory) {
+            update_item_swapped();
+        }
     }
 
 }

@@ -7,7 +7,6 @@ import mods.eln.node.six.SixNode;
 import mods.eln.node.six.SixNodeDescriptor;
 import mods.eln.node.six.SixNodeElementInventory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 
 public abstract class IgorSixNodeWithInventoryElement extends IgorSixNodeElement {

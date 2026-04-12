@@ -1,16 +1,12 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim;
 
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticConnection;
-import com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component.PneumaticLoad;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticConnection;
+import com.steve1.igortweakseaaddon.misc.PneumaticSim.Component.PneumaticLoad;
 import mods.eln.Eln;
 import mods.eln.sim.IProcess;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.logger;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_pascals;
-import static com.steve1.igortweakseaaddon.misc.igorUTILS.plot_speed;
 
 public class PneumaticSimulator implements IProcess {
 

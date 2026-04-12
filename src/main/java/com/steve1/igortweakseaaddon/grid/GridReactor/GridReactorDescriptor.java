@@ -1,6 +1,6 @@
 package com.steve1.igortweakseaaddon.grid.GridReactor;
 
-import com.steve1.igortweakseaaddon.grid.IgorGrid.IgorGridDescriptor;
+import com.steve1.igortweakseaaddon.misc.IgorGrid.IgorGridDescriptor;
 import mods.eln.Eln;
 import mods.eln.item.FerromagneticCoreDescriptor;
 import mods.eln.misc.Obj3D;

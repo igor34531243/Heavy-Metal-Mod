@@ -1,4 +1,4 @@
-package com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.Component;
+package com.steve1.igortweakseaaddon.misc.PneumaticSim.Component;
 
 import mods.eln.sim.mna.SubSystem;
 import mods.eln.sim.mna.component.Component;
@@ -6,8 +6,8 @@ import mods.eln.sim.mna.state.State;
 
 import static com.steve1.igortweakseaaddon.BaseIgorTweaksEaAddon.*;
 import static com.steve1.igortweakseaaddon.misc.igorUTILS.*;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_medium;
-import static com.steve1.igortweakseaaddon.pneumatics.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_small;
+import static com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_medium;
+import static com.steve1.igortweakseaaddon.misc.PneumaticSim.PneumaticSimulator.global_pneumatic_epsilon_small;
 
 public class PneumaticConnection extends Component{
 
@@ -65,7 +65,7 @@ public class PneumaticConnection extends Component{
         }
 
         speed+=acceleration_pressure*time;
-        speed*=(1-resistance*time/average_density);
+        speed*=(1-resistance*time/Math.max(average_density,base_atmospheric_density));
 
         if (speed>343 || speed<-343) {
             speed=Math.copySign(343,speed);

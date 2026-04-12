@@ -7,8 +7,6 @@ TODO:
 
 8.1) add pneumatic compressor, add pneumatic turbine
 
-8.25) add air tanks
-
 8.5) add pneumatic break that consumes breaking pads but stops incredibly well and scales stopping power with pressure applied
 
 8.6) add pneumatic clutch that doesent consume any parts like regular clutch does(for balance reasons)
@@ -40,6 +38,8 @@ ALREADY DONE
 67) add reactor for grid
 
 8.2) add pneumatic sensor to detect parameters of air inside a pipe
+
+8.25) add air tanks
 
 CONCEPT LIMBO
 
