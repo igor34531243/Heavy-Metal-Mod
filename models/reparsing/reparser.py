@@ -52,7 +52,7 @@ def fix_obj(input_path,mtl_name, group,first_group,shiftv,shiftvt,shiftvn):
     shft=[shiftv,shiftvt,shiftvn]
     
     with open("input/"+input_path, 'r', encoding='utf-8') as f:
-        for line in f:
+        for i, line in enumerate(f):
             line = line.strip()
             if not line or line.startswith('#') or line.startswith('o ') or line.startswith('g '):
                 continue
@@ -77,6 +77,8 @@ def fix_obj(input_path,mtl_name, group,first_group,shiftv,shiftvt,shiftvn):
                 else:
                     faces.append(f"f {shift_f(idx[0],shft)} {shift_f(idx[1],shft)} {shift_f(idx[2],shft)}")
             elif prefix == 'usemtl':
+                if len(parts) == 1:
+                    raise Exception("Model part missing texture Line: "+str(i)+" "+str(line))
                 if lastmtl==None or lastmtl != parts[1]:
                     faces.append("usemtl "+parts[1])
                     lastmtl=parts[1]
@@ -84,6 +86,8 @@ def fix_obj(input_path,mtl_name, group,first_group,shiftv,shiftvt,shiftvn):
                 mtllib=mtl_name
             elif prefix == "s":
                 pass # already handling ts later
+            elif prefix == "l":
+                pass # skipping lines (unconnected edges)
             else:
                 raise Exception("unknown field: "+str(prefix))
             

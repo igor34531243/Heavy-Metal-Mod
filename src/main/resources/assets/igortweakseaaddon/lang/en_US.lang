@@ -1,6 +1,7 @@
 
 Grid_High_Voltage_Breaker.name=Grid High Voltage Breaker
 Grid_High_Voltage_Switch.name=Grid High Voltage Switch
+Grid_Power_Reactor.name=Grid Power Shunt Reactor
 
 800V_Power_Socket.name=800V Power Socket
 3200V_Power_Socket.name=3200V Power Socket
@@ -13,6 +14,11 @@ Iron_Air_Pipe.name=Iron Air Pipe
 Tungsten_Air_Pipe.name=Tungsten Air Pipe
 Alloy_Air_Pipe.name=Alloy Air Pipe
 Creative_Air_Pipe.name=Creative Air Pipe
+
+Air_Valve.name=Air Valve
+Air_release.name=Air Release Valve
+One_Way_Air_Valve.name=One Way Air Valve
+Air_Probe.name=Air Probe
 
 Fuse_For_T1_Power_Lines.name=Fuse For T1 Power Lines
 Fuse_For_T2_Power_Lines.name=Fuse For T2 Power Lines

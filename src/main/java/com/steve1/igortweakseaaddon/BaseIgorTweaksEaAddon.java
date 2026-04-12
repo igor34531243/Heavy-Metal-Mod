@@ -37,6 +37,7 @@ import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherBlock;
 import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherDescriptor;
 import mods.eln.sixnode.powersocket.PowerSocketDescriptor;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -224,6 +225,12 @@ public class BaseIgorTweaksEaAddon {
 			Object iron_cable=findItemStackMethod.invoke(instance,"Iron Cable");
 			Object alloy_ingot=findItemStackMethod.invoke(instance,"Alloy Ingot");
 			Object tungsten_cable=findItemStackMethod.invoke(instance, "Tungsten Cable");
+			Object t2pole=findItemStackMethod.invoke(instance,"Transmission Tower");
+			Object machinebl=findItemStackMethod.invoke(instance, "Machine Block");
+			Object advmotor=findItemStackMethod.invoke(instance, "Advanced Electrical Motor");
+			Object vhvRelay=findItemStackMethod.invoke(instance, "Very High Voltage Relay");
+			Object iron_block= Blocks.iron_block;
+			Object optCore=findItemStackMethod.invoke(instance, "Optimal Ferromagnetic Core");
 
 			if (vhv_cable == null || alloy_plate==null || cinnabar==null || hv_cable==null) {
 				throw new RuntimeException("One of the eln items for crafting is not found.");
@@ -250,6 +257,32 @@ public class BaseIgorTweaksEaAddon {
 							'A', alloy_plate,
 							'P', lead_plate,
 							'R', item_rubber
+					}
+			);
+			//Grid switch
+			output = switchDescriptor.newItemStack();
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"R R",
+							"TAT",
+							"BEB",
+							'A', advmotor,
+							'T', t2pole,
+							'R', item_rubber,
+							'E', vhvRelay,
+							'B', machinebl
+					}
+			);
+			//Grid reactor
+			output = reactorDescriptor.newItemStack();
+			addRecipeMethod.invoke(instance, output,
+					new Object[]{
+							"R R",
+							"CIC",
+							"CIC",
+							'I', iron_block,
+							'C', optCore,
+							'R', item_rubber,
 					}
 			);
 
@@ -650,7 +683,7 @@ public class BaseIgorTweaksEaAddon {
 				SerieEE.newE12(2.2)
 		);
 		g = new SmartGhostGroup();
-		g.addRectangle(0,1,0,2,0,1);
+		g.addRectangle(0,1,0,3,0,1);
 
 		reactorDescriptor.setGhostGroup(g);
 

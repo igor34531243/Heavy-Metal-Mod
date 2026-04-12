@@ -1,5 +1,5 @@
 # Fixed for ELN - Merged Objects
-mtllib GridReactor.mtl
+mtllib reactor.mtl
 o main
 v 1.000306 0.723506 0.004435
 v 1.000306 1.304591 0.004435

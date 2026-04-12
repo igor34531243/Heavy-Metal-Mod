@@ -1,4 +1,22 @@
-# Made in Blockbench 5.0.7
-newmtl m_1308eb73-20dc-1bf6-e4b5-30859ff8f7f9
-map_Kd texture.png
-newmtl none
+# Blender 5.1.0 MTL File: 'reactor.blend'
+# www.blender.org
+
+newmtl Material
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd coil.png
+
+newmtl Material.004
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd insulator.png
