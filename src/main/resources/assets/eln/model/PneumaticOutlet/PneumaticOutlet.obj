@@ -1,14 +1,15 @@
+# moved_half_block
 # Fixed for ELN - Merged Objects
 mtllib PneumaticOutlet.mtl
 o main
-v 1 1 1
-v 1 1 0
-v 1 0 1
-v 1 0 0
-v 0 1 1
-v 0 1 0
-v 0 0 1
-v 0 0 0
+v 0.5 0.5 0.5
+v 0.5 0.5 -0.5
+v 0.5 -0.5 0.5
+v 0.5 -0.5 -0.5
+v -0.5 0.5 0.5
+v -0.5 0.5 -0.5
+v -0.5 -0.5 0.5
+v -0.5 -0.5 -0.5
 vt 0.125 1
 vt 0 1
 vt 0 0.875

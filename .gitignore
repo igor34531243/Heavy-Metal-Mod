@@ -27,3 +27,7 @@ gradle-app.setting
 .settings
 .idea
 eclipse
+# and these ones finally
+/forge_sources/
+/run/
+Forge 1.7.10.zip

@@ -23,7 +23,6 @@ public class IgorGridRender extends GridRender {
 
         GL11.glPushMatrix();
         front.glRotateXnRef();
-        GL11.glTranslated(-0.5, -0.5, -0.5);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         stored_descriptor.draw(this);
         GL11.glPopMatrix();

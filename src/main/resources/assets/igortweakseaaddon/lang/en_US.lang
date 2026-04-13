@@ -17,7 +17,7 @@ Creative_Air_Pipe.name=Creative Air Pipe
 
 Air_Valve.name=Air Valve
 Air_release.name=Air Release Valve
-One_Way_Air_Valve.name=One Way Air Valve
+One_Way_Air_Valve.name=Smart Air Valve
 Air_Probe.name=Air Probe
 
 Fuse_For_T1_Power_Lines.name=Fuse For T1 Power Lines

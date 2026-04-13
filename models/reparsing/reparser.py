@@ -1,4 +1,23 @@
 import sys
+import os
+
+def move_half_block_every_direction(in_str):
+    control_str="# moved_half_block"
+    if control_str in in_str:
+        print("already nudged")
+        return in_str
+    m=in_str.split("\n")
+    m.insert(0,control_str)
+    for i in range(len(m)):
+        s=m[i].split()
+        if len(s)>0 and s[0]=="v":
+            if len(s)!=4:
+                raise Exception("got not 3 coordinates for V for some reason?")
+            for k in range(1,4):
+                s[k]=format_num(float(s[k])-0.5)
+        m[i]=" ".join(s)
+    print("sucsessfuly nudged!")
+    return "\n".join(m)
 
 def format_num(x):
     res=0
@@ -105,6 +124,22 @@ def fix_obj(input_path,mtl_name, group,first_group,shiftv,shiftvt,shiftvn):
 
     return res,mnumv,mnumvt,mnumvn
 
+def move_half_block_every_direction_from_file(file_name):
+    if os.path.isdir("to_move/"+file_name):
+        for i in os.listdir("to_move/"+file_name):
+            move_half_block_every_direction_from_file(file_name+"/"+i)
+    if ".obj" not in file_name:
+        return None
+    with open("to_move/"+file_name,"r") as file:
+        a=file.read()
+    b=move_half_block_every_direction(a)
+    with open("to_move/"+file_name,"w") as file:
+        file.write(b)
+
+def move_half_block_every_direction_from_files_all():
+    for i in os.listdir("to_move"):
+        move_half_block_every_direction_from_file(i)
+
 if __name__ == "__main__":
     #combine(["fuse_rods_spent.obj","fuse_rods_set.obj","GridBreaker_nofuse.obj"],
             #"GridBreaker.obj",
@@ -126,14 +161,16 @@ if __name__ == "__main__":
                 #"PneumaticHub.obj",
                 #"PneumaticHub.mtl",
                 #["main"])
-    combine(["socket800.obj"],
-                "PowerSocket800.obj",
-                "PowerSocket800.mtl",
-                ["main"])    
+    #combine(["socket800.obj"],
+                #"PowerSocket800.obj",
+                #"PowerSocket800.mtl",
+                #["main"])
     #combine(["valve placeholder.obj"],
                 #"ValvePlaceholder.obj",
                 #"ValvePlaceholder.mtl",
                 #["main"])
+    move_half_block_every_direction_from_files_all()
+    
     
     """
     шаблон для заполнения:

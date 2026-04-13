@@ -48,20 +48,22 @@ public class IgorSimpleShaftDescriptor extends IgorTransparentNodeDescriptor {
     }
 
     public void draw(double angle) {
-        GL11.glPushMatrix();
+        if (model!=null) {
+            GL11.glPushMatrix();
 
-        model_main.draw();
-        BoundingBox bb = rotating_part.boundingBox();
-        Vec3 centre = bb.centre();
-        double ox = centre.xCoord;
-        double oy = centre.yCoord;
-        double oz = centre.zCoord;
-        GL11.glTranslated(ox, oy, oz);
-        GL11.glRotatef((float)((angle * 360) / 2.0 / Math.PI), 0f, 0f, 1f);
-        GL11.glTranslated(-ox, -oy, -oz);
-        rotating_part.draw();
+            model_main.draw();
+            BoundingBox bb = rotating_part.boundingBox();
+            Vec3 centre = bb.centre();
+            double ox = centre.xCoord;
+            double oy = centre.yCoord;
+            double oz = centre.zCoord;
+            GL11.glTranslated(ox, oy, oz);
+            GL11.glRotatef((float) ((angle * 360) / 2.0 / Math.PI), 0f, 0f, 1f);
+            GL11.glTranslated(-ox, -oy, -oz);
+            rotating_part.draw();
 
-        GL11.glPopMatrix();
+            GL11.glPopMatrix();
+        }
     }
 
     @Override
